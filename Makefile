@@ -1,10 +1,10 @@
-dockerCommand = docker-compose -f docker/docker-compose.yml 
+docker-command = docker-compose -f docker/docker-compose.yml 
 
 start:
-	$(dockerCommand) up -d
+	$(docker-command) up -d
 
 stop:
-	$(dockerCommand) stop	
+	$(docker-command) stop	
 
 execPython: start
-	$(dockerCommand) exec backend bash -it
+	$(docker-command) exec backend bash
