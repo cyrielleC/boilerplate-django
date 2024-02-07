@@ -15,8 +15,42 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from users.models import User
+from django.contrib.auth.models import Group
+
+from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope, TokenHasScope
+from rest_framework import routers, serializers, viewsets
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', "first_name", "last_name")
+# ViewSets define the view behavior.
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ("name", )
+
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
+    # for login see https://www.django-rest-framework.org/tutorial/4-authentication-and-permissions/
+    path('apiuser/', include('rest_framework.urls', namespace='rest_framework')),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    # path('users/', UserList.as_view()),
+    # path('users/<pk>/', UserDetails.as_view()),
+    # path('groups/', GroupList.as_view()),
+    path('api/', include('menu.urls')),
 ]
+

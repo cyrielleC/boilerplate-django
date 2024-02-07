@@ -28,7 +28,7 @@ execFrontend:
 	$(DOCKER_COMPOSE) exec frontend /bin/sh
 
 updateRightsAfterDockerCreation:
-	sudo chown -R $USER:$USER app
+	sudo chown -R $(USER):$(USER) app
 
 deleteBackend: stop
 	$(DOCKER_COMPOSE) rm backend
