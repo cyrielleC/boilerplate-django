@@ -10,7 +10,11 @@ export class ApiRequestService {
 
   constructor(private readonly httpClient: HttpClient) {}
 
-  getMenu(): Observable<any> {
-    return this.httpClient.get(environment.apiUrl + 'menu/category/');
+  getApiRootUrl(): string {
+    return environment.apiUrl;
+  }
+
+  getCategory(): Observable<any> {
+    return this.httpClient.get( this.getApiRootUrl() + 'menu/category/');
   }
 }
