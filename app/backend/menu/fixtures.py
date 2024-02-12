@@ -53,6 +53,8 @@ c = Category.objects.get(pk = 1)
 # )
 # test.save()
 
-print(c.elements.first());
+margmenu = BaseDish(category= c, food= Food.objects.get(pk = 30), type = MenuType.SEVERALSIZE.value)
+margmenu.save()
+
 # ### Cas à gérer :
 # # menu midi/soir, entrée, entrée plat dessert, dessert plat, 6 sushis, entrée optionnelle, choix d'ingrédient
