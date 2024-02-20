@@ -1,0 +1,29 @@
+<ng-container *ngIf="restaurant$ | async as restaurant">
+    <h1>{{ restaurant.name }}</h1>
+    <h2>{{ restaurant.address }}</h2>
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let category of restaurant.categories; index as i; first as isFirst"
+        expanded="isFirst"
+        >
+            <mat-expansion-panel-header>
+                <mat-panel-title>{{category.name}}</mat-panel-title>
+                <mat-panel-description>{{category.shortDescription}}</mat-panel-description>
+            </mat-expansion-panel-header>
+            <div>
+                <div *ngFor="let menu of category.menus">
+                    <h3>
+                        {{menu.name ?? menu.food.name}}
+                    </h3>
+                    {{menu.description}}
+                    <app-formula *ngIf="menu.type === menuType.FORMULA"
+                        [formula]="menu"
+                    >
+                    </app-formula>
+                    <ng-container *ngIf="menu.type !== menuType.FORMULA">
+                        {{menu.food | foodName}} {{menu | price: restaurant.sizes }}
+                    </ng-container>
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</ng-container>

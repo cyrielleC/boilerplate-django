@@ -1,4 +1,4 @@
-from menu.models import BaseDish, Category, Food, FoodElement, Formula, MenuType, Restaurant, FoodType, PriceSize, PizzaSize
+from menu.models import BaseDish, Category, Food, FoodElement, Formula, MenuType, Restaurant, FoodType, PriceSize, DishSize
 
 # f1 = Food(name = 'sauce tomate', type = FoodType.INGREDIENT.value)
 # f1.save()

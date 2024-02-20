@@ -1,15 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from './app.routing.module';
 import { AppComponent } from './app.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {MatTabsModule} from '@angular/material/tabs';
 import {TranslateModule, TranslateLoader, TranslateService} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { StoreModule } from '@ngrx/store';
 import { reducer as recipeReducer } from './store/reducer/recipe.reducer';
+import { reducer as menuReducer } from './store/reducer/menu.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { RecipeEffects } from './store/effect/recipe.effect';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environment/environment';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -23,7 +27,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MatTabsModule,
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,
@@ -31,7 +34,13 @@ export function HttpLoaderFactory(http: HttpClient) {
           deps: [HttpClient]
       }
     }),
-    StoreModule.forRoot({ recipe: recipeReducer }), // 'recipe' est le nom de votre slice dans le store
+    StoreModule.forRoot({ recipe: recipeReducer, menu: menuReducer}),
+    EffectsModule.forRoot([RecipeEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+      trace: true,
+    }),
   ],
   providers: [
     provideAnimationsAsync()

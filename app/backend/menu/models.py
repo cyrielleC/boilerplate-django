@@ -2,13 +2,15 @@ from django.db import models
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=200)
+    number= models.CharField(max_length=50)
     address = models.TextField()
     def __str__(self):
         return self.name
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
-    restaurant = models.ForeignKey('Restaurant', on_delete=models.CASCADE)
+    shortDescription = models.CharField(max_length=200, null = True)
+    restaurant = models.ForeignKey('Restaurant', on_delete=models.CASCADE, related_name='categories')
     def __str__(self):
         return self.name
 
@@ -41,14 +43,14 @@ class BaseDish(models.Model):
 
 class PriceSize(models.Model):
     pizzaMenu = models.ForeignKey('BaseDish', on_delete=models.CASCADE, related_name="prices", db_index=True)
-    size = models.ForeignKey('PizzaSize', on_delete=models.CASCADE)
+    size = models.ForeignKey('DishSize', on_delete=models.CASCADE)
     price = models.FloatField()
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['pizzaMenu', 'size'], name='price_size_composite_primary_key'),
         ]
 
-class PizzaSize(models.Model):
+class DishSize(models.Model):
     name = models.CharField(max_length=200)
 
 class Formula(BaseDish):
@@ -101,3 +103,4 @@ class FoodElement(models.Model):
             models.UniqueConstraint(fields=['parent', 'child'], name='food_element_composite_primary_key'),
             models.UniqueConstraint(fields=['parent', 'order'], name='food_element_unique_element_order')
         ]
+        ordering = ['order']

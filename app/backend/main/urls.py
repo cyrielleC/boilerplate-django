@@ -52,5 +52,6 @@ urlpatterns = [
     # path('users/<pk>/', UserDetails.as_view()),
     # path('groups/', GroupList.as_view()),
     path('api/', include('menu.urls')),
+    path('api/', include('order.urls')),
 ]
 

@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { foodCategoryGuard } from '../../guard/food-category.guard';
+import { CardComponent } from './component/card/card.component';
 
 const routes: Routes = [
   {
     path: '',
-    canActivate: [foodCategoryGuard]
-  }
+    component: CardComponent,
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class MenuRoutingModule { }
