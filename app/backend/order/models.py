@@ -23,6 +23,6 @@ class Order(models.Model):
     paymentStatus = models.BooleanField(default = False)
 
 class PriceFoodElement(models.Model):
-    content = models.ManyToManyField('menu.BaseDish')
+    formula = models.ManyToManyField('menu.Formula')
     price = models.FloatField()
     order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name = 'elements')

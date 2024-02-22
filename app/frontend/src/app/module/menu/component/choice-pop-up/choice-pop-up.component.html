@@ -1,0 +1,7 @@
+<div class="choice-pop-up">
+  <div *ngFor="let dishElement of data.dishElements">
+    <app-category-choice *ngIf="dishElement.food.type === foodType.CATEGORY" [setDishElement]="dishElement" (formGroup$)="updateFormGroup($event, dishElement.food.id)" (groupHasBeenUpdated$)="refresh()"></app-category-choice>
+    <app-ingredient-choice *ngIf="dishElement.food.type === foodType.DISH" [food]="dishElement.food" (formGroup$)="updateFormGroup($event, dishElement.food.id)"></app-ingredient-choice>
+  </div>
+  <button [disabled]="!formGroup.valid">Valider</button>
+</div>

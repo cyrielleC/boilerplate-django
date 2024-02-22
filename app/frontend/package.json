@@ -36,9 +36,11 @@
     "@angular/compiler-cli": "^17.1.0",
     "@ngrx/store-devtools": "^17.1.0",
     "@types/jest": "^29.5.11",
+    "eslint": "^8.56.0",
     "jest": "^29.7.0",
     "jest-preset-angular": "^14.0.0",
-    "typescript": "~5.3.2"
+    "typescript": "~5.3.2",
+    "typescript-eslint": "^7.0.2"
   },
   "jest": {
     "preset": "jest-preset-angular",

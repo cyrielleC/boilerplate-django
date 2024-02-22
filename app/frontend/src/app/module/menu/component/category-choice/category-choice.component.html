@@ -1,0 +1,9 @@
+<h3>{{ dishElement.name }}</h3>
+{{ 'FORMULA.MAKE_A_CHOICE' | translate : { FOOD_NAME: dishElement.name | lowercase} }}
+<form [formGroup]="formGroup">
+    <mat-radio-group formControlName="choice" (change)="select($event)">
+        <mat-radio-button *ngFor="let element of menuService.getCategorieElements(dishElement.food.id)" [value]="element.child">{{element.child.name}}</mat-radio-button>
+    </mat-radio-group>
+    <app-ingredient-choice *ngIf="formGroup.controls['choice'].value && menuService.hasChoice(formGroup.controls['choice'].value)" [food]="formGroup.controls['choice'].value" (formGroup$)="update($event)">
+    </app-ingredient-choice>    
+</form>

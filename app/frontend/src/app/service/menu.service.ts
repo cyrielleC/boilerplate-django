@@ -14,7 +14,6 @@ export class MenuService {
 
   getMenu(): Observable<any> {
     return this.store.select(selectCategories).pipe(
-        
     );
   }
 }

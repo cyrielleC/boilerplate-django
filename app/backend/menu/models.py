@@ -14,51 +14,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class MenuType(models.TextChoices):
-    SEVERALSIZE = 'SEVERALSIZE'
-    FORMULA = 'FORMULA'
-    SIMPLE = 'SIMPLE'
-
-class BaseDish(models.Model):
+class CategoryElement(models.Model):
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='elements', db_index=True)
     name = models.CharField(max_length=200, null = True)
     description = models.CharField(max_length=200, null = True)
-    price = models.FloatField(null = True)
-    quantity = models.IntegerField(default=1)
-    food = models.ForeignKey('Food', on_delete=models.PROTECT, related_name='menuDishes', db_index=True)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='elements', db_index=True)
     extras = models.ManyToManyField('FoodElementWithPrice')
     order = models.IntegerField()
-    type = models.CharField(
-        max_length=20,
-        choices=[(tag, tag.value) for tag in MenuType],
-        default=MenuType.SIMPLE.value
-    )
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['food', 'category'], name='base_dish_composite_primary_key'),
-            models.UniqueConstraint(fields=['category', 'order'], name='base_dish_unique_element_order')
-     ]
     def __str__(self):
         return self.name
-
-class PriceSize(models.Model):
-    pizzaMenu = models.ForeignKey('BaseDish', on_delete=models.CASCADE, related_name="prices", db_index=True)
-    size = models.ForeignKey('DishSize', on_delete=models.CASCADE)
-    price = models.FloatField()
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['pizzaMenu', 'size'], name='price_size_composite_primary_key'),
-        ]
+        ordering = ['order']
 
-class DishSize(models.Model):
-    name = models.CharField(max_length=200)
-
-class Formula(BaseDish):
-    starter = models.ForeignKey('Food', on_delete=models.PROTECT, related_name='menStartes', null = True, db_index=True)
-    dessert = models.ForeignKey('Food', on_delete=models.PROTECT, related_name='menuDesserts', null = True, db_index=True)
-    starterDishPrice = models.FloatField(null = True)
-    dishDessertPrice = models.FloatField(null=True)
-    allPrice = models.FloatField(null=True)
 
 class FoodElementWithPrice(models.Model):
     quantity = models.IntegerField(default=1)
@@ -104,3 +70,35 @@ class FoodElement(models.Model):
             models.UniqueConstraint(fields=['parent', 'order'], name='food_element_unique_element_order')
         ]
         ordering = ['order']
+    
+class DishElement(models.Model):
+    name = models.CharField(max_length=200)
+    quantity = models.IntegerField(default=1)
+    categoryElement = models.ForeignKey('CategoryElement', on_delete=models.CASCADE, related_name='elements', db_index=True)
+    food = models.ForeignKey('Food', on_delete=models.CASCADE, db_index=True)
+    order = models.IntegerField()
+    def __str__(self):
+        return str(self.quantity) + ' ' + self.categoryElement + ' ' + self.food
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['food', 'categoryElement'], name='dish_element_composite_primary_key'),
+            models.UniqueConstraint(fields=['categoryElement', 'order'], name='dish_element_unique_element_order')
+        ]
+        ordering = ['order']
+    
+class Formula(models.Model):
+    price = models.FloatField()
+    description = models.CharField(max_length=200, null = True)
+    categoryElement = models.ForeignKey('CategoryElement', on_delete=models.CASCADE, related_name='formulas', db_index=True)
+
+class FormulaElement(models.Model):
+    formula = models.ForeignKey('Formula', on_delete=models.CASCADE, related_name='elements', db_index=True)
+    dishElement = models.ForeignKey('DishElement', on_delete=models.CASCADE, db_index=True)
+    order = models.IntegerField()
+    def __str__(self):
+        return self.formula + ' ' + self.dishElement + str(self.order)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['formula', 'dishElement'], name='formula_element_composite_primary_key'),
+            models.UniqueConstraint(fields=['formula', 'order'], name='formula_element_unique_element_order')
+        ]

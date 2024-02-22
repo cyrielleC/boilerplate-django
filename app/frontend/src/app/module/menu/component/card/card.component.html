@@ -10,18 +10,23 @@
                 <mat-panel-description>{{category.shortDescription}}</mat-panel-description>
             </mat-expansion-panel-header>
             <div>
-                <div *ngFor="let menu of category.menus">
+                <div *ngFor="let menu of category.elements">
                     <h3>
-                        {{menu.name ?? menu.food.name}}
+                        {{menu.name ?? menu.elements[0].food.name}}
                     </h3>
                     {{menu.description}}
-                    <app-formula *ngIf="menu.type === menuType.FORMULA"
-                        [formula]="menu"
-                    >
-                    </app-formula>
-                    <ng-container *ngIf="menu.type !== menuType.FORMULA">
-                        {{menu.food | foodName}} {{menu | price: restaurant.sizes }}
-                    </ng-container>
+                    <div *ngIf="menu.elements.length > 1">
+                        <div *ngFor="let element of menu.elements">
+                            {{ (element.name ? 'FORMULA.CHOICE_DISPLAY.WITH_NAME' : 'FORMULA.CHOICE_DISPLAY.WITHOUT_NAME') | translate: {NAME: element.name, FOODS: (element.food | foodName)}  }}
+                        </div>
+                    </div>
+                    <div *ngIf="menu.elements.length === 1 && menu.elements[0].food.elements.length > 0">
+                        {{ 'FORMULA.INGREDIENT_DISPLAY' | translate: {FOODS: (menu.elements[0].food | ingredientList)} }}
+                    </div>
+                    <div *ngFor="let formula of menu.formulas">
+                        {{formula.description}} {{formula.price}}
+                        <app-add-to-cart-button [formula]="formula" [dishElements]="menu.elements"></app-add-to-cart-button>
+                    </div>
                 </div>
             </div>
         </mat-expansion-panel>

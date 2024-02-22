@@ -1,50 +1,30 @@
 import { Injectable } from '@angular/core';
-import { Food, FoodType, Formula, FormulaType, MenuType } from '../../../model/recipe.models';
+import { Dish, Food, FoodCategory, FoodElement, FoodType, Ingredient } from '../../../model/recipe.models';
+import { Store } from '@ngrx/store';
+import { selectRestaurantCategories } from '../../../store/selector/recipe.selector';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
 
-  constructor() { }
+  categories: FoodCategory[] = [];
 
-  menuNeedsChoice(choice: Formula, formulaChoice: FormulaType | null = null): boolean {
-    if (choice.extras?.length > 0) {
-      return true;
-    }
-    if (this.foodNeedsChoice(choice.food)) {
-      return true;
-    }
-    if (choice.type !== MenuType.FORMULA) {
-      return false;
-    }
-    switch(formulaChoice) {
-      case FormulaType.price:
-        return false;
-      case FormulaType.allPrice:
-        return this.foodNeedsChoice(choice.starter) || this.foodNeedsChoice(choice.dessert);
-      case FormulaType.starterDishPrice:
-        return this.foodNeedsChoice(choice.starter);
-      case FormulaType.dishDessertPrice:
-        return this.foodNeedsChoice(choice.dessert);
-    }
-    // TODO log
-    throw new Error('Case should not happen');
+  constructor(private readonly store: Store) {
+    this.store.select(selectRestaurantCategories)
+      .subscribe((categories) => this.categories = categories ?? []);
   }
 
-  foodNeedsChoice(food: Food): boolean {
+  hasChoice(food: Food): boolean {
     if (food.type === FoodType.CATEGORY) {
       return true;
     }
-    for (let el of food.elements) {
-      if (el.child.type === FoodType.CATEGORY) {
-        return true;
-      }
-    }
-    return false;
+    return !!food.elements?.some(el => el.child.type === FoodType.CATEGORY)
   }
 
-  formulaHasStarter(formula: FormulaType): boolean {
-    return true;
+  getCategorieElements(categoryId: number): FoodElement<Ingredient | Dish>[] {
+    return this.categories?.find((category) => categoryId === category.id)?.elements ?? [];
   }
+
+  // getCategoryFormGroup()
 }

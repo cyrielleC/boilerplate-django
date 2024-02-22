@@ -39,3 +39,7 @@ export const selectRestaurant = createSelector(
     selectMenuState,
     (state: MenuStoreModel) => state.restaurant
 );
+export const selectRestaurantCategories = createSelector(
+    selectMenuState,
+    (state: MenuStoreModel) => state.restaurant?.foodcategories
+);

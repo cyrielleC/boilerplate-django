@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { BaseDish, Formula, FormulaType } from '../../../../model/recipe.models';
 import { Store } from '@ngrx/store';
 import { Dialog } from '@angular/cdk/dialog';
-import { FormulaChoicePopUpComponent } from '../formula-choice-pop-up/formula-choice-pop-up.component';
+import { ChoicePopUpComponent } from '../choice-pop-up/choice-pop-up.component';
 import { OrderService } from '../../service/order.service';
+import { DishElement, Formula } from '../../../../model/recipe.models';
 
 @Component({
   selector: 'app-add-to-cart-button',
@@ -11,9 +11,8 @@ import { OrderService } from '../../service/order.service';
   styleUrl: './add-to-cart-button.component.scss'
 })
 export class AddToCartButtonComponent {
-  @Input({ required: true }) elementToAdd!: Formula;
-  @Input() formulaChoice: FormulaType | undefined;
-  @Input() priceId: string | undefined;
+  @Input({ required: true }) formula!: Formula;
+  @Input({ required: true }) dishElements!: DishElement[];
 
   constructor(
     private readonly store: Store,
@@ -22,16 +21,20 @@ export class AddToCartButtonComponent {
   ) {}
   
   addToCart(): void {
-    if (!this.orderService.menuNeedsChoice(this.elementToAdd, this.formulaChoice)) {
+    let dishElements = this.dishElements
+    .filter((el) => this.formula.elements
+      .some(formulaEl => formulaEl.dishElementId === el.id && this.orderService.hasChoice(el.food))
+    );
+
+    if (dishElements.length === 0) {
       // TODO add to cart
     }
     else {
-      const dialogRef = this.dialog.open<string>(FormulaChoicePopUpComponent, {
+      const dialogRef = this.dialog.open<string>(ChoicePopUpComponent, {
         width: '250px',
         data: {
-          elementToAdd: this.elementToAdd,
-          formulaChoice: this.formulaChoice,
-          priceId: this.priceId,
+          formula: this.formula,
+          dishElements,
         },
       });
     }

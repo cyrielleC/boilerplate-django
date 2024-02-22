@@ -1,6 +1,7 @@
 
 
 export interface Ingredient  {
+    id: number;
     name: string;
     shortName: string;
     description: string;
@@ -37,64 +38,47 @@ export interface Restaurant {
   address: string;
   categories: Category[];
   foodcategories: FoodCategory[];
-  sizes: DishSize[]
 }
 
 export interface Category {
   name: string;
-  restaurant: Restaurant; // Reference to the parent Restaurant object
-  menus: Formula[];
+  elements: CategoryElement[];
   shortDescription: string;
 }
-
-export enum MenuType {
-  SEVERALSIZE = 'SEVERALSIZE',
-  FORMULA = 'FORMULA',
-  SIMPLE = 'SIMPLE'
-}
-
-export interface BaseDish {
+// category-element.model.ts
+export interface CategoryElement {
+  id: number;
   name: string | null;
   description: string | null;
-  [FormulaType.price]: number | null;
-  prices: PriceSize[] | null;
-  quantity: number;
-  food: Food; // Reference to the related Food object
   extras: FoodElementWithPrice[];
   order: number;
-  type: MenuType;
+  elements: DishElement[];
+  formulas: Formula[]
 }
 
-export interface PriceSize {
-  pizzaMenu: BaseDish; // Reference to the related BaseDish object
-  size: string; // Reference to the related DishSize object
+export interface DishElement {
+  id: number;
+  name: string;
+  quantity: number;
+  food: Food;
+}
+
+export interface Formula {
+  id: number;
   price: number;
+  description: string | null;
+  elements: FormulaElement[];
 }
 
-export interface DishSize {
-    id: string;
-    name: string;
-}
-
-export interface Formula extends BaseDish {
-  starter: Food; // Reference to the related Food object
-  dessert: Food; // Reference to the related Food object
-  [FormulaType.starterDishPrice]: number | null;
-  [FormulaType.dishDessertPrice]: number | null;
-  [FormulaType.allPrice]: number | null;
+export interface FormulaElement {
+  dishElementId: number;
+  order: number;
 }
 
 export interface FoodElementWithPrice {
-    quantity: number;
-    food: Food;
-    price: number;
-    includedNumber: number;
-    order: number;
-  }
-
-export enum FormulaType {
-  'price' = 'price',
-  'allPrice' = 'allPrice',
-  'starterDishPrice' = 'starterDishPrice',
-  'dishDessertPrice' = 'dishDessertPrice',
+  quantity: number;
+  food: Food;
+  price: number;
+  includedNumber: number;
+  order: number;
 }

@@ -13,5 +13,5 @@ def generate_json_file(restaurantId):
         json.dump(json_data, json_file, ensure_ascii=False)
 
 
-generate_json_file('23JR58J3F95')
+generate_json_file('ABC')
 

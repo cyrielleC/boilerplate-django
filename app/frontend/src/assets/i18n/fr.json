@@ -10,6 +10,13 @@
             "PRICE": "Plat seul: {{PRICE}} €",
             "STARTERDISHPRICE": "Entrée plat: {{PRICE}} €",
             "DISHDESSERTPRICE": "Plat desssert: {{PRICE}} €"
-        }
+        },
+        "CHOICE_DISPLAY": {
+            "WITH_NAME": "{{NAME}}: {{FOODS}}",
+            "WITHOUT_NAME": "{{FOODS}}"
+        },
+        "INGREDIENT_DISPLAY": "Ingrédients: {{FOODS}}",
+        "INGREDIENT": "ingrédient",
+        "MAKE_A_CHOICE": "Choisissez votre {{FOOD_NAME}}:"
     }
 }
