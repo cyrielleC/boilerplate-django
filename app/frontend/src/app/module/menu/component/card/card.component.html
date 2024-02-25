@@ -1,9 +1,16 @@
 <ng-container *ngIf="restaurant$ | async as restaurant">
     <h1>{{ restaurant.name }}</h1>
     <h2>{{ restaurant.address }}</h2>
+    <div [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+    </div>
+    <mat-menu #menu="matMenu">
+        <button *ngFor="" mat-menu-item>
+        </button>
+    </mat-menu>
     <mat-accordion>
         <mat-expansion-panel *ngFor="let category of restaurant.categories; index as i; first as isFirst"
-        expanded="isFirst"
+        [expanded]="isFirst"
         >
             <mat-expansion-panel-header>
                 <mat-panel-title>{{category.name}}</mat-panel-title>
@@ -17,7 +24,7 @@
                     {{menu.description}}
                     <div *ngIf="menu.elements.length > 1">
                         <div *ngFor="let element of menu.elements">
-                            {{ (element.name ? 'FORMULA.CHOICE_DISPLAY.WITH_NAME' : 'FORMULA.CHOICE_DISPLAY.WITHOUT_NAME') | translate: {NAME: element.name, FOODS: (element.food | foodName)}  }}
+                            {{ (element.name ? 'FORMULA.CHOICE_DISPLAY.WITH_NAME' : 'FORMULA.CHOICE_DISPLAY.WITHOUT_NAME') | translate: {NAME: element.name, FOODS: (element.food | foodName: menu.formulaExtraPrices)}  }}
                         </div>
                     </div>
                     <div *ngIf="menu.elements.length === 1 && menu.elements[0].food.elements.length > 0">

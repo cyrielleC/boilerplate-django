@@ -1,10 +1,10 @@
-
-<h3>{{ food.name }} coucou</h3>
-<form [formGroup]="formGroup">
-    <ng-container *ngFor="let foodElement of elements">
-        {{ 'FORMULA.MAKE_A_CHOICE' | translate : { FOOD_NAME: foodElement.child.name } }}
-        <mat-radio-group [formControlName]="foodElement.child.id" (change)="formGroup$.emit(formGroup)">
-            <mat-radio-button *ngFor="let element of menuService.getCategorieElements(foodElement.child.id)" [value]="element.child">{{element.child.name}}</mat-radio-button>
-        </mat-radio-group>
-    </ng-container>
-</form>
+<!-- <h3>{{ food.name }}</h3>
+<ng-container *ngFor="let foodElement of elements">
+    {{ 'FORMULA.MAKE_A_CHOICE' | translate : { FOOD_NAME: foodElement.child.name } }}
+    <app-plus-minus-counter
+        [quantity]="getQuantity(element.child)"
+        [available]="dishElement.quantity - formGroup.value.length"
+        (addElement)="addElement(element.child)"
+        (removeElement)="removeElement(element.child)"
+    ></app-plus-minus-counter>
+</ng-container> -->

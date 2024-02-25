@@ -25,6 +25,6 @@ export class ApiRequestService {
     return this.httpClient.get<Ingredient[]>( this.getApiRootUrl() + 'menu/ingredient/');
   }
   getRestaurant(): Observable<Restaurant> {
-    return this.httpClient.get<Restaurant>( environment.assetsUrl + 'json/menu.json');
+    return this.httpClient.get<Restaurant>( this.getApiRootUrl() + 'menu/restaurant/1');
   }
 }

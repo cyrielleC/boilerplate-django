@@ -11,6 +11,9 @@ import {MatRadioModule} from '@angular/material/radio';
 import { CategoryChoiceComponent } from './component/category-choice/category-choice.component';
 import { IngredientChoiceComponent } from './component/ingredient-choice/ingredient-choice.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatIconModule} from '@angular/material/icon';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     PipesModule,
     MatRadioModule,
     ReactiveFormsModule,
+    MatMenuModule,
+    MatIconModule,
+    SharedModule,
   ]
 })
 export class MenuModule { }

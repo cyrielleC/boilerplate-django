@@ -4,6 +4,7 @@ import { setRestaurantAction } from '../action/menu.actions';
 
 export interface MenuStoreModel {
   restaurant?: Restaurant,
+  // order: string;
 }
 
 export const initialState: MenuStoreModel = {};

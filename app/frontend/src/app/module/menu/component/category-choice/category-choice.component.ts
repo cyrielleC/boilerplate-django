@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Dish, DishElement, Food, FoodElement, Ingredient } from '../../../../model/recipe.models';
 import { OrderService } from '../../service/order.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatRadioChange } from '@angular/material/radio';
+import { FormControl, Validators } from '@angular/forms';
+import { arraySizeValidator } from '../../../../validaror/array-size.validator';
+import { DishElementWithQuantity } from '../choice-pop-up/choice-pop-up.component';
 
 @Component({
   selector: 'app-category-choice',
@@ -10,34 +10,33 @@ import { MatRadioChange } from '@angular/material/radio';
   styleUrl: './category-choice.component.scss'
 })
 export class CategoryChoiceComponent implements OnInit {
-  @Input({ required: true }) set setDishElement(el: DishElement) {
-    this.dishElement = el;
-    this.categoryElements = this.menuService.getCategorieElements(this.dishElement.food.id);
-  };
-  @Output() formGroup$ : EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
+  @Input({ required: true }) dishElement!: DishElementWithQuantity;
+  @Output() formGroup$ : EventEmitter<FormControl> = new EventEmitter<FormControl>();
   @Output() groupHasBeenUpdated$ : EventEmitter<true> = new EventEmitter<true>();
-  dishElement: DishElement;
-  choice: Food;
-  categoryElements: FoodElement<Ingredient | Dish>[];
-  formGroup: FormGroup;
+  formControl: FormControl;
 
   constructor(
     protected readonly menuService: OrderService,
   ){}
 
   ngOnInit() {
-    this.formGroup = new FormGroup({
-        'choice': new FormControl(null, Validators.required),
-    }, Validators.required);
-    this.formGroup$.emit(this.formGroup);
+    this.formControl = new FormControl(
+      [], 
+      [
+        Validators.required,
+        arraySizeValidator(this.dishElement.quantity, this.dishElement.quantity)
+      ]
+    );
+    this.formGroup$.emit(this.formControl);
   }
 
-  select($event: MatRadioChange) {
-    this.formGroup.removeControl('subChoice');
-  }
-
-  update(formGroup: FormGroup) {
-    this.formGroup.addControl('subChoice', formGroup);
-    this.groupHasBeenUpdated$.emit(true);
+  getElements(foodCategoryId: number) {
+    return this.menuService.getCategorieElements(foodCategoryId).map((el) =>{
+      return {
+        'id': el.child.id,
+        'name': el.child.name,
+        'quantity': el.quantity, 
+      };
+    })
   }
 }

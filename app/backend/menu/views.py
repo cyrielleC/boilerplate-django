@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from menu.models import Category, Food, FoodType
-from menu.serializer import CategorySerializer, FoodSerializer, FoodSerializer, FoodWithoutChildrenSerializer
+from menu.models import Category, Food, FoodType, Restaurant
+from menu.serializer import CategorySerializer, FoodSerializer, FoodSerializer, FoodWithoutChildrenSerializer, RestaurantSerializer
 from rest_framework import viewsets
 
 
@@ -23,3 +23,7 @@ class FoodViewSet(viewsets.ModelViewSet):
 class FoodIngredientViewSet(viewsets.ModelViewSet):
     queryset = Food.objects.filter(type=FoodType.INGREDIENT.value)
     serializer_class = FoodWithoutChildrenSerializer
+
+class RestaurantViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer

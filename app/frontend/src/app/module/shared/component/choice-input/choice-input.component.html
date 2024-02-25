@@ -1,0 +1,9 @@
+<div *ngFor="let element of elements">
+    {{ element.quantity ?? 1 }} {{ element.name }}
+    <app-plus-minus-counter
+        [quantity]="getQuantity(element.id)"
+        [available]="quantity - formControl.value.length"
+        (addElement)="addElement(element.id)"
+        (removeElement)="removeElement(element.id)"
+    ></app-plus-minus-counter>
+</div>

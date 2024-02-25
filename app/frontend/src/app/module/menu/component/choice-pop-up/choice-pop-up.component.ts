@@ -1,11 +1,15 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { Dish, DishElement, FoodType, Formula, Ingredient } from '../../../../model/recipe.models';
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+
+export interface DishElementWithQuantity extends DishElement{
+  quantity: number;
+}
 
 export interface ChoicePopUp {
   formula: Formula,
-  dishElements: DishElement[],
+  dishElements: DishElementWithQuantity[],
 }
 
 @Component({
@@ -25,11 +29,15 @@ export class ChoicePopUpComponent {
     private cdRef: ChangeDetectorRef,
   ) {}
 
-  updateFormGroup(formGroup: FormGroup, foodId: number) {
-    this.formGroup.addControl(foodId.toString(), formGroup);
+  updateFormGroup(formGroup: FormControl, dishElement: DishElement) {
+    this.formGroup.addControl(dishElement.id.toString(), formGroup);
     this.cdRef.detectChanges();
+    console.log(this.formGroup);
   }
   refresh() {
     this.cdRef.detectChanges();
+  }
+  submit() {
+    console.log([this.data.formula, this.formGroup.value]);
   }
 }

@@ -1,7 +1,8 @@
-import { AfterContentInit, AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Food, FoodElement, FoodType, Ingredient } from '../../../../model/recipe.models';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Dish, Food, FoodCategory, FoodElement, FoodType, FoodWithElements, Ingredient } from '../../../../model/recipe.models';
 import { OrderService } from '../../service/order.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { arraySizeValidator } from '../../../../validaror/array-size.validator';
 
 @Component({
   selector: 'app-ingredient-choice',
@@ -9,8 +10,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrl: './ingredient-choice.component.scss'
 })
 export class IngredientChoiceComponent implements OnInit {
-  @Input({ required: true }) food!: Food;
-  elements: FoodElement<Ingredient>[];
+  @Input({ required: true }) food!: Dish;
+  elements: FoodElement<FoodCategory | Ingredient>[];
   @Output() formGroup$ : EventEmitter<FormGroup> = new EventEmitter<FormGroup>();
   foodType = FoodType;
   formGroup: FormGroup;
@@ -25,7 +26,8 @@ export class IngredientChoiceComponent implements OnInit {
     const groupContent: { [key: number]: FormControl } = {};
     this.elements = this.food.elements.filter((el) => el.child.type === FoodType.CATEGORY);
     this.elements.forEach((el) => {
-        groupContent[el.child.id] = new FormControl(null, Validators.required);
+        groupContent[el.child.id] = new FormControl(
+          [], [Validators.required, arraySizeValidator(el.quantity, el.quantity)]);
       }
     );
     this.formGroup = new FormGroup(groupContent, Validators.required);
