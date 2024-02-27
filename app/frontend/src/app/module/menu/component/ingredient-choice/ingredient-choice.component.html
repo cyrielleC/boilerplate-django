@@ -1,10 +1,13 @@
-<!-- <h3>{{ food.name }}</h3>
-<ng-container *ngFor="let foodElement of elements">
-    {{ 'FORMULA.MAKE_A_CHOICE' | translate : { FOOD_NAME: foodElement.child.name } }}
-    <app-plus-minus-counter
-        [quantity]="getQuantity(element.child)"
-        [available]="dishElement.quantity - formGroup.value.length"
-        (addElement)="addElement(element.child)"
-        (removeElement)="removeElement(element.child)"
-    ></app-plus-minus-counter>
-</ng-container> -->
+<h3>{{ food.name + (number ? ' ' + number : '') }}</h3>
+<div *ngFor="let foodCategoryElement of foodCategoryElements">
+    {{ 'FORMULA.MAKE_A_CHOICE' | translate : { FOOD_NAME: foodCategoryElement.child.name } }}
+    <div *ngFor="let element of menuService.getCategorieElements(foodCategoryElement.child.id)">
+        {{ element.child.name }}
+        <app-plus-minus-counter
+            [quantity]="getQuantity(foodCategoryElement.child.id, element.child.id)"
+            [available]="foodCategoryElement.quantity - formGroup.controls[foodCategoryElement.child.id].value.length"
+            (addElement)="addElement(foodCategoryElement.child.id, element.child)"
+            (removeElement)="removeElement(foodCategoryElement.child.id, element.child)"
+        ></app-plus-minus-counter>
+    </div>
+</div>

@@ -1,7 +1,8 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { Dish, DishElement, FoodType, Formula, Ingredient } from '../../../../model/recipe.models';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, Validators } from '@angular/forms';
+import { ChoiceFormGroup } from '../category-choice/category-choice.component';
 
 export interface DishElementWithQuantity extends DishElement{
   quantity: number;
@@ -17,10 +18,11 @@ export interface ChoicePopUp {
   templateUrl: './choice-pop-up.component.html',
   styleUrl: './choice-pop-up.component.scss'
 })
-export class ChoicePopUpComponent {
+export class ChoicePopUpComponent implements OnInit {
 
   foodType = FoodType;
-  formGroup: FormGroup = new FormGroup({});
+  formGroupCat: FormGroup<{[key in string]: FormArray<ChoiceFormGroup>}> = new FormGroup({});
+  formGroupIng: FormGroup<{[key in string]: FormGroup}> = new FormGroup({});
   choices: (Dish | Ingredient)[] = [];
 
   constructor(
@@ -28,16 +30,22 @@ export class ChoicePopUpComponent {
     @Inject(DIALOG_DATA) public data: ChoicePopUp,
     private cdRef: ChangeDetectorRef,
   ) {}
-
-  updateFormGroup(formGroup: FormControl, dishElement: DishElement) {
-    this.formGroup.addControl(dishElement.id.toString(), formGroup);
-    this.cdRef.detectChanges();
-    console.log(this.formGroup);
+  ngOnInit(): void {
+    this.data.dishElements.forEach((dishElement)=> {
+      if (dishElement.food.type === FoodType.CATEGORY) {
+        this.formGroupCat.addControl(dishElement.id.toString(), new FormArray<ChoiceFormGroup>([], Validators.required));
+      }
+      else {
+        this.formGroupIng.addControl(dishElement.id.toString(), new FormGroup({}, Validators.required) as FormGroup);
+      }
+    });
   }
+
   refresh() {
     this.cdRef.detectChanges();
   }
   submit() {
-    console.log([this.data.formula, this.formGroup.value]);
+    console.log(this.formGroupCat.value);
+    console.log(this.formGroupIng.value);
   }
 }

@@ -36,9 +36,8 @@ export class AddToCartButtonComponent {
       // TODO add to cart
     }
     else {
-      console.log(dishElementsWithQuantity);
       const dialogRef = this.dialog.open<string>(ChoicePopUpComponent, {
-        width: '250px',
+        width: '100%',
         data: {
           formula: this.formula,
           dishElements: dishElementsWithQuantity,

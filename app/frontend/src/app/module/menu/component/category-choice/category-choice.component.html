@@ -1,29 +1,22 @@
 <h3>{{ dishElement.name }}</h3>
 {{ (dishElement.quantity === 1 ? 'FORMULA.MAKE_A_CHOICE' : 'FORMULA.MAKE_SEVERAL_CHOICE') | translate : { FOOD_NAME: dishElement.name | lowercase, QUANTITY: dishElement.quantity} }}
-
-<app-choice-input
-    [formControl]="formControl"
-    [quantity]="dishElement.quantity"
-    [elements]="getElements(dishElement.food.id)"
-></app-choice-input>
-
-<!-- {{ 'FORMULA.MAKE_A_CHOICE' | translate : { FOOD_NAME: dishElement.name | lowercase} }}
-<form [formGroup]="formGroup">
-    <mat-radio-group formControlName="choice" (change)="select($event)">
-        <mat-radio-button *ngFor="let element of menuService.getCategorieElements(dishElement.food.id)" [value]="element.child">{{element.child.name}}</mat-radio-button>
-    </mat-radio-group>
-    <app-ingredient-choice *ngIf="formGroup.controls['choice'].value && menuService.hasChoice(formGroup.controls['choice'].value)" [food]="formGroup.controls['choice'].value" (formGroup$)="update($event)">
-    </app-ingredient-choice>    
-</form> -->
-
-<!-- <div *ngFor="let element of menuService.getCategorieElements(dishElement.food.id)">
+<div *ngFor="let element of menuService.getCategorieElements(dishElement.food.id)">
     {{ element.child.name }}
     <app-plus-minus-counter
         [quantity]="getQuantity(element.child)"
-        [available]="dishElement.quantity - formGroup.value.length"
+        [available]="dishElement.quantity - formArray.length"
         (addElement)="addElement(element.child)"
         (removeElement)="removeElement(element.child)"
     ></app-plus-minus-counter>
-    <app-ingredient-choice *ngIf=" && menuService.hasChoice(formGroup.controls['choice'].value)" [food]="formGroup.controls['choice'].value" (formGroup$)="update($event)">
-    </app-ingredient-choice>    
-</div> -->
+    <ng-container *ngFor="let formGroupControl of formArray.controls; index as i">
+        <app-ingredient-choice *ngIf="
+            formGroupControl.controls['subChoice']
+            && formGroupControl.controls['choice'].value.id === element.child.id
+            "
+            [food]="formGroupControl.controls['choice'].value"
+            [formGroup]="formGroupControl.controls['subChoice']"
+            [number]="i"
+        >
+        </app-ingredient-choice>    
+    </ng-container>    
+</div>

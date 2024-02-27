@@ -1,8 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { OrderService } from '../../service/order.service';
-import { FormControl, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, UntypedFormArray, Validators } from '@angular/forms';
 import { arraySizeValidator } from '../../../../validaror/array-size.validator';
 import { DishElementWithQuantity } from '../choice-pop-up/choice-pop-up.component';
+import { Food } from '../../../../model/recipe.models';
+import { ingredientChoiceValidator } from '../../../../validaror/ingredient-choice.validator';
+
+export type ChoiceFormGroup = FormGroup<{choice: FormGroup, subChoice?: FormGroup}>;
 
 @Component({
   selector: 'app-category-choice',
@@ -11,23 +15,17 @@ import { DishElementWithQuantity } from '../choice-pop-up/choice-pop-up.componen
 })
 export class CategoryChoiceComponent implements OnInit {
   @Input({ required: true }) dishElement!: DishElementWithQuantity;
-  @Output() formGroup$ : EventEmitter<FormControl> = new EventEmitter<FormControl>();
+  @Input({ required: true }) formArray!: FormArray<ChoiceFormGroup>;
   @Output() groupHasBeenUpdated$ : EventEmitter<true> = new EventEmitter<true>();
-  formControl: FormControl;
 
   constructor(
     protected readonly menuService: OrderService,
   ){}
 
   ngOnInit() {
-    this.formControl = new FormControl(
-      [], 
-      [
-        Validators.required,
-        arraySizeValidator(this.dishElement.quantity, this.dishElement.quantity)
-      ]
+    this.formArray.addValidators(
+      arraySizeValidator(this.dishElement.quantity, this.dishElement.quantity),
     );
-    this.formGroup$.emit(this.formControl);
   }
 
   getElements(foodCategoryId: number) {
@@ -38,5 +36,29 @@ export class CategoryChoiceComponent implements OnInit {
         'quantity': el.quantity, 
       };
     })
+  }
+
+  getQuantity(food: Food) {
+    return this.formArray.controls.filter((formGroup: any) => formGroup.controls['choice'].value.id === food.id).length;
+  }
+
+  removeElement(food: Food) {
+    let lastIndex: number = 0;
+    this.formArray.controls.forEach((formGroup: any, index: number) => {
+      if (formGroup.controls['choice'].value.id === food.id) {
+        lastIndex = index;
+      }
+    });
+    this.formArray.removeAt(lastIndex);
+  }
+
+  addElement(food: Food) {
+    const newFormGroup: FormGroup = new FormGroup({
+      choice: new FormControl(food)
+    });
+    if (this.menuService.hasChoice(food)) {
+      newFormGroup.addControl('subChoice', new FormGroup({}, ingredientChoiceValidator()));
+    }
+    this.formArray.push(newFormGroup);
   }
 }

@@ -1,7 +1,22 @@
 
 
-export interface AbstractFood  {
-    id: number;
+export interface ObjectWithId {
+  id: number;
+}
+
+export enum FoodType {
+  DISH = 'DISH',
+  CATEGORY = 'CATEGORY',
+  INGREDIENT = 'INGREDIENT',
+}
+
+export interface FoodElement<T>  {
+  quantity: number;
+  child: T;
+  isVisible: boolean;
+}
+
+export interface AbstractFood extends ObjectWithId {
     name: string;
     shortName: string;
     description: string;
@@ -14,17 +29,6 @@ export interface Ingredient extends AbstractFood {
   elements: null;
 }
 
-export enum FoodType {
-    DISH = 'DISH',
-    CATEGORY = 'CATEGORY',
-    INGREDIENT = 'INGREDIENT',
-}
-
-export interface FoodElement<T>  {
-    quantity: number;
-    child: T;
-    isVisible: boolean;
-}
 
 export interface Dish extends AbstractFood {
     elements: FoodElement<Ingredient | FoodCategory>[];
