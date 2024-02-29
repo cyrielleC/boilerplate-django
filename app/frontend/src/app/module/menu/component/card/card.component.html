@@ -1,13 +1,7 @@
 <ng-container *ngIf="restaurant$ | async as restaurant">
     <h1>{{ restaurant.name }}</h1>
     <h2>{{ restaurant.address }}</h2>
-    <div [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-        <mat-icon>more_vert</mat-icon>
-    </div>
-    <mat-menu #menu="matMenu">
-        <!-- <button *ngFor="" mat-menu-item>
-        </button> -->
-    </mat-menu>
+    <app-cart-menu></app-cart-menu>
     <mat-accordion>
         <mat-expansion-panel *ngFor="let category of restaurant.categories; index as i; first as isFirst"
         [expanded]="isFirst"
@@ -18,9 +12,9 @@
             </mat-expansion-panel-header>
             <div>
                 <div *ngFor="let menu of category.elements">
-                    <h3>
-                        {{menu.name ?? menu.elements[0].food.name}}
-                    </h3>
+                    <div class="card-category-element-title" *ngIf="menu.name || menu.elements[0].food.type === foodType.DISH">
+                        {{ menu | choiceName}}
+                    </div>
                     {{menu.description}}
                     <div *ngIf="menu.elements.length > 1">
                         <div *ngFor="let element of menu.elements">
@@ -32,7 +26,7 @@
                     </div>
                     <div *ngFor="let formula of menu.formulas">
                         {{formula.description}} {{formula.price}}
-                        <app-add-to-cart-button [formula]="formula" [dishElements]="menu.elements"></app-add-to-cart-button>
+                        <app-add-to-cart-button [name]="menu | choiceName: category" [formula]="formula" [dishElements]="menu.elements"></app-add-to-cart-button>
                     </div>
                 </div>
             </div>

@@ -1,16 +1,37 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
-import { Dish, DishElement, FoodType, Formula, Ingredient } from '../../../../model/recipe.models';
-import { AbstractControl, FormArray, FormGroup, Validators } from '@angular/forms';
-import { ChoiceFormGroup } from '../category-choice/category-choice.component';
+import { Component, Inject, OnInit } from '@angular/core';
+import { Dish, DishElement, FoodType, Formula, Ingredient } from '@app/model/recipe.models';
+import { FormArray, FormGroup, Validators } from '@angular/forms';
+import { ChoiceFormGroup } from '@menu/component/category-choice/category-choice.component';
+import { ingredientChoiceValidator } from '@app/validaror/ingredient-choice.validator';
+import { IngredientChoiceValue } from '@menu/component/ingredient-choice/ingredient-choice.component';
+import { Store } from '@ngrx/store';
+import { addToCartAction } from '@menu/store/menu.actions';
+import { OrderService } from '@menu/service/order.service';
 
 export interface DishElementWithQuantity extends DishElement{
   quantity: number;
 }
 
 export interface ChoicePopUp {
+  name: string;
   formula: Formula,
   dishElements: DishElementWithQuantity[],
+}
+
+export type ChoiceModel = 
+{choice: Dish, subChoice?: IngredientChoiceValue} 
+| IngredientChoiceValue[];
+
+export type DishChoice = {
+  [key in string]: ChoiceModel[]
+};
+
+export interface FormulaChoice {
+  name: string;
+  formula: Formula;
+  dishChoice?: DishChoice;
+  price?: number;
 }
 
 @Component({
@@ -19,33 +40,38 @@ export interface ChoicePopUp {
   styleUrl: './choice-pop-up.component.scss'
 })
 export class ChoicePopUpComponent implements OnInit {
-
   foodType = FoodType;
   formGroupCat: FormGroup<{[key in string]: FormArray<ChoiceFormGroup>}> = new FormGroup({});
   formGroupIng: FormGroup<{[key in string]: FormGroup}> = new FormGroup({});
-  choices: (Dish | Ingredient)[] = [];
 
   constructor(
     public dialogRef: DialogRef<string>,
     @Inject(DIALOG_DATA) public data: ChoicePopUp,
-    private cdRef: ChangeDetectorRef,
+    private readonly store: Store,
+    private readonly menuService: OrderService,
   ) {}
+  
   ngOnInit(): void {
     this.data.dishElements.forEach((dishElement)=> {
-      if (dishElement.food.type === FoodType.CATEGORY) {
-        this.formGroupCat.addControl(dishElement.id.toString(), new FormArray<ChoiceFormGroup>([], Validators.required));
-      }
-      else {
-        this.formGroupIng.addControl(dishElement.id.toString(), new FormGroup({}, Validators.required) as FormGroup);
-      }
+      dishElement.food.type === FoodType.CATEGORY ?
+        this.formGroupCat.addControl(dishElement.id.toString(), new FormArray<ChoiceFormGroup>([], Validators.required))
+      :
+        this.formGroupIng.addControl(dishElement.id.toString(), new FormGroup({}, [Validators.required, ingredientChoiceValidator()]) as FormGroup)
     });
   }
 
-  refresh() {
-    this.cdRef.detectChanges();
-  }
   submit() {
-    console.log(this.formGroupCat.value);
-    console.log(this.formGroupIng.value);
+    let choices = {...this.formGroupCat.value, ...this.formGroupIng.value};
+    this.store.dispatch(
+      addToCartAction({
+        element : {
+          name: this.data.name,
+          formula: this.data.formula,
+          dishChoice: {...this.formGroupCat.value, ...this.formGroupIng.value},
+          price: this.menuService.calculatePrice(this.data.formula, choices)
+        }
+      })
+    );
+    this.dialogRef.close();
   }
 }

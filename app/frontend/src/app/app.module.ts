@@ -9,7 +9,6 @@ import {TranslateModule, TranslateLoader, TranslateService} from '@ngx-translate
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { StoreModule } from '@ngrx/store';
 import { reducer as recipeReducer } from './store/reducer/recipe.reducer';
-import { reducer as menuReducer } from './store/reducer/menu.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { RecipeEffects } from './store/effect/recipe.effect';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -34,7 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
           deps: [HttpClient]
       }
     }),
-    StoreModule.forRoot({ recipe: recipeReducer, menu: menuReducer}),
+    StoreModule.forRoot({ recipe: recipeReducer}),
     EffectsModule.forRoot([RecipeEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states

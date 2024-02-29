@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Dialog } from '@angular/cdk/dialog';
-import { ChoicePopUpComponent, DishElementWithQuantity } from '../choice-pop-up/choice-pop-up.component';
-import { OrderService } from '../../service/order.service';
-import { DishElement, Formula } from '../../../../model/recipe.models';
+import { ChoicePopUpComponent, DishElementWithQuantity, FormulaChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
+import { OrderService } from '@menu/service/order.service';
+import { DishElement, Formula } from '@app/model/recipe.models';
+import { addToCartAction } from '@menu/store/menu.actions';
 
 @Component({
   selector: 'app-add-to-cart-button',
@@ -11,12 +12,13 @@ import { DishElement, Formula } from '../../../../model/recipe.models';
   styleUrl: './add-to-cart-button.component.scss'
 })
 export class AddToCartButtonComponent {
+  @Input({ required: true }) name!: string;
   @Input({ required: true }) formula!: Formula;
   @Input({ required: true }) dishElements!: DishElement[];
 
   constructor(
-    private readonly store: Store,
     private readonly dialog: Dialog,
+    private readonly store: Store,
     private readonly orderService: OrderService,
   ) {}
   
@@ -32,16 +34,23 @@ export class AddToCartButtonComponent {
       };
     });
 
+    const actionPayload: FormulaChoice = {
+      formula: this.formula,
+      name: this.name,
+    };
+
     if (dishElementsWithQuantity.length === 0) {
-      // TODO add to cart
+      this.store.dispatch(addToCartAction({
+        element: actionPayload
+      }));
     }
     else {
       const dialogRef = this.dialog.open<string>(ChoicePopUpComponent, {
         width: '100%',
         data: {
-          formula: this.formula,
-          dishElements: dishElementsWithQuantity,
-        },
+          ...actionPayload,
+          dishElements: dishElementsWithQuantity
+        }
       });
     }
   }

@@ -1,12 +1,12 @@
-import { AbstractControl, FormArray, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { AbstractControl, FormArray, FormControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 
 // Validateur personnalisé pour la taille d'un FormArray
-export function arraySizeValidator(min: number, max: number): ValidatorFn {
+export function formControlArraySizeValidator(min: number, max: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-        if (!(control instanceof FormArray)) {
+        if (!(control instanceof FormControl)) {
             return null;
         }
-        const arrayLength = control.length;
+        const arrayLength = control.value.length;
         if (arrayLength < min || arrayLength > max) {
             return { arraySize: true };
         }

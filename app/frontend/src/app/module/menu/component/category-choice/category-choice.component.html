@@ -8,15 +8,12 @@
         (addElement)="addElement(element.child)"
         (removeElement)="removeElement(element.child)"
     ></app-plus-minus-counter>
-    <ng-container *ngFor="let formGroupControl of formArray.controls; index as i">
-        <app-ingredient-choice *ngIf="
-            formGroupControl.controls['subChoice']
-            && formGroupControl.controls['choice'].value.id === element.child.id
-            "
-            [food]="formGroupControl.controls['choice'].value"
-            [formGroup]="formGroupControl.controls['subChoice']"
-            [number]="i"
-        >
-        </app-ingredient-choice>    
-    </ng-container>    
 </div>
+<ng-container *ngFor="let formGroupControl of getElementsWithSubChoice(); index as i">
+    <app-ingredient-choice
+        [food]="formGroupControl.controls['choice'].value"
+        [formGroup]="formGroupControl.controls['subChoice']"
+        [number]="getQuantity(formGroupControl.controls['choice'].value) > 1 ? (i + 1) : 0"
+    >
+    </app-ingredient-choice>    
+</ng-container>    

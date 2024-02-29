@@ -4,7 +4,6 @@
       *ngIf="dishElement.food.type === foodType.CATEGORY"
       [dishElement]="dishElement"
       [formArray]="formGroupCat.controls[dishElement.id]"
-      (groupHasBeenUpdated$)="refresh()"
     ></app-category-choice>
     <app-ingredient-choice
       *ngIf="dishElement.food.type === foodType.DISH"

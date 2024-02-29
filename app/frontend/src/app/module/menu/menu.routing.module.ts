@@ -1,12 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CardComponent } from './component/card/card.component';
+import { CardComponent } from '@menu/component/card/card.component';
+import { CartComponent } from './component/cart/cart.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'order',
     component: CardComponent,
   },
+  {
+    path: 'cart',
+    component: CartComponent,
+  },
+  { path: '**', redirectTo: 'order' }
 ];
 
 @NgModule({

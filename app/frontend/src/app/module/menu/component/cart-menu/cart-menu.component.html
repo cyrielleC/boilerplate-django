@@ -1,0 +1,26 @@
+<ng-container *ngIf="order$ | async as order">
+    <button 
+        [matMenuTriggerFor]="menu"
+        mat-raised-button
+        [matBadge]="order.length" matBadgeColor="primary"
+    >
+        {{ 'CART.TITLE' | translate }}
+        <mat-icon>shopping_basket</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <ng-container *ngIf="order.length=== 0">
+            {{'CART.EMPTY_CART' | translate}}
+        </ng-container>
+        <div *ngFor="let element of order; index as i" class="cart-menu--item">
+            <div class="cart-menu--item-description">
+                <div>{{ element.name }}</div>
+                <div *ngIf="element.formula.description">{{ 'FORMULA.DESCRIPTION' | translate : {DESCRIPTION: element.formula.description} }}</div>
+            </div>
+            <div class="cart-menu--item-action">
+                <div>{{ element.price ?? element.formula.price }}</div>
+                <button (click)="$event.stopPropagation();removeItem(i)"><mat-icon>delete</mat-icon></button>
+            </div>
+        </div>
+        <button *ngIf="order.length > 0" [routerLink]="['../cart']" >{{'CART.ORDER' | translate}}</button>
+    </mat-menu>
+</ng-container>

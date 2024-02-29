@@ -14,6 +14,25 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import { SharedModule } from '../shared/shared.module';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatButtonModule} from '@angular/material/button';
+import {CdkAccordionModule} from '@angular/cdk/accordion';
+import { CartMenuComponent } from '@menu/component/cart-menu/cart-menu.component';
+import { ActionReducer, META_REDUCERS, MetaReducer, StoreModule } from '@ngrx/store';
+import { reducer as menuReducer } from '@menu/store/menu.reducer';
+import { localStorageSync } from 'ngrx-store-localstorage';
+import {MatBadgeModule} from '@angular/material/badge';
+import { CartComponent } from './component/cart/cart.component';
+
+
+export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+  return localStorageSync(
+    {keys: ['order'], rehydrate: true}
+  )(reducer);
+}
+
+const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
+
 
 @NgModule({
   declarations: [
@@ -22,6 +41,8 @@ import { SharedModule } from '../shared/shared.module';
     AddToCartButtonComponent,
     CategoryChoiceComponent,
     IngredientChoiceComponent,
+    CartMenuComponent,
+    CartComponent,
   ],
   imports: [
     CommonModule,
@@ -34,6 +55,16 @@ import { SharedModule } from '../shared/shared.module';
     MatMenuModule,
     MatIconModule,
     SharedModule,
+    MatButtonToggleModule,
+    MatButtonModule,
+    CdkAccordionModule,
+    MatBadgeModule,
+    StoreModule.forFeature('menu', menuReducer, {
+      metaReducers: [localStorageSyncReducer]
+    })
+  ],
+  providers: [
+    { provide: META_REDUCERS, useFactory: localStorageSyncReducer, multi: true }
   ]
 })
 export class MenuModule { }

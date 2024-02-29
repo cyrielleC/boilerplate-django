@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { OrderService } from '../../service/order.service';
-import { FormArray, FormControl, FormGroup, UntypedFormArray, Validators } from '@angular/forms';
-import { arraySizeValidator } from '../../../../validaror/array-size.validator';
-import { DishElementWithQuantity } from '../choice-pop-up/choice-pop-up.component';
-import { Food } from '../../../../model/recipe.models';
-import { ingredientChoiceValidator } from '../../../../validaror/ingredient-choice.validator';
+import { Component, Input, OnInit } from '@angular/core';
+import { OrderService } from '@menu/service/order.service';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { formArraySizeValidator } from '@app/validaror/form-array-size.validator';
+import { DishElementWithQuantity } from '@menu/component/choice-pop-up/choice-pop-up.component';
+import { Food } from '@app/model/recipe.models';
+import { ingredientChoiceValidator } from '@app/validaror/ingredient-choice.validator';
 
 export type ChoiceFormGroup = FormGroup<{choice: FormGroup, subChoice?: FormGroup}>;
+export type ChoiceWithSubChoiceFormGroup = FormGroup<{choice: FormGroup, subChoice: FormGroup}>;
 
 @Component({
   selector: 'app-category-choice',
@@ -16,7 +17,6 @@ export type ChoiceFormGroup = FormGroup<{choice: FormGroup, subChoice?: FormGrou
 export class CategoryChoiceComponent implements OnInit {
   @Input({ required: true }) dishElement!: DishElementWithQuantity;
   @Input({ required: true }) formArray!: FormArray<ChoiceFormGroup>;
-  @Output() groupHasBeenUpdated$ : EventEmitter<true> = new EventEmitter<true>();
 
   constructor(
     protected readonly menuService: OrderService,
@@ -24,7 +24,7 @@ export class CategoryChoiceComponent implements OnInit {
 
   ngOnInit() {
     this.formArray.addValidators(
-      arraySizeValidator(this.dishElement.quantity, this.dishElement.quantity),
+      formArraySizeValidator(this.dishElement.quantity, this.dishElement.quantity),
     );
   }
 
@@ -57,8 +57,13 @@ export class CategoryChoiceComponent implements OnInit {
       choice: new FormControl(food)
     });
     if (this.menuService.hasChoice(food)) {
+      // the validator is here to have subChoice invalid from the start
       newFormGroup.addControl('subChoice', new FormGroup({}, ingredientChoiceValidator()));
     }
     this.formArray.push(newFormGroup);
+  }
+
+  getElementsWithSubChoice(): ChoiceWithSubChoiceFormGroup[] {
+    return this.formArray.controls.filter((el) => el.controls['subChoice']) as ChoiceWithSubChoiceFormGroup[];
   }
 }

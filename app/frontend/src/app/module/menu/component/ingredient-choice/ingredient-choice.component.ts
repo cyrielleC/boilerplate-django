@@ -1,9 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Dish, FoodCategory, FoodElement, FoodType, Ingredient } from '../../../../model/recipe.models';
-import { OrderService } from '../../service/order.service';
+import { Dish, FoodCategory, FoodElement, FoodType, Ingredient } from '@app/model/recipe.models';
+import { OrderService } from '@menu/service/order.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { arraySizeValidator } from '../../../../validaror/array-size.validator';
-import { removeLastOccurrence } from '../../../../utils/removeLastOccurence';
+import { removeLastOccurrence } from '@app/utils/removeLastOccurence';
+import { formControlArraySizeValidator } from '@app/validaror/form-control-array-size.validator';
+
+export type IngredientChoiceValue = {
+  [key in string]: Ingredient[];
+}
 
 @Component({
   selector: 'app-ingredient-choice',
@@ -25,7 +29,7 @@ export class IngredientChoiceComponent implements OnInit {
     this.foodCategoryElements = this.food.elements.filter((el) => el.child.type === FoodType.CATEGORY);
     this.foodCategoryElements.forEach((el) => {
       this.formGroup.addControl(el.child.id.toString(), new FormControl(
-        [], [Validators.required, arraySizeValidator(el.quantity, el.quantity)]
+        [], [Validators.required, formControlArraySizeValidator(el.quantity, el.quantity)]
         ));
     });
   }
@@ -42,7 +46,12 @@ export class IngredientChoiceComponent implements OnInit {
       [...this.formGroup.controls[foodCategoryId].value]
     );
   }
+  
   removeElement(foodCategoryId: number, ingredient: Ingredient | Dish): void {
-    this.formGroup.controls[foodCategoryId].setValue([...removeLastOccurrence(this.formGroup.controls[foodCategoryId].value, ingredient)]);
+    this.formGroup.controls[foodCategoryId].setValue(removeLastOccurrence([...this.formGroup.controls[foodCategoryId].value], ingredient));
+  }
+
+  setSoleElement(foodCategoryId: number, ingredient: Ingredient | Dish): void {
+    this.formGroup.controls[foodCategoryId].setValue([ingredient]);
   }
 }

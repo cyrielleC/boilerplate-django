@@ -52,6 +52,7 @@ export interface Restaurant {
 }
 
 export interface Category {
+  id: number;
   name: string;
   elements: CategoryElement[];
   shortDescription: string;

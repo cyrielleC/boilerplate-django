@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Restaurant } from '../../../../model/recipe.models';
-import { selectRestaurant } from '../../../../store/selector/recipe.selector';
+import { FoodType, Restaurant } from '@app/model/recipe.models';
+import { selectRestaurant } from '@menu/store/menu.selector';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,6 +10,8 @@ import { Observable } from 'rxjs';
   styleUrl: './card.component.scss'
 })
 export class CardComponent {
+
+  foodType = FoodType;
 
   restaurant$: Observable<Restaurant | undefined> = this.store.select(selectRestaurant);
 

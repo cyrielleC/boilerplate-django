@@ -26,6 +26,7 @@
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
     "ngrx": "^0.0.1-security",
+    "ngrx-store-localstorage": "^17.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
@@ -35,7 +36,7 @@
     "@angular/cli": "^17.1.1",
     "@angular/compiler-cli": "^17.1.0",
     "@ngrx/store-devtools": "^17.1.0",
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.12",
     "eslint": "^8.56.0",
     "jest": "^29.7.0",
     "jest-preset-angular": "^14.0.0",

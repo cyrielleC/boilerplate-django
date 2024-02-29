@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IsAdminAuthenticatedGuard } from './guard/auth.guard';
-import { GetObjectsGuard } from './guard/get-object.guard.';
-import { getRestaurantAction } from './store/action/menu.actions';
-import { selectRestaurant } from './store/selector/recipe.selector';
+import { GetObjectsGuard } from '@app/guard/get-object.guard.';
+import { getRestaurantAction } from '@menu/store/menu.actions';
+import { selectRestaurant } from '@menu/store/menu.selector';
+import { IsAdminAuthenticatedGuard } from '@app/guard/auth.guard';
 
 const routes: Routes = [
   {
@@ -12,7 +12,7 @@ const routes: Routes = [
     loadChildren: () => import('./module/admin/admin.module').then(m => m.AdminModule)
   },  
   {
-    path: 'order',
+    path: 'menu',
     canActivate: [GetObjectsGuard],
     data: {
       objectsConfig: [

@@ -5,7 +5,7 @@ import { getCategoryAction, getDishAction, setCategoryAction, setDishAction } fr
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ApiRequestService } from '../../service/api-request.service';
 import { FoodCategory, Dish, Restaurant } from '../../model/recipe.models';
-import { getRestaurantAction, setRestaurantAction } from '../action/menu.actions';
+import { getRestaurantAction, setRestaurantAction } from '../../module/menu/store/menu.actions';
 
 
 @Injectable()

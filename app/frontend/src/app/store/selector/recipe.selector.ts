@@ -1,6 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { RecipeStoreModel } from '../reducer/recipe.reducer';
-import { MenuStoreModel } from '../reducer/menu.reducer';
 
 export const selectRecipeState = createFeatureSelector<RecipeStoreModel>('recipe');
 
@@ -33,13 +32,3 @@ export const selectRecipeItemByName = (itemName: string) => createSelector(
       }
     }
   );
-export const selectMenuState = createFeatureSelector<MenuStoreModel>('menu');
-
-export const selectRestaurant = createSelector(
-    selectMenuState,
-    (state: MenuStoreModel) => state.restaurant
-);
-export const selectRestaurantCategories = createSelector(
-    selectMenuState,
-    (state: MenuStoreModel) => state.restaurant?.foodcategories
-);
