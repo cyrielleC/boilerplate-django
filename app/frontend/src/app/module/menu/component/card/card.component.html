@@ -26,7 +26,7 @@
                     </div>
                     <div *ngFor="let formula of menu.formulas">
                         {{formula.description}} {{formula.price}}
-                        <app-add-to-cart-button [name]="menu | choiceName: category" [formula]="formula" [dishElements]="menu.elements"></app-add-to-cart-button>
+                        <app-add-to-cart-button [name]="menu | choiceName: category" [categoryElement]="menu" [formulaId]="formula.id"></app-add-to-cart-button>
                     </div>
                 </div>
             </div>

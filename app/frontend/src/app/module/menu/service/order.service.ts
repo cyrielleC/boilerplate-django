@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CategoryElement, Dish, Food, FoodCategory, FoodElement, FoodType, Formula, FormulaExtraPrice, Ingredient, Restaurant } from '@app/model/recipe.models';
+import { Dish, Food, FoodCategory, FoodElement, FoodType, FormulaExtraPrice, Ingredient, Restaurant } from '@app/model/recipe.models';
 import { Store } from '@ngrx/store';
 import { selectRestaurant } from '@menu/store/menu.selector';
 import { ChoiceModel, DishChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
@@ -8,7 +8,7 @@ import { IngredientChoiceValue } from '@menu/component/ingredient-choice/ingredi
 @Injectable({
   providedIn: 'root'
 })
-export class OrderService {
+export class CategoryService {
 
   restaurant: Restaurant | undefined;
 
@@ -28,27 +28,31 @@ export class OrderService {
     return !!food.elements?.some(el => el.child.type === FoodType.CATEGORY)
   }
 
-  getCategorieElements(categoryId: number): FoodElement<Ingredient | Dish>[] {
+  getCategorieElements(categoryId: number): FoodElement<Ingredient | Dish | FoodCategory>[] {
     return this.restaurant?.foodcategories
       .find((category: FoodCategory) => categoryId === category.id)?.elements ?? [];
   }
 
+  getFlattenCategorieElements(categoryId: number, quantity = 1): FoodElement<Ingredient | Dish>[] {
+    const elements = this.restaurant?.foodcategories.find((category: FoodCategory) => categoryId === category.id)?.elements ?? [];
+    return elements.flatMap(element => {
+      if (element.child.type === FoodType.CATEGORY) {
+        return this.getFlattenCategorieElements(element.child.id, element.quantity);
+      }
+      return {
+        ...element,
+        quantity: element.quantity * quantity,
+      };
+    }) as FoodElement<Dish | Ingredient>[];
+  }
 
-  calculatePrice(formula: Formula, choice: DishChoice): number {
-    const extraPrices = this.restaurant?.categories
-      .flatMap(el => el.elements)
-      .find(el => el.formulas.some(fomulaEl => fomulaEl.id === formula.id))
-      ?.formulaExtraPrices;
-    
-    if (!extraPrices || extraPrices.length === 0) {
-      return formula.price;
+
+  calculateExtraPrice(extraPrices: FormulaExtraPrice, choice: DishChoice): number {
+    if (!extraPrices || Object.keys(extraPrices).length === 0) {
+      return 0;
     }
 
-    let finalPrice = formula.price;
-    // let finalPrice = formula.elements.map((el) => {
-    //   let dishElement = categoryElement.elements.find((dishElement) => dishElement.food.type !== FoodType.CATEGORY && dishElement.id === el.dishElementId);
-    //   return this.getFoodExtraPrice(dishElement?.id, categoryElement.formulaExtraPrices) * el.quantity;
-    // }).reduce<number>((acc, nombre) => acc + nombre, formula.price);
+    let finalPrice = 0;
 
     for (const [key, value] of Object.entries(choice)) {
       let arrayToMep;
@@ -59,13 +63,12 @@ export class OrderService {
           arrayToMep = (el.subChoice ? [el.subChoice] : []) as IngredientChoiceValue[];
         }
         arrayToMep.forEach((ingredientChoice: IngredientChoiceValue) => {
-          finalPrice = Object.entries(ingredientChoice)
+          finalPrice = Object.values(ingredientChoice)
                         .flatMap(
-                          ([catId, ingredients]: [string, Ingredient[]]) => {
-                            const catPrice = this.getFoodExtraPrice(parseInt(catId), extraPrices);
+                          (ingredients: Ingredient[]) => {
                             return ingredients.map(
                               (ingredient: Ingredient) => 
-                                this.getFoodExtraPrice(ingredient.id, extraPrices) || catPrice
+                                this.getFoodExtraPrice(ingredient.id, extraPrices)
                             )
                           }).reduce<number>((acc, nombre) => acc + nombre, finalPrice);
         });
@@ -74,8 +77,7 @@ export class OrderService {
     return finalPrice;
   }
 
-  getFoodExtraPrice(foodId: number | undefined, categoryExtraPrice: FormulaExtraPrice[]) {
-    return categoryExtraPrice.find((el) => el.foodId === foodId)?.price ?? 0;
+  getFoodExtraPrice(foodId: number, categoryExtraPrice: FormulaExtraPrice): number {
+    return categoryExtraPrice[foodId] ?? 0;
   }
-
 }

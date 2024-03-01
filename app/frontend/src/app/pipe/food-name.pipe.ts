@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Food, FoodType, FormulaExtraPrice } from '../model/recipe.models';
-import { OrderService } from '../module/menu/service/order.service';
+import { CategoryService } from '../module/menu/service/order.service';
 
 @Pipe({
   name: 'foodName'
@@ -8,11 +8,11 @@ import { OrderService } from '../module/menu/service/order.service';
 export class FoodNamePipe implements PipeTransform {
 
   constructor(
-    private readonly menuService: OrderService,
+    private readonly menuService: CategoryService,
   ) {
   }
 
-  transform(value: Food, extraPrices: FormulaExtraPrice[] = [], join = ', '): string {
+  transform(value: Food, extraPrices: FormulaExtraPrice = {}, join = ', '): string {
     if (value.type === FoodType.CATEGORY) {
       let elements = value.elements;
       if (!elements) {
@@ -22,7 +22,7 @@ export class FoodNamePipe implements PipeTransform {
         return elements.map((el) => 
           (el.quantity > 1 ?  el.quantity : '') 
           + (el.child.shortName ? el.child.shortName : el.child.name)
-          + (extraPrices.find(extra => extra.foodId === el.child.id) ? ' (supplément: ' + extraPrices.find(extra => extra.foodId === el.child.id)?.price + '€)' : '')
+          + (extraPrices[el.child.id] ? ' (supplément: ' + extraPrices[el.child.id].toString() + '€)' : '')
         ).join(join);
       }
     }

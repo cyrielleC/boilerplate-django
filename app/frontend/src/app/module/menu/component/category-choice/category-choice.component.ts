@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { OrderService } from '@menu/service/order.service';
+import { CategoryService } from '@menu/service/order.service';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { formArraySizeValidator } from '@app/validaror/form-array-size.validator';
 import { DishElementWithQuantity } from '@menu/component/choice-pop-up/choice-pop-up.component';
@@ -19,7 +19,7 @@ export class CategoryChoiceComponent implements OnInit {
   @Input({ required: true }) formArray!: FormArray<ChoiceFormGroup>;
 
   constructor(
-    protected readonly menuService: OrderService,
+    protected readonly menuService: CategoryService,
   ){}
 
   ngOnInit() {

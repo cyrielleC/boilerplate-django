@@ -18,11 +18,6 @@ class FoodElementSerializer(serializers.ModelSerializer):
         else:
             serializer = FoodWithoutChildrenSerializer(instance.child)
         return serializer.data
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        number = self.context.get('quantity', 1)  # Retrieve 'number' from context, default to 1 if not present
-        representation['quantity'] *= number  # Multiply quantity by the 'number'
-        return representation
 
 class FoodSerializer(FoodWithoutChildrenSerializer):
     elements = serializers.SerializerMethodField()
@@ -94,14 +89,22 @@ class CategoryElementSerializer(serializers.ModelSerializer):
         serializer = FormulaSerializer(instance.formulas, many=True)
         return serializer.data
     def get_formulaExtraPrices(self, instance):
+        serialized_elements = {}
         elements = instance.formulaExtraPrices.all()
-        serialized_elements = []
+        def add_elements_from_category(category_id, price):
+            cat_elements = FoodElement.objects.filter(parent_id = category_id)
+            for cat_element in cat_elements:
+                if cat_element.child.type != FoodType.CATEGORY.value:
+                    if not cat_element.child.id in serialized_elements:
+                        serialized_elements[cat_element.child.id] = price
+                else:
+                    add_elements_from_category(cat_element.child.id, price)
+
         for element in elements:
-            element_data = {
-                'foodId': element.food_id,
-                'price': element.price,
-            }
-            serialized_elements.append(element_data)
+            if element.food.type != FoodType.CATEGORY.value:
+                serialized_elements[element.food_id] = element.price
+            else:
+                add_elements_from_category(element.food_id, element.price)
 
         return serialized_elements
 
@@ -125,7 +128,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
         serializer = CategorySerializer(instance.categories, many=True)
         return serializer.data
     def get_foodcategories(self, instance):
-        serializer = FoodCategorySerializer(
+        serializer = FoodSerializer(
             Food.objects.filter(type=FoodType.CATEGORY.value),
             many=True
         )

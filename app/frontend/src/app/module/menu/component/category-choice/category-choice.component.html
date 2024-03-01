@@ -1,6 +1,6 @@
 <h3>{{ dishElement.name }}</h3>
 {{ (dishElement.quantity === 1 ? 'FORMULA.MAKE_A_CHOICE' : 'FORMULA.MAKE_SEVERAL_CHOICE') | translate : { FOOD_NAME: dishElement.name | lowercase, QUANTITY: dishElement.quantity} }}
-<div *ngFor="let element of menuService.getCategorieElements(dishElement.food.id)">
+<div *ngFor="let element of menuService.getFlattenCategorieElements(dishElement.food.id)">
     {{ element.child.name }}
     <app-plus-minus-counter
         [quantity]="getQuantity(element.child)"

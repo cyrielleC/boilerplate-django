@@ -1,1 +1,7 @@
-<p>cart works!</p>
+<div
+    *ngFor="let order of order$ | async"
+>
+{{order.name}}
+<div *ngIf="order.formula.description">{{ 'FORMULA.DESCRIPTION' | translate : {DESCRIPTION: order.formula.description} }}</div>
+{{order.price ?? order.formula.price}}
+</div>

@@ -1,13 +1,14 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { Dish, DishElement, FoodType, Formula, Ingredient } from '@app/model/recipe.models';
+import { Dish, DishElement, FoodType, Formula, FormulaExtraPrice, Ingredient } from '@app/model/recipe.models';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { ChoiceFormGroup } from '@menu/component/category-choice/category-choice.component';
 import { ingredientChoiceValidator } from '@app/validaror/ingredient-choice.validator';
 import { IngredientChoiceValue } from '@menu/component/ingredient-choice/ingredient-choice.component';
 import { Store } from '@ngrx/store';
 import { addToCartAction } from '@menu/store/menu.actions';
-import { OrderService } from '@menu/service/order.service';
+import { CategoryService } from '@menu/service/order.service';
+import { Observable, combineLatest, map, mapTo, startWith, tap } from 'rxjs';
 
 export interface DishElementWithQuantity extends DishElement{
   quantity: number;
@@ -15,8 +16,9 @@ export interface DishElementWithQuantity extends DishElement{
 
 export interface ChoicePopUp {
   name: string;
-  formula: Formula,
-  dishElements: DishElementWithQuantity[],
+  formula: Formula;
+  dishElements: DishElementWithQuantity[];
+  extraPrices: FormulaExtraPrice;
 }
 
 export type ChoiceModel = 
@@ -43,12 +45,13 @@ export class ChoicePopUpComponent implements OnInit {
   foodType = FoodType;
   formGroupCat: FormGroup<{[key in string]: FormArray<ChoiceFormGroup>}> = new FormGroup({});
   formGroupIng: FormGroup<{[key in string]: FormGroup}> = new FormGroup({});
+  price$: Observable<number>;
 
   constructor(
     public dialogRef: DialogRef<string>,
     @Inject(DIALOG_DATA) public data: ChoicePopUp,
     private readonly store: Store,
-    private readonly menuService: OrderService,
+    private readonly menuService: CategoryService,
   ) {}
   
   ngOnInit(): void {
@@ -58,9 +61,22 @@ export class ChoicePopUpComponent implements OnInit {
       :
         this.formGroupIng.addControl(dishElement.id.toString(), new FormGroup({}, [Validators.required, ingredientChoiceValidator()]) as FormGroup)
     });
+
+    this.formGroupCat.valueChanges.subscribe(() => console.log(this.data.extraPrices));
+    this.price$ = combineLatest([this.formGroupCat.valueChanges.pipe(startWith(true)), this.formGroupIng.valueChanges.pipe(startWith(true))])
+    .pipe(
+      // startWith(true),
+      map(() => this.reCalculatePrice()),
+    );
   }
 
-  submit() {
+
+  reCalculatePrice(): number {
+    console.log(this.data.extraPrices);
+    return this.data.formula.price + this.menuService.calculateExtraPrice(this.data.extraPrices, {...this.formGroupCat.value, ...this.formGroupIng.value});
+  }
+
+  submit(): void {
     let choices = {...this.formGroupCat.value, ...this.formGroupIng.value};
     this.store.dispatch(
       addToCartAction({
@@ -68,7 +84,7 @@ export class ChoicePopUpComponent implements OnInit {
           name: this.data.name,
           formula: this.data.formula,
           dishChoice: {...this.formGroupCat.value, ...this.formGroupIng.value},
-          price: this.menuService.calculatePrice(this.data.formula, choices)
+          // price: this.menuService.calculateExtraPrice(this.data., choices)
         }
       })
     );

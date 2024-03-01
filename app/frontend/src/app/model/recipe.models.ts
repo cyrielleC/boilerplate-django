@@ -36,7 +36,7 @@ export interface Dish extends AbstractFood {
 }
 
 export interface FoodCategory extends AbstractFood {
-    elements: FoodElement<Ingredient | Dish>[];
+    elements: FoodElement<Ingredient | Dish | FoodCategory>[];
     type: FoodType.CATEGORY;
 }
 
@@ -66,7 +66,7 @@ export interface CategoryElement {
   order: number;
   elements: DishElement[];
   formulas: Formula[]
-  formulaExtraPrices: FormulaExtraPrice[]
+  formulaExtraPrices: FormulaExtraPrice
 }
 
 export interface DishElement {
@@ -88,9 +88,8 @@ export interface FormulaElement {
   quantity: number;
 }
 
-export interface FormulaExtraPrice {
-  foodId: number;
-  price: number;
+export type FormulaExtraPrice = {
+  [key: number]: number;
 }
 
 export interface FoodElementWithPrice {

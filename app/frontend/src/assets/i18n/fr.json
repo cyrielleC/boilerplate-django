@@ -22,6 +22,7 @@
         "DESCRIPTION": "Formule \"{{DESCRIPTION}}\""
     },
     "CART": {
+        "ADD_TO_CART": "Ajouter ({{AMOUNT}} €)",
         "EMPTY_CART": "Panier vide",
         "TITLE": "Votre commande",
         "ORDER": "Passer la commande"

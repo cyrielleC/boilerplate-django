@@ -23,6 +23,8 @@ import { reducer as menuReducer } from '@menu/store/menu.reducer';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import {MatBadgeModule} from '@angular/material/badge';
 import { CartComponent } from './component/cart/cart.component';
+import { EffectsModule } from '@ngrx/effects';
+import { MenuEffects } from './store/menu.effect';
 
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -32,7 +34,6 @@ export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionRedu
 }
 
 const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
-
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     MatBadgeModule,
     StoreModule.forFeature('menu', menuReducer, {
       metaReducers: [localStorageSyncReducer]
-    })
+    }),
+    EffectsModule.forFeature(MenuEffects),
   ],
   providers: [
     { provide: META_REDUCERS, useFactory: localStorageSyncReducer, multi: true }
