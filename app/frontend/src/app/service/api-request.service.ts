@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
-import { FoodCategory, Dish, Ingredient, Restaurant } from '../model/recipe.models';
+import { FoodCategory, Dish, Ingredient, Restaurant } from '../model/api-recipe.models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class ApiRequestService {
   constructor(private readonly httpClient: HttpClient) {}
 
   getApiRootUrl(): string {
-    return environment.apiUrl;
+    return environment.urls.apiUrl;
   }
 
   getFoodCategory(): Observable<FoodCategory[]> {
@@ -25,6 +25,6 @@ export class ApiRequestService {
     return this.httpClient.get<Ingredient[]>( this.getApiRootUrl() + 'menu/ingredient/');
   }
   getRestaurant(): Observable<Restaurant> {
-    return this.httpClient.get<Restaurant>( this.getApiRootUrl() + 'menu/restaurant/1');
+    return this.httpClient.get<Restaurant>( this.getApiRootUrl() + 'menu/restaurant/' + environment.restaurantId);
   }
 }

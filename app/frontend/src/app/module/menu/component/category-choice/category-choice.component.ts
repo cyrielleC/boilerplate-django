@@ -3,8 +3,8 @@ import { CategoryService } from '@menu/service/order.service';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { formArraySizeValidator } from '@app/validaror/form-array-size.validator';
 import { DishElementWithQuantity } from '@menu/component/choice-pop-up/choice-pop-up.component';
-import { Food } from '@app/model/recipe.models';
 import { ingredientChoiceValidator } from '@app/validaror/ingredient-choice.validator';
+import { Food, FormulaExtraPrice } from '@app/model/api-recipe.models';
 
 export type ChoiceFormGroup = FormGroup<{choice: FormGroup, subChoice?: FormGroup}>;
 export type ChoiceWithSubChoiceFormGroup = FormGroup<{choice: FormGroup, subChoice: FormGroup}>;
@@ -16,6 +16,7 @@ export type ChoiceWithSubChoiceFormGroup = FormGroup<{choice: FormGroup, subChoi
 })
 export class CategoryChoiceComponent implements OnInit {
   @Input({ required: true }) dishElement!: DishElementWithQuantity;
+  @Input({ required: true }) extraPrices!: FormulaExtraPrice;
   @Input({ required: true }) formArray!: FormArray<ChoiceFormGroup>;
 
   constructor(

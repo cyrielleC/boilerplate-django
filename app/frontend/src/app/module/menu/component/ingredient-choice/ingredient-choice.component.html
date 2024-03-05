@@ -3,7 +3,10 @@
     {{ 'FORMULA.MAKE_A_CHOICE' | translate : { FOOD_NAME: foodCategoryElement.child.name } }}
     <ng-container *ngIf="foodCategoryElement.quantity > 1">
         <div *ngFor="let element of foodCategoryElement.elements">
-            {{ element.child.name }}
+            <app-choice-list
+                [element]="element.child"
+                [extraPrices]="extraPrices" 
+            ></app-choice-list> 
             <app-plus-minus-counter
                 [quantity]="getQuantity(foodCategoryElement.child.id, element.child.id)"
                 [available]="foodCategoryElement.quantity - formGroup.controls[foodCategoryElement.child.id].value.length"
@@ -18,6 +21,11 @@
         <mat-button-toggle 
             *ngFor="let element of foodCategoryElement.elements" aria-label="Font Style"
             (click)="setSoleElement(foodCategoryElement.child.id, element.child)"
-        >{{ element.child.name }}</mat-button-toggle>
+        >
+        <app-choice-list
+            [element]="element.child"
+            [extraPrices]="extraPrices" 
+        ></app-choice-list> 
+        </mat-button-toggle>
       </mat-button-toggle-group>
 </div>

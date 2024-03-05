@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { FoodCategory, Dish } from '../../model/recipe.models';
+import { FoodCategory, Dish } from '../../model/api-recipe.models';
 
 export const getCategoryAction = createAction('[Category] Get Categories');
 export const setCategoryAction = createAction('[Category] Set Categories', props<{categories: FoodCategory[]}>());

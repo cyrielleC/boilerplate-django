@@ -26,5 +26,12 @@
         "EMPTY_CART": "Panier vide",
         "TITLE": "Votre commande",
         "ORDER": "Passer la commande"
+    },
+    "INGREDIENT": {
+        "LIST": {
+            "BEFORE_SUPP_PRICE": " (+",
+            "AFTER_SUPP_PRICE": "€)",
+            "GLUE": ", "
+        }
     }
 }

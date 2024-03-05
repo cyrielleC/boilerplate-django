@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { FoodType, Restaurant } from '@app/model/recipe.models';
 import { selectRestaurant } from '@menu/store/menu.selector';
 import { Observable } from 'rxjs';
+import { FoodType, Restaurant } from '@app/model/api-recipe.models';
 
 @Component({
   selector: 'app-card',

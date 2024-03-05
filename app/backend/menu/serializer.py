@@ -123,7 +123,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'address', 'categories', 'foodcategories', )
+        fields = ('id', 'name', 'address', 'categories', 'foodcategories', 'addressLink')
     def get_categories(self, instance):
         serializer = CategorySerializer(instance.categories, many=True)
         return serializer.data

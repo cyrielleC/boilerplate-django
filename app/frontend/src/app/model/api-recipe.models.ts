@@ -47,6 +47,7 @@ export interface Restaurant {
   name: string;
   number: string;
   address: string;
+  addressLink: string;
   categories: Category[];
   foodcategories: FoodCategory[];
 }

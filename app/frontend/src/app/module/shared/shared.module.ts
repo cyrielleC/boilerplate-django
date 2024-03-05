@@ -7,11 +7,15 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import { ExpandComponent } from './component/expand/expand.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { ChoiceListComponent } from './component/choice-list/choice-list.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { PipesModule } from '@app/pipe/pipe.module';
 
 @NgModule({
   declarations: [
     PlusMinusCounterComponent,
     ExpandComponent,
+    ChoiceListComponent,
   ],
   imports: [
     CommonModule,
@@ -19,9 +23,12 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatDividerModule,
     MatButtonModule,
     MatButtonToggleModule,
+    TranslateModule, 
+    PipesModule,
   ],
   exports: [
     PlusMinusCounterComponent,
+    ChoiceListComponent,
   ]
 })
 export class SharedModule { }

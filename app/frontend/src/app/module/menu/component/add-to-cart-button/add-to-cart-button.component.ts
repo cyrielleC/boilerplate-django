@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Dialog } from '@angular/cdk/dialog';
 import { ChoicePopUpComponent, DishElementWithQuantity, FormulaChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
 import { CategoryService } from '@menu/service/order.service';
-import { CategoryElement, Formula } from '@app/model/recipe.models';
 import { addToCartAction } from '@menu/store/menu.actions';
+import { CategoryElement, Formula } from '@app/model/api-recipe.models';
 
 @Component({
   selector: 'app-add-to-cart-button',

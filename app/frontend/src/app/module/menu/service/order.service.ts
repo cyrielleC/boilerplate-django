@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Dish, Food, FoodCategory, FoodElement, FoodType, FormulaExtraPrice, Ingredient, Restaurant } from '@app/model/recipe.models';
+import { Dish, Food, FoodCategory, FoodElement, FoodType, FormulaExtraPrice, Ingredient, Restaurant } from '@app/model/api-recipe.models';
 import { Store } from '@ngrx/store';
 import { selectRestaurant } from '@menu/store/menu.selector';
 import { ChoiceModel, DishChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
@@ -45,7 +45,6 @@ export class CategoryService {
       };
     }) as FoodElement<Dish | Ingredient>[];
   }
-
 
   calculateExtraPrice(extraPrices: FormulaExtraPrice, choice: DishChoice): number {
     if (!extraPrices || Object.keys(extraPrices).length === 0) {

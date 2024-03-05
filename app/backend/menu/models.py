@@ -4,6 +4,7 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=200)
     number= models.CharField(max_length=50)
     address = models.TextField()
+    addressLink = models.CharField(max_length=300)
     def __str__(self):
         return self.name
 

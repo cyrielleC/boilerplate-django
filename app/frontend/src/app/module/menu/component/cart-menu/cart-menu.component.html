@@ -4,7 +4,7 @@
         mat-raised-button
         [matBadge]="order.length" matBadgeColor="primary"
     >
-        {{ 'CART.TITLE' | translate }}
+        <span class="hideInMobile">{{ 'CART.TITLE' | translate }}</span>
         <mat-icon>shopping_basket</mat-icon>
     </button>
     <mat-menu #menu="matMenu">

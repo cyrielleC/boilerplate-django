@@ -4,7 +4,7 @@ import { map, exhaustMap, catchError } from 'rxjs/operators';
 import { getCategoryAction, getDishAction, setCategoryAction, setDishAction } from '../action/recipe.actions';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ApiRequestService } from '../../service/api-request.service';
-import { FoodCategory, Dish, Restaurant } from '../../model/recipe.models';
+import { FoodCategory, Dish, Restaurant } from '../../model/api-recipe.models';
 import { getRestaurantAction, setRestaurantAction } from '../../module/menu/store/menu.actions';
 
 

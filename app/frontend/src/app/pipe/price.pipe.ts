@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CategoryElement } from '../model/recipe.models';
+import { CategoryElement } from '../model/api-recipe.models';
 
 @Pipe({
   name: 'price'

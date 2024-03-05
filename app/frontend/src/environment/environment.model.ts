@@ -1,5 +1,8 @@
 export interface Environement {
     production: boolean;
-    apiUrl: string;
-    assetsUrl: string;
+    urls: {
+        apiUrl: string;
+        assetsUrl: string;
+    };
+    restaurantId: string;
 }

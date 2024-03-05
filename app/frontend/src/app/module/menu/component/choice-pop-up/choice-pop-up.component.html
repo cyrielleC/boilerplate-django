@@ -4,11 +4,13 @@
       *ngIf="dishElement.food.type === foodType.CATEGORY"
       [dishElement]="dishElement"
       [formArray]="formGroupCat.controls[dishElement.id]"
+      [extraPrices]="data.extraPrices"
     ></app-category-choice>
     <app-ingredient-choice
       *ngIf="dishElement.food.type === foodType.DISH"
       [food]="dishElement.food"
       [formGroup]="formGroupIng.controls[dishElement.id]"
+      [extraPrices]="data.extraPrices"
     ></app-ingredient-choice>
   </div>
   <button [disabled]="!formGroupIng.valid || !formGroupCat.valid" (click)="submit()">{{ 'CART.ADD_TO_CART' | translate: {AMOUNT: (price$ | async) } }}</button>

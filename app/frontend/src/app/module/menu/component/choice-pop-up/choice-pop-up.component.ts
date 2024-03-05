@@ -1,6 +1,5 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { Dish, DishElement, FoodType, Formula, FormulaExtraPrice, Ingredient } from '@app/model/recipe.models';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { ChoiceFormGroup } from '@menu/component/category-choice/category-choice.component';
 import { ingredientChoiceValidator } from '@app/validaror/ingredient-choice.validator';
@@ -8,7 +7,8 @@ import { IngredientChoiceValue } from '@menu/component/ingredient-choice/ingredi
 import { Store } from '@ngrx/store';
 import { addToCartAction } from '@menu/store/menu.actions';
 import { CategoryService } from '@menu/service/order.service';
-import { Observable, combineLatest, map, mapTo, startWith, tap } from 'rxjs';
+import { Observable, combineLatest, map, startWith } from 'rxjs';
+import { Dish, DishElement, FoodType, Formula, FormulaExtraPrice } from '@app/model/api-recipe.models';
 
 export interface DishElementWithQuantity extends DishElement{
   quantity: number;
@@ -62,32 +62,37 @@ export class ChoicePopUpComponent implements OnInit {
         this.formGroupIng.addControl(dishElement.id.toString(), new FormGroup({}, [Validators.required, ingredientChoiceValidator()]) as FormGroup)
     });
 
-    this.formGroupCat.valueChanges.subscribe(() => console.log(this.data.extraPrices));
-    this.price$ = combineLatest([this.formGroupCat.valueChanges.pipe(startWith(true)), this.formGroupIng.valueChanges.pipe(startWith(true))])
-    .pipe(
-      // startWith(true),
+    this.price$ = combineLatest(
+      [
+        this.formGroupCat.valueChanges.pipe(startWith(true)),
+        this.formGroupIng.valueChanges.pipe(startWith(true))
+      ]).pipe(
       map(() => this.reCalculatePrice()),
     );
   }
 
 
   reCalculatePrice(): number {
-    console.log(this.data.extraPrices);
-    return this.data.formula.price + this.menuService.calculateExtraPrice(this.data.extraPrices, {...this.formGroupCat.value, ...this.formGroupIng.value});
+    return this.data.formula.price 
+      + this.menuService
+          .calculateExtraPrice(this.data.extraPrices, this.getFormsValues());
   }
 
   submit(): void {
-    let choices = {...this.formGroupCat.value, ...this.formGroupIng.value};
     this.store.dispatch(
       addToCartAction({
         element : {
           name: this.data.name,
           formula: this.data.formula,
-          dishChoice: {...this.formGroupCat.value, ...this.formGroupIng.value},
-          // price: this.menuService.calculateExtraPrice(this.data., choices)
+          dishChoice: this.getFormsValues(),
+          price: this.reCalculatePrice()
         }
       })
     );
     this.dialogRef.close();
+  }
+
+  private getFormsValues(): DishChoice {
+    return {...this.formGroupCat.value, ...this.formGroupIng.value};
   }
 }

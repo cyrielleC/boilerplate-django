@@ -25,6 +25,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { CartComponent } from './component/cart/cart.component';
 import { EffectsModule } from '@ngrx/effects';
 import { MenuEffects } from './store/menu.effect';
+import { MainLayoutComponent } from './component/main-layout/main-layout.component';
 
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -44,6 +45,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     IngredientChoiceComponent,
     CartMenuComponent,
     CartComponent,
+    MainLayoutComponent,
   ],
   imports: [
     CommonModule,

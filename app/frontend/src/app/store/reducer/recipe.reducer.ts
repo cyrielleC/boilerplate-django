@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { FoodCategory, Dish, Ingredient } from '../../model/recipe.models';
+import { FoodCategory, Dish, Ingredient } from '../../model/api-recipe.models';
 import { setDishAction, setCategoryAction } from '../action/recipe.actions';
 
 export interface RecipeStoreModel {

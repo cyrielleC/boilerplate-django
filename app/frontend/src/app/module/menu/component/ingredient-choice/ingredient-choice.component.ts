@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Dish, FoodCategory, FoodElement, FoodType, Ingredient } from '@app/model/recipe.models';
+import { Dish, FoodCategory, FoodElement, FoodType, FormulaExtraPrice, Ingredient } from '@app/model/api-recipe.models';
 import { CategoryService } from '@menu/service/order.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { removeLastOccurrence } from '@app/utils/removeLastOccurence';
@@ -16,6 +16,7 @@ export type IngredientChoiceValue = {
 })
 export class IngredientChoiceComponent implements OnInit {
   @Input({ required: true }) food!: Dish;
+  @Input({ required: true }) extraPrices!: FormulaExtraPrice;
   @Input({ required: true }) formGroup!: FormGroup;
   @Input() number: number = 1;
   foodCategoryElements: (FoodElement<FoodCategory | Ingredient>

@@ -2,6 +2,9 @@ import { Environement } from "./environment.model";
 
 export const environment: Environement =  {
     production: false,
-    apiUrl: 'http://localhost/api/',
-    assetsUrl: 'http://localhost/assets/',
+    urls: {
+        apiUrl: 'http://localhost/api/',
+        assetsUrl: 'http://localhost/assets/',
+    },
+    restaurantId: '1',
 }

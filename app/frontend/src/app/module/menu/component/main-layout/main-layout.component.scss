@@ -1,0 +1,27 @@
+.main-layout {
+    &--header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px;
+        &-restaurant {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            &-name {
+                font-size: large;
+            }
+        }
+    }
+    &--content {
+        display: flex;
+        flex-direction: row;
+        &-side {
+            width: 250px;
+        }
+        &-main {
+            flex-grow: 1;
+        }
+    }
+}

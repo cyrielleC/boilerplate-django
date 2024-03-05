@@ -1,0 +1,22 @@
+<ng-container *ngIf="restaurant$ | async as restaurant">
+    <div class="main-layout--header" >
+        <div class="main-layout--header-restaurant">
+            <div class="main-layout--header-restaurant-name">{{ restaurant.name }}</div>
+            <h2>{{ restaurant.address }}</h2>
+            <mat-icon (click)="openLocation(restaurant.addressLink)"> location_on</mat-icon>
+        </div>
+        <app-cart-menu></app-cart-menu>
+    </div>
+    <div class="main-layout--content">
+        <div class="main-layout--content-side"
+        >
+            <div *ngFor="let category of restaurant.categories">{{ category.name}}</div>
+    
+        </div>
+        <div class="main-layout--content-main"
+        >
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</ng-container>
+

@@ -1,0 +1,8 @@
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+/* Créer une classe pour masquer l'élément sur les appareils mobiles */
+.hideInMobile {
+  @include media-breakpoint-down(sm) {
+    display: none !important;
+  }
+}

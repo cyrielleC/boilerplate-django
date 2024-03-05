@@ -1,4 +1,4 @@
-import { ObjectWithId } from "../model/recipe.models";
+import { ObjectWithId } from "../model/api-recipe.models";
 
 export function removeLastOccurrence(array: ObjectWithId[], element: ObjectWithId): ObjectWithId[] {
     const index = array.map(obj => obj.id).lastIndexOf(element.id);

@@ -1,7 +1,10 @@
 <h3>{{ dishElement.name }}</h3>
 {{ (dishElement.quantity === 1 ? 'FORMULA.MAKE_A_CHOICE' : 'FORMULA.MAKE_SEVERAL_CHOICE') | translate : { FOOD_NAME: dishElement.name | lowercase, QUANTITY: dishElement.quantity} }}
 <div *ngFor="let element of menuService.getFlattenCategorieElements(dishElement.food.id)">
-    {{ element.child.name }}
+    <app-choice-list
+        [element]="element.child"
+        [extraPrices]="extraPrices" 
+    ></app-choice-list> 
     <app-plus-minus-counter
         [quantity]="getQuantity(element.child)"
         [available]="dishElement.quantity - formArray.length"
@@ -14,6 +17,7 @@
         [food]="formGroupControl.controls['choice'].value"
         [formGroup]="formGroupControl.controls['subChoice']"
         [number]="getQuantity(formGroupControl.controls['choice'].value) > 1 ? (i + 1) : 0"
-    >
+        [extraPrices]="extraPrices"
+  >
     </app-ingredient-choice>    
 </ng-container>    

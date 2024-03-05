@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FoodWithElements } from '../model/recipe.models';
+import { FoodWithElements } from '../model/api-recipe.models';
 
 @Pipe({
   name: 'ingredientList'
