@@ -84,6 +84,7 @@ export interface Formula {
 }
 
 export interface FormulaElement {
+  id: number;
   dishElementId: number;
   order: number;
   quantity: number;
@@ -110,9 +111,4 @@ export interface OrderFormula {
 export interface OrderFormulaElement {
   categoryChoices: number;
   price: number;
-}
-
-export interface IngredientChoice {
-  formulaElementId: number;
-  ingredientId: number;
 }

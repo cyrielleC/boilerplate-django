@@ -1,17 +1,21 @@
 <div class="choice-pop-up">
-  <div *ngFor="let dishElement of data.dishElements">
+  <div *ngFor="let formulaEl of data.formulaElementWithDish">
+    <h3>{{ formulaEl.dishElement.name }}</h3>
     <app-category-choice 
-      *ngIf="dishElement.food.type === foodType.CATEGORY"
-      [dishElement]="dishElement"
-      [formArray]="formGroupCat.controls[dishElement.id]"
+      *ngIf="formulaEl.dishElement.food.type === foodType.CATEGORY"
+      [formulaElement]="formulaEl"
+      [formArray]="formGroup.controls[formulaEl.id]"
       [extraPrices]="data.extraPrices"
     ></app-category-choice>
-    <app-ingredient-choice
-      *ngIf="dishElement.food.type === foodType.DISH"
-      [food]="dishElement.food"
-      [formGroup]="formGroupIng.controls[dishElement.id]"
-      [extraPrices]="data.extraPrices"
-    ></app-ingredient-choice>
+    <ng-container
+      *ngIf="formulaEl.dishElement.food.type === foodType.DISH"
+    >
+      <app-ingredient-choice
+        *ngFor="let control of formGroup.controls[formulaEl.id].controls"
+        [formArray]="control"
+        [extraPrices]="data.extraPrices"
+      ></app-ingredient-choice>
+    </ng-container>
   </div>
-  <button [disabled]="!formGroupIng.valid || !formGroupCat.valid" (click)="submit()">{{ 'CART.ADD_TO_CART' | translate: {AMOUNT: (price$ | async) } }}</button>
+  <button [disabled]="!formGroup.valid" (click)="submit()">{{ 'CART.ADD_TO_CART' | translate: {AMOUNT: (price$ | async) } }}</button>
 </div>

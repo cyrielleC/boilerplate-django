@@ -10,8 +10,7 @@
     <div class="main-layout--content">
         <div class="main-layout--content-side"
         >
-            <div *ngFor="let category of restaurant.categories">{{ category.name}}</div>
-    
+            <div *ngFor="let category of restaurant.categories" [routerLink]="['order']" [fragment]="category.name">{{ category.name}}</div>
         </div>
         <div class="main-layout--content-main"
         >

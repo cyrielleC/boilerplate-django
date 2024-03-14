@@ -5,7 +5,7 @@ export const selectMenuState = createFeatureSelector<MenuStoreModel>('menu');
 
 export const selectRestaurant = createSelector(
     selectMenuState,
-    (state: MenuStoreModel) => state.restaurant
+    (state: MenuStoreModel) => state.restaurant!
 );
 export const selectRestaurantCategories = createSelector(
     selectMenuState,

@@ -1,6 +1,7 @@
 <mat-accordion *ngIf="restaurant$ | async as restaurant">
     <mat-expansion-panel *ngFor="let category of restaurant.categories; index as i; first as isFirst"
     [expanded]="isFirst"
+    [id]="category.name"
     >
         <mat-expansion-panel-header>
             <mat-panel-title>{{category.name}}</mat-panel-title>

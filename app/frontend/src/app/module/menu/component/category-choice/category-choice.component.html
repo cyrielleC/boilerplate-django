@@ -1,21 +1,20 @@
-<h3>{{ dishElement.name }}</h3>
-{{ (dishElement.quantity === 1 ? 'FORMULA.MAKE_A_CHOICE' : 'FORMULA.MAKE_SEVERAL_CHOICE') | translate : { FOOD_NAME: dishElement.name | lowercase, QUANTITY: dishElement.quantity} }}
-<div *ngFor="let element of menuService.getFlattenCategorieElements(dishElement.food.id)">
+{{ (formulaElement.quantity === 1 ? 'FORMULA.MAKE_A_CHOICE' : 'FORMULA.MAKE_SEVERAL_CHOICE') | translate : { FOOD_NAME: formulaElement.dishElement.name | lowercase, QUANTITY: formulaElement.quantity} }}
+<div *ngFor="let element of menuService.getFlattenCategorieElements(formulaElement.dishElement.food.id)">
     <app-choice-list
         [element]="element.child"
         [extraPrices]="extraPrices" 
     ></app-choice-list> 
     <app-plus-minus-counter
         [quantity]="getQuantity(element.child)"
-        [available]="dishElement.quantity - formArray.length"
-        (addElement)="addElement(element.child)"
+        [available]="formulaElement.quantity - formArray.length"
+        (addElement)="addElement(element.child, element.quantity)"
         (removeElement)="removeElement(element.child)"
     ></app-plus-minus-counter>
 </div>
+
 <ng-container *ngFor="let formGroupControl of getElementsWithSubChoice(); index as i">
     <app-ingredient-choice
-        [food]="formGroupControl.controls['choice'].value"
-        [formGroup]="formGroupControl.controls['subChoice']"
+        [formArray]="formGroupControl"
         [number]="getQuantity(formGroupControl.controls['choice'].value) > 1 ? (i + 1) : 0"
         [extraPrices]="extraPrices"
   >

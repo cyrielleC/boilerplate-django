@@ -21,6 +21,6 @@
                 <button (click)="$event.stopPropagation();removeItem(i)"><mat-icon>delete</mat-icon></button>
             </div>
         </div>
-        <button *ngIf="order.length > 0" [routerLink]="['../cart']" >{{'CART.ORDER' | translate}}</button>
+        <button *ngIf="order.length > 0" [routerLink]="['cart']" >{{'CART.ORDER' | translate}}</button>
     </mat-menu>
 </ng-container>

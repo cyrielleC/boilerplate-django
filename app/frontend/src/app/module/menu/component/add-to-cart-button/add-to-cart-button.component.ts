@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Dialog } from '@angular/cdk/dialog';
-import { ChoicePopUpComponent, DishElementWithQuantity, FormulaChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
+import { ChoicePopUpComponent, FormulaElementWithDishElement, FormulaChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
 import { CategoryService } from '@menu/service/order.service';
 import { addToCartAction } from '@menu/store/menu.actions';
-import { CategoryElement, Formula } from '@app/model/api-recipe.models';
+import { CategoryElement, DishElement, Formula } from '@app/model/api-recipe.models';
 
 @Component({
   selector: 'app-add-to-cart-button',
@@ -25,14 +25,15 @@ export class AddToCartButtonComponent {
   addToCart(): void {
 
     let formula: Formula | undefined = this.categoryElement.formulas.find((fomulaEl) => fomulaEl.id === this.formulaId);
-    let dishElementsWithQuantity: DishElementWithQuantity[] = this.categoryElement.elements
-    .filter((el) =>
+    let dishElementsWithQuantity: FormulaElementWithDishElement[] = this.categoryElement.elements
+    .filter((el: DishElement) =>
       formula!.elements.some(formulaEl => formulaEl.dishElementId === el.id)
       && this.orderService.hasChoice(el.food) 
     ).map((el) => {
+      const formulaEl = formula!.elements.find(formulaEl => formulaEl.dishElementId === el.id)!;
       return {
-        ...el,
-        quantity: formula!.elements.find(formulaEl => formulaEl.dishElementId === el.id)?.quantity ?? 1,
+        ...formulaEl,
+        dishElement: el,
       };
     });
 
@@ -51,7 +52,7 @@ export class AddToCartButtonComponent {
         width: '100%',
         data: {
           ...actionPayload,
-          dishElements: dishElementsWithQuantity,
+          formulaElementWithDish: dishElementsWithQuantity,
           extraPrices: this.categoryElement.formulaExtraPrices
         }
       });

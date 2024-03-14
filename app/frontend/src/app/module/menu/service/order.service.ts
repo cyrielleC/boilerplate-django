@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Dish, Food, FoodCategory, FoodElement, FoodType, FormulaExtraPrice, Ingredient, Restaurant } from '@app/model/api-recipe.models';
+import { Category, CategoryElement, Dish, DishElement, Food, FoodCategory, FoodElement, FoodType, FormulaElement, FormulaExtraPrice, Ingredient, Restaurant } from '@app/model/api-recipe.models';
 import { Store } from '@ngrx/store';
 import { selectRestaurant } from '@menu/store/menu.selector';
 import { ChoiceModel, DishChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
-import { IngredientChoiceValue } from '@menu/component/ingredient-choice/ingredient-choice.component';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +10,7 @@ import { IngredientChoiceValue } from '@menu/component/ingredient-choice/ingredi
 export class CategoryService {
 
   restaurant: Restaurant | undefined;
+  allDishElements: DishElement[];
 
   constructor(
     private readonly store: Store,
@@ -18,6 +18,9 @@ export class CategoryService {
     this.store.select(selectRestaurant)
       .subscribe((restaurant: Restaurant | undefined) => {
         this.restaurant = restaurant;
+        this.allDishElements = this.restaurant!.categories.flatMap(
+          (cat: Category) => cat.elements.flatMap((catEl: CategoryElement) => catEl.elements)
+        );
       });
   }
 
@@ -51,32 +54,30 @@ export class CategoryService {
       return 0;
     }
 
-    let finalPrice = 0;
-
-    for (const [key, value] of Object.entries(choice)) {
-      let arrayToMep;
-      value.map((el: ChoiceModel)=> {
-        arrayToMep = el as IngredientChoiceValue[];
-        if (!(el instanceof Array)) {
-          finalPrice = finalPrice + this.getFoodExtraPrice(el.choice.id,extraPrices);
-          arrayToMep = (el.subChoice ? [el.subChoice] : []) as IngredientChoiceValue[];
+    return Object.values(choice)
+      .flatMap(
+        (el: ChoiceModel[]) => {
+          return el.flatMap((choice: ChoiceModel) => [
+            ...Object.values(choice.subChoice ?? {})
+            .flatMap(
+              (subEl: Ingredient[]) => subEl.map((ing: Ingredient) => this.getFoodExtraPrice(ing.id, extraPrices))
+            ),
+            this.getFoodExtraPrice(choice.choice?.id,extraPrices)
+          ])
         }
-        arrayToMep.forEach((ingredientChoice: IngredientChoiceValue) => {
-          finalPrice = Object.values(ingredientChoice)
-                        .flatMap(
-                          (ingredients: Ingredient[]) => {
-                            return ingredients.map(
-                              (ingredient: Ingredient) => 
-                                this.getFoodExtraPrice(ingredient.id, extraPrices)
-                            )
-                          }).reduce<number>((acc, nombre) => acc + nombre, finalPrice);
-        });
-      });
-    }
-    return finalPrice;
+      )
+      .reduce<number>((acc, nombre) => acc + nombre, 0);
   }
 
   getFoodExtraPrice(foodId: number, categoryExtraPrice: FormulaExtraPrice): number {
     return categoryExtraPrice[foodId] ?? 0;
+  }
+
+  getAssociatedDishElement(formulaEl: FormulaElement): DishElement {
+    const dishElement = this.allDishElements.find((el: DishElement) => el.id === formulaEl.dishElementId);
+    if (!dishElement) {
+      throw new Error('shouldnt happen');
+    }
+    return dishElement;
   }
 }

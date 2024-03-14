@@ -17,11 +17,11 @@ export class ChoiceListComponent {
   ) {
   }
   
-  getTranslationKey(value: Food): string {
-    if (value.type === FoodType.CATEGORY) {
-      let elements = value.elements;
+  getNameIngredientsAndPrice(): string {
+    if (this.element.type === FoodType.CATEGORY) {
+      let elements = this.element.elements;
       if (!elements) {
-        elements = this.menuService.getCategorieElements(value.id);
+        elements = this.menuService.getCategorieElements(this.element.id);
       }
       if (elements) {
         return elements.map((el, index) => 
@@ -31,7 +31,7 @@ export class ChoiceListComponent {
         ).join('ING_JOIN');
       }
     }
-    return (value.shortName ? value.shortName : value.name) + this.getExtraPriceIfApplicable(value);
+    return (this.element.shortName ? this.element.shortName : this.element.name) + this.getExtraPriceIfApplicable(this.element);
   }
 
   getExtraPriceIfApplicable(food: Food) {

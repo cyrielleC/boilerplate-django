@@ -1,6 +1,6 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ChoiceFormGroup } from '@menu/component/category-choice/category-choice.component';
 import { ingredientChoiceValidator } from '@app/validaror/ingredient-choice.validator';
 import { IngredientChoiceValue } from '@menu/component/ingredient-choice/ingredient-choice.component';
@@ -8,24 +8,23 @@ import { Store } from '@ngrx/store';
 import { addToCartAction } from '@menu/store/menu.actions';
 import { CategoryService } from '@menu/service/order.service';
 import { Observable, combineLatest, map, startWith } from 'rxjs';
-import { Dish, DishElement, FoodType, Formula, FormulaExtraPrice } from '@app/model/api-recipe.models';
+import { Dish, DishElement, FoodElement, FoodType, Formula, FormulaElement, FormulaExtraPrice } from '@app/model/api-recipe.models';
+import { formArraySizeValidator } from '@app/validaror/form-array-size.validator';
 
-export interface DishElementWithQuantity extends DishElement{
-  quantity: number;
+export interface FormulaElementWithDishElement extends FormulaElement {
+  dishElement: DishElement;
 }
 
 export interface ChoicePopUp {
   name: string;
   formula: Formula;
-  dishElements: DishElementWithQuantity[];
+  formulaElementWithDish: FormulaElementWithDishElement[];
   extraPrices: FormulaExtraPrice;
 }
-
-export type ChoiceModel = 
-{choice: Dish, subChoice?: IngredientChoiceValue} 
-| IngredientChoiceValue[];
+export type ChoiceModel = {choice: Dish, subChoice?: IngredientChoiceValue};
 
 export type DishChoice = {
+  // The key is a formulaElement id
   [key in string]: ChoiceModel[]
 };
 
@@ -33,6 +32,7 @@ export interface FormulaChoice {
   name: string;
   formula: Formula;
   dishChoice?: DishChoice;
+  extraPrices?: FormulaExtraPrice;
   price?: number;
 }
 
@@ -43,8 +43,7 @@ export interface FormulaChoice {
 })
 export class ChoicePopUpComponent implements OnInit {
   foodType = FoodType;
-  formGroupCat: FormGroup<{[key in string]: FormArray<ChoiceFormGroup>}> = new FormGroup({});
-  formGroupIng: FormGroup<{[key in string]: FormGroup}> = new FormGroup({});
+  formGroup: FormGroup<{[key in string]: FormArray<ChoiceFormGroup>}> = new FormGroup({});
   price$: Observable<number>;
 
   constructor(
@@ -55,22 +54,25 @@ export class ChoicePopUpComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    this.data.dishElements.forEach((dishElement)=> {
-      dishElement.food.type === FoodType.CATEGORY ?
-        this.formGroupCat.addControl(dishElement.id.toString(), new FormArray<ChoiceFormGroup>([], Validators.required))
-      :
-        this.formGroupIng.addControl(dishElement.id.toString(), new FormGroup({}, [Validators.required, ingredientChoiceValidator()]) as FormGroup)
+    this.data.formulaElementWithDish.forEach((formulaElWithdishElement)=> {
+      this.formGroup.addControl(formulaElWithdishElement.id.toString(), new FormArray<ChoiceFormGroup>([], formArraySizeValidator(formulaElWithdishElement.quantity, formulaElWithdishElement.quantity)));
+      if (formulaElWithdishElement.dishElement.food.type === FoodType.DISH) {
+        const formArrayValue = [];
+        for (let i = 0; i < formulaElWithdishElement.quantity; i++) {
+          this.formGroup.controls[formulaElWithdishElement.id.toString()].push(new FormGroup(
+            {
+              choice: new FormControl(formulaElWithdishElement.dishElement.food as Dish),
+              subChoice:  new FormGroup({}, ingredientChoiceValidator())
+            }
+          ) as ChoiceFormGroup);
+        }
+      }
     });
 
-    this.price$ = combineLatest(
-      [
-        this.formGroupCat.valueChanges.pipe(startWith(true)),
-        this.formGroupIng.valueChanges.pipe(startWith(true))
-      ]).pipe(
+    this.price$ = this.formGroup.valueChanges.pipe(startWith(true)).pipe(
       map(() => this.reCalculatePrice()),
     );
   }
-
 
   reCalculatePrice(): number {
     return this.data.formula.price 
@@ -85,7 +87,8 @@ export class ChoicePopUpComponent implements OnInit {
           name: this.data.name,
           formula: this.data.formula,
           dishChoice: this.getFormsValues(),
-          price: this.reCalculatePrice()
+          price: this.reCalculatePrice(),
+          extraPrices: this.data.extraPrices
         }
       })
     );
@@ -93,6 +96,7 @@ export class ChoicePopUpComponent implements OnInit {
   }
 
   private getFormsValues(): DishChoice {
-    return {...this.formGroupCat.value, ...this.formGroupIng.value};
+    // @ts-ignore
+    return {...this.formGroup.value} as DishChoice;
   }
 }

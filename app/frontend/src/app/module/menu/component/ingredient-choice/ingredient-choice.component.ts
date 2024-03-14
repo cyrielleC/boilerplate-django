@@ -1,11 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Dish, FoodCategory, FoodElement, FoodType, FormulaExtraPrice, Ingredient } from '@app/model/api-recipe.models';
 import { CategoryService } from '@menu/service/order.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { removeLastOccurrence } from '@app/utils/removeLastOccurence';
 import { formControlArraySizeValidator } from '@app/validaror/form-control-array-size.validator';
+import { FormulaElementWithDishElement } from '../choice-pop-up/choice-pop-up.component';
+import { ChoiceFormGroup } from '../category-choice/category-choice.component';
 
 export type IngredientChoiceValue = {
+  // the key is a food category id
   [key in string]: Ingredient[];
 }
 
@@ -15,9 +18,8 @@ export type IngredientChoiceValue = {
   styleUrl: './ingredient-choice.component.scss'
 })
 export class IngredientChoiceComponent implements OnInit {
-  @Input({ required: true }) food!: Dish;
   @Input({ required: true }) extraPrices!: FormulaExtraPrice;
-  @Input({ required: true }) formGroup!: FormGroup;
+  @Input({ required: true }) formArray!: ChoiceFormGroup;
   @Input() number: number = 1;
   foodCategoryElements: (FoodElement<FoodCategory | Ingredient>
   & {
@@ -30,9 +32,9 @@ export class IngredientChoiceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.foodCategoryElements = this.food.elements
-      .filter((el) => el.child.type === FoodType.CATEGORY)
-      .map((el) => {
+    this.foodCategoryElements = this.formArray.controls['choice'].value.elements
+      .filter((el: FoodElement<Ingredient | FoodCategory>) => el.child.type === FoodType.CATEGORY)
+      .map((el: FoodElement<Ingredient | FoodCategory>) => {
         return {
           ...el,
           elements: this.menuService.getFlattenCategorieElements(el.child.id)
@@ -40,30 +42,30 @@ export class IngredientChoiceComponent implements OnInit {
       });
       
     this.foodCategoryElements.forEach((el) => {
-      this.formGroup.addControl(el.child.id.toString(), new FormControl(
-        [], [Validators.required, formControlArraySizeValidator(el.quantity, el.quantity)]
-        ));
-    });
+        this.formArray.controls['subChoice']!.addControl(el.child.id.toString(), new FormControl(
+          [], [Validators.required, formControlArraySizeValidator(el.quantity, el.quantity)]
+          ));
+      });
   }
 
   getQuantity(foodCategoryId: number, ingredientId: number): number {
-    return this.formGroup.controls[foodCategoryId].value.filter((el: Ingredient)=> ingredientId === el.id).length;
+    return this.formArray.controls['subChoice'].controls[foodCategoryId].value.filter((el: Ingredient)=> ingredientId === el.id).length;
   }
 
   addElement(foodCategoryId: number, ingredient: Ingredient | Dish): void {
-    this.formGroup.controls[foodCategoryId].value.push(
+    this.formArray.controls['subChoice'].controls[foodCategoryId].value.push(
       ingredient
     );
-    this.formGroup.controls[foodCategoryId].setValue(
-      [...this.formGroup.controls[foodCategoryId].value]
+    this.formArray.controls['subChoice'].controls[foodCategoryId].setValue(
+      [...this.formArray.controls['subChoice'].controls[foodCategoryId].value]
     );
   }
   
   removeElement(foodCategoryId: number, ingredient: Ingredient | Dish): void {
-    this.formGroup.controls[foodCategoryId].setValue(removeLastOccurrence([...this.formGroup.controls[foodCategoryId].value], ingredient));
+    this.formArray.controls['subChoice'].controls[foodCategoryId].setValue(removeLastOccurrence([...this.formArray.controls['subChoice'].controls[foodCategoryId].value], ingredient));
   }
 
   setSoleElement(foodCategoryId: number, ingredient: Ingredient | Dish): void {
-    this.formGroup.controls[foodCategoryId].setValue([ingredient]);
+    this.formArray.controls['subChoice'].controls[foodCategoryId].setValue([ingredient]);
   }
 }

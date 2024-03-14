@@ -17,8 +17,8 @@
         },
         "INGREDIENT_DISPLAY": "Ingrédients: {{FOODS}}",
         "INGREDIENT": "ingrédient",
-        "MAKE_A_CHOICE": "Choisissez votre {{FOOD_NAME}}:",
-        "MAKE_SEVERAL_CHOICE": "{{FOOD_NAME}} ({{QUANTITY}} à choisir)",
+        "MAKE_A_CHOICE": "Choisissez votre {{FOOD_NAME}} :",
+        "MAKE_SEVERAL_CHOICE": "{{FOOD_NAME}} ({{QUANTITY}} à choisir) :",
         "DESCRIPTION": "Formule \"{{DESCRIPTION}}\""
     },
     "CART": {

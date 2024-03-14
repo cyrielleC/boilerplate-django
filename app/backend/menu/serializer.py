@@ -67,6 +67,7 @@ class FormulaSerializer(serializers.ModelSerializer):
         serialized_elements = []
         for element in elements:
             element_data = {
+                'id': element.id,
                 'dishElementId': element.dishElement_id,
                 'order': element.order,
                 'quantity': element.quantity,
