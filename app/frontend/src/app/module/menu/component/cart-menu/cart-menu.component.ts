@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { FormulaChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
+import { FormulaChoice } from '@app/model/local-recipe.models';
 import { selectOrder } from '@menu/store/menu.selector';
 import { removeFromCartAction } from '@menu/store/menu.actions';
 

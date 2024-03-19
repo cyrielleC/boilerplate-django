@@ -1,4 +1,4 @@
-<!-- <h3>{{ food.name + (number ? ' ' + number : '') }}</h3> -->
+<h3>{{ formArray.controls['choice'].value.name + (number ? ' ' + number : '') }}</h3>
 <div *ngFor="let foodCategoryElement of foodCategoryElements">
     <ng-container *ngIf="foodCategoryElement.quantity > 1">
         {{ 'FORMULA.MAKE_SEVERAL_CHOICE' | translate : { FOOD_NAME: foodCategoryElement.child.name, QUANTITY: foodCategoryElement.quantity } }}

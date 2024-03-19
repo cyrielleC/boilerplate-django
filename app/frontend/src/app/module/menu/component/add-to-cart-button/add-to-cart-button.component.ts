@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Dialog } from '@angular/cdk/dialog';
-import { ChoicePopUpComponent, FormulaElementWithDishElement, FormulaChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
+import { ChoicePopUpComponent } from '@menu/component/choice-pop-up/choice-pop-up.component';
+import { FormulaChoice } from '@app/model/local-recipe.models';
+import { FormulaElementWithDishElement } from '@app/model/local-recipe.models';
 import { CategoryService } from '@menu/service/order.service';
 import { addToCartAction } from '@menu/store/menu.actions';
 import { CategoryElement, DishElement, Formula } from '@app/model/api-recipe.models';
@@ -24,8 +26,8 @@ export class AddToCartButtonComponent {
   
   addToCart(): void {
 
-    let formula: Formula | undefined = this.categoryElement.formulas.find((fomulaEl) => fomulaEl.id === this.formulaId);
-    let dishElementsWithQuantity: FormulaElementWithDishElement[] = this.categoryElement.elements
+    const formula: Formula | undefined = this.categoryElement.formulas.find((fomulaEl) => fomulaEl.id === this.formulaId);
+    const dishElementsWithQuantity: FormulaElementWithDishElement[] = this.categoryElement.elements
     .filter((el: DishElement) =>
       formula!.elements.some(formulaEl => formulaEl.dishElementId === el.id)
       && this.orderService.hasChoice(el.food) 
@@ -48,7 +50,7 @@ export class AddToCartButtonComponent {
       }));
     }
     else {
-      const dialogRef = this.dialog.open<string>(ChoicePopUpComponent, {
+      this.dialog.open<string>(ChoicePopUpComponent, {
         width: '100%',
         data: {
           ...actionPayload,

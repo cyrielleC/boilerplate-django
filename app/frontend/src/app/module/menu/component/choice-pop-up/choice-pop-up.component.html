@@ -10,11 +10,16 @@
     <ng-container
       *ngIf="formulaEl.dishElement.food.type === foodType.DISH"
     >
+    <ng-container
+      *ngFor="let controls of formGroup.controls[formulaEl.id].controls; index as i"
+    >
       <app-ingredient-choice
-        *ngFor="let control of formGroup.controls[formulaEl.id].controls"
+        *ngFor="let control of controls.controls"
         [formArray]="control"
         [extraPrices]="data.extraPrices"
+        [number]="i + 1"
       ></app-ingredient-choice>
+    </ng-container>
     </ng-container>
   </div>
   <button [disabled]="!formGroup.valid" (click)="submit()">{{ 'CART.ADD_TO_CART' | translate: {AMOUNT: (price$ | async) } }}</button>

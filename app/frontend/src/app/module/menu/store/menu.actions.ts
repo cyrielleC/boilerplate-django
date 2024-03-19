@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Restaurant } from '@app/model/api-recipe.models';
-import { FormulaChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
+import { FormulaChoice } from '@app/model/local-recipe.models';
 
 export const getRestaurantAction = createAction('[Menu] Get Menu');
 export const setRestaurantAction = createAction('[Menu] Set Menu', props<{restaurant: Restaurant}>());

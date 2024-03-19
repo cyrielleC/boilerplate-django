@@ -5,17 +5,12 @@
         "MANAGE_PROMOTION": "Gérer vos offres"
     },
     "FORMULA": {
-        "PRICES": {
-            "ALLPRICE": "Entrée plat dessert: {{PRICE}} €",
-            "PRICE": "Plat seul: {{PRICE}} €",
-            "STARTERDISHPRICE": "Entrée plat: {{PRICE}} €",
-            "DISHDESSERTPRICE": "Plat desssert: {{PRICE}} €"
-        },
         "CHOICE_DISPLAY": {
             "WITH_NAME": "{{NAME}}: {{FOODS}}",
-            "WITHOUT_NAME": "{{FOODS}}"
+            "WITHOUT_NAME": "{{FOODS}}",
+            "WITH_QUANTITY": "{{QUANTITY}} {{FOODS}}"
         },
-        "INGREDIENT_DISPLAY": "Ingrédients: {{FOODS}}",
+        "INGREDIENT_DISPLAY": "Ingrédients:",
         "INGREDIENT": "ingrédient",
         "MAKE_A_CHOICE": "Choisissez votre {{FOOD_NAME}} :",
         "MAKE_SEVERAL_CHOICE": "{{FOOD_NAME}} ({{QUANTITY}} à choisir) :",
@@ -25,7 +20,9 @@
         "ADD_TO_CART": "Ajouter ({{AMOUNT}} €)",
         "EMPTY_CART": "Panier vide",
         "TITLE": "Votre commande",
-        "ORDER": "Passer la commande"
+        "ORDER": "Passer la commande",
+        "PRICE":  "{{PRICE}} €",
+        "EXTRA_PRICE":  "+ {{PRICE}} €"
     },
     "INGREDIENT": {
         "LIST": {

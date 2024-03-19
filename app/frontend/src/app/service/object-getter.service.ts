@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MemoizedSelector, Store } from '@ngrx/store';
 import { TypedAction } from '@ngrx/store/src/models';
-import { Observable, catchError, filter, map, mapTo, tap } from 'rxjs';
+import { Observable, filter, map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

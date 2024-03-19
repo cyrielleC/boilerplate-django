@@ -1,6 +1,6 @@
 <mat-accordion *ngIf="restaurant$ | async as restaurant">
     <mat-expansion-panel *ngFor="let category of restaurant.categories; index as i; first as isFirst"
-    [expanded]="isFirst"
+    [expanded]="((fragment$ | async) === null && isFirst) || (fragment$ | async) === category.name"
     [id]="category.name"
     >
         <mat-expansion-panel-header>
@@ -8,7 +8,7 @@
             <mat-panel-description>{{category.shortDescription}}</mat-panel-description>
         </mat-expansion-panel-header>
         <div>
-            <div *ngFor="let menu of category.elements">
+            <div *ngFor="let menu of category.elements" class="category-element">
                 <div class="card-category-element-title" *ngIf="menu.name || menu.elements[0].food.type === foodType.DISH">
                     {{ menu | choiceName}}
                 </div>

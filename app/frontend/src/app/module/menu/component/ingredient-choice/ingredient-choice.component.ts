@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Dish, FoodCategory, FoodElement, FoodType, FormulaExtraPrice, Ingredient } from '@app/model/api-recipe.models';
 import { CategoryService } from '@menu/service/order.service';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { removeLastOccurrence } from '@app/utils/removeLastOccurence';
 import { formControlArraySizeValidator } from '@app/validaror/form-control-array-size.validator';
-import { FormulaElementWithDishElement } from '../choice-pop-up/choice-pop-up.component';
 import { ChoiceFormGroup } from '../category-choice/category-choice.component';
 
 export type IngredientChoiceValue = {

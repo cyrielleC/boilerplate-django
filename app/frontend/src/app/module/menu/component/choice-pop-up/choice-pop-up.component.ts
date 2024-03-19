@@ -1,40 +1,16 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ChoiceFormGroup } from '@menu/component/category-choice/category-choice.component';
 import { ingredientChoiceValidator } from '@app/validaror/ingredient-choice.validator';
-import { IngredientChoiceValue } from '@menu/component/ingredient-choice/ingredient-choice.component';
 import { Store } from '@ngrx/store';
 import { addToCartAction } from '@menu/store/menu.actions';
 import { CategoryService } from '@menu/service/order.service';
-import { Observable, combineLatest, map, startWith } from 'rxjs';
-import { Dish, DishElement, FoodElement, FoodType, Formula, FormulaElement, FormulaExtraPrice } from '@app/model/api-recipe.models';
+import { Observable, map, startWith } from 'rxjs';
+import { Dish, FoodType } from '@app/model/api-recipe.models';
 import { formArraySizeValidator } from '@app/validaror/form-array-size.validator';
-
-export interface FormulaElementWithDishElement extends FormulaElement {
-  dishElement: DishElement;
-}
-
-export interface ChoicePopUp {
-  name: string;
-  formula: Formula;
-  formulaElementWithDish: FormulaElementWithDishElement[];
-  extraPrices: FormulaExtraPrice;
-}
-export type ChoiceModel = {choice: Dish, subChoice?: IngredientChoiceValue};
-
-export type DishChoice = {
-  // The key is a formulaElement id
-  [key in string]: ChoiceModel[]
-};
-
-export interface FormulaChoice {
-  name: string;
-  formula: Formula;
-  dishChoice?: DishChoice;
-  extraPrices?: FormulaExtraPrice;
-  price?: number;
-}
+import { ChoicePopUp } from '@app/model/local-recipe.models';
+import { DishChoice } from '@app/model/local-recipe.models';
 
 @Component({
   selector: 'app-choice-pop-up',
@@ -43,7 +19,7 @@ export interface FormulaChoice {
 })
 export class ChoicePopUpComponent implements OnInit {
   foodType = FoodType;
-  formGroup: FormGroup<{[key in string]: FormArray<ChoiceFormGroup>}> = new FormGroup({});
+  formGroup: FormGroup<{[key in string]: FormArray<FormArray<ChoiceFormGroup>>}> = new FormGroup({});
   price$: Observable<number>;
 
   constructor(
@@ -55,16 +31,18 @@ export class ChoicePopUpComponent implements OnInit {
   
   ngOnInit(): void {
     this.data.formulaElementWithDish.forEach((formulaElWithdishElement)=> {
-      this.formGroup.addControl(formulaElWithdishElement.id.toString(), new FormArray<ChoiceFormGroup>([], formArraySizeValidator(formulaElWithdishElement.quantity, formulaElWithdishElement.quantity)));
+      this.formGroup.addControl(formulaElWithdishElement.id.toString(), new FormArray<FormArray<ChoiceFormGroup>>([], formArraySizeValidator(formulaElWithdishElement.quantity, formulaElWithdishElement.quantity)));
       if (formulaElWithdishElement.dishElement.food.type === FoodType.DISH) {
-        const formArrayValue = [];
         for (let i = 0; i < formulaElWithdishElement.quantity; i++) {
-          this.formGroup.controls[formulaElWithdishElement.id.toString()].push(new FormGroup(
-            {
-              choice: new FormControl(formulaElWithdishElement.dishElement.food as Dish),
-              subChoice:  new FormGroup({}, ingredientChoiceValidator())
-            }
-          ) as ChoiceFormGroup);
+          this.formGroup.controls[formulaElWithdishElement.id.toString()].push(
+            new FormArray<ChoiceFormGroup>([
+              new FormGroup(
+                {
+                  choice: new FormControl(formulaElWithdishElement.dishElement.food as Dish),
+                  subChoice:  new FormGroup({}, ingredientChoiceValidator())
+                }
+              ) as ChoiceFormGroup
+          ]));
         }
       }
     });
@@ -75,6 +53,7 @@ export class ChoicePopUpComponent implements OnInit {
   }
 
   reCalculatePrice(): number {
+    console.log(this.formGroup);
     return this.data.formula.price 
       + this.menuService
           .calculateExtraPrice(this.data.extraPrices, this.getFormsValues());

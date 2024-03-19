@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Category, CategoryElement, Dish, DishElement, Food, FoodCategory, FoodElement, FoodType, FormulaElement, FormulaExtraPrice, Ingredient, Restaurant } from '@app/model/api-recipe.models';
 import { Store } from '@ngrx/store';
 import { selectRestaurant } from '@menu/store/menu.selector';
-import { ChoiceModel, DishChoice } from '@menu/component/choice-pop-up/choice-pop-up.component';
+import { DishChoice } from '@app/model/local-recipe.models';
+import { ChoiceModel } from '@app/model/local-recipe.models';
 
 @Injectable({
   providedIn: 'root'
@@ -56,14 +57,16 @@ export class CategoryService {
 
     return Object.values(choice)
       .flatMap(
-        (el: ChoiceModel[]) => {
-          return el.flatMap((choice: ChoiceModel) => [
-            ...Object.values(choice.subChoice ?? {})
-            .flatMap(
-              (subEl: Ingredient[]) => subEl.map((ing: Ingredient) => this.getFoodExtraPrice(ing.id, extraPrices))
-            ),
-            this.getFoodExtraPrice(choice.choice?.id,extraPrices)
-          ])
+        (el: ChoiceModel[][]) => {
+          return el.flatMap((choices: ChoiceModel[]) => 
+            choices.flatMap((choice: ChoiceModel) => [
+              ...Object.values(choice.subChoice ?? {})
+              .flatMap(
+                (subEl: Ingredient[]) => subEl.map((ing: Ingredient) => this.getFoodExtraPrice(ing.id, extraPrices))
+              ),
+              this.getFoodExtraPrice(choice.choice?.id,extraPrices)
+            ])
+          )
         }
       )
       .reduce<number>((acc, nombre) => acc + nombre, 0);

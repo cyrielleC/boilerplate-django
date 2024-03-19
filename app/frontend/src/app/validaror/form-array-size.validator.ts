@@ -8,7 +8,7 @@ export function formArraySizeValidator(min: number, max: number): ValidatorFn {
         }
         const arrayLength = control.length;
         if (arrayLength < min || arrayLength > max) {
-            return { arraySize: true };
+            return { ['arraySize' + arrayLength.toString()]: true };
         }
         return null;
     }

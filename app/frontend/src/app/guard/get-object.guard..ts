@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn } from '@angular/router';
 import { MemoizedSelector } from '@ngrx/store';
 import { TypedAction } from '@ngrx/store/src/models';
-import { Observable, combineLatest, filter, map, tap } from 'rxjs';
+import { Observable, combineLatest, filter, map } from 'rxjs';
 import { ObjectGetterService } from '../service/object-getter.service';
 
 

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ChoiceModel, FormulaChoice } from '../choice-pop-up/choice-pop-up.component';
+import { FormulaChoice } from '@app/model/local-recipe.models';
 import { selectOrder } from '@menu/store/menu.selector';
 import { Store } from '@ngrx/store';
-import { DishElement, Food, FoodCategory, FoodElement, FormulaElement, FormulaExtraPrice, Ingredient } from '@app/model/api-recipe.models';
+import { DishElement, Food, FoodCategory, FoodElement, FormulaElement, FormulaExtraPrice } from '@app/model/api-recipe.models';
 import { CategoryService } from '@menu/service/order.service';
 
 @Component({

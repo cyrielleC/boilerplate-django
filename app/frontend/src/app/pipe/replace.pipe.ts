@@ -5,8 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ReplacePipe implements PipeTransform {
 
-  transform(value: string, keyValueReplacementArray: {[key:string]: string}): any {
-    var keyRegexp = new RegExp(Object.keys(keyValueReplacementArray).join('|'), 'g');
+  transform(value: string, keyValueReplacementArray: {[key:string]: string}): string {
+    const keyRegexp = new RegExp(Object.keys(keyValueReplacementArray).join('|'), 'g');
 
     return value.replace(keyRegexp, function(matched: string) {
       return keyValueReplacementArray[matched];
