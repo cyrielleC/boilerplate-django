@@ -16,6 +16,7 @@ import { BasicFoodFormComponent } from './component/basic-food-form/basic-food-f
 import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
 import { SharedModule } from '@app/module/shared/shared.module';
 import { FoodElementPickAndOrderComponent } from './component/food-element-pick-and-order/food-element-pick-and-order.component';
+import { PipesModule } from '@app/pipe/pipe.module';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { FoodElementPickAndOrderComponent } from './component/food-element-pick-
     MatInputModule,
     CdkDropList,
     CdkDrag,
+    PipesModule,
   ]
 })
 export class RecipeModule { }

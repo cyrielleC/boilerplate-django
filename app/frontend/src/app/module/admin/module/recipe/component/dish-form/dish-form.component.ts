@@ -1,4 +1,4 @@
-import { selectFoodById, selectFoodByType } from '@admin/store/recipe.selector';
+import { selectFoodById } from '@admin/store/recipe.selector';
 import { Dialog } from '@angular/cdk/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
@@ -8,6 +8,7 @@ import { Dish, Food, FoodElement, FoodIngredientCategory, FoodType, Ingredient }
 import { Store } from '@ngrx/store';
 import { Observable, tap } from 'rxjs';
 import { RecipeService } from '../../service/recipe.service';
+import { FoodNamePopUpComponent } from '../food-name-pop-up/food-name-pop-up.component';
 
 @Component({
   selector: 'app-dish-form',
@@ -35,7 +36,7 @@ export class DishFormComponent implements OnInit {
             this.formGroup = new FormGroup({
               elements: new FormControl<FoodElement<Ingredient | FoodIngredientCategory>[]>([...((el as Dish).elements ?? []).map((el) => { return {...el}})])
             });
-      }),
+        }),
       ) as Observable<Dish>;
   }
 
@@ -70,7 +71,12 @@ export class DishFormComponent implements OnInit {
   }
 
   createElement(type: FoodType) {
-    // this.dialogRef();
+    this.dialog.open<string>(FoodNamePopUpComponent, {
+      width: '50%',
+      data: {
+        type,
+      }
+    });  
   }
 
 }

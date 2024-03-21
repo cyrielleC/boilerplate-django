@@ -19,7 +19,10 @@
                 <div
                     *ngFor="let element of formGroup.controls['elements'].value" 
                     [class]="'dish-form--elements-list-item ' + (element.child.type | lowercase)" cdkDrag>
-                    <div class="flex-grow-1">{{element.child.name}}</div>
+                    <div class="flex-grow-1">
+                        <div>{{ element.child.name }}</div>
+                        <div *ngIf="element.child.type === foodType.CATEGORY_I">{{ element.child | ingredientList}}</div>
+                    </div>                    
                     <app-plus-minus-counter
                         [quantity]="element.quantity"
                         [available]="1"
@@ -49,10 +52,14 @@
                             *ngIf="!alreadyInList(el)"
                             [class]="'dish-form--elements-category-list ' + (type | lowercase)"
                         >
-                            <div class="flex-grow-1">{{ el.name }}</div>
+                            <div class="flex-grow-1">
+                                <div>{{ el.name }}</div>
+                                <div *ngIf="type === foodType.CATEGORY_I">{{ el | ingredientList}}</div>
+                            </div>
                             <button mat-mini-fab color="link" (click)="add(el)">
                                 <mat-icon>add</mat-icon>
-                            </button>                        </div>
+                            </button>                        
+                        </div>
                     </ng-container>
                 </div>
             </div>

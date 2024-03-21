@@ -22,7 +22,7 @@ export class RecipeListComponent {
 
   createFood(type: FoodType): void {
     this.dialog.open<string>(FoodNamePopUpComponent, {
-      // width: '50%',
+      width: '50%',
       data: {
         type,
       }

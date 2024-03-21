@@ -1,9 +1,10 @@
 <div class="food-name-pop-up">
     <div class="food-name-pop-up--title">{{'CREATE_FOOD_TITLE' | translate}}</div>
     <form [formGroup]="formGroup">
-        <label>{{ 'CREATE_FOOD_INSTRUCTION' | translate }}</label>
-        <input type="text" formControlName="name" />
-        <button (click)="submit()" [disabled]="!formGroup.valid">{{'CREATE_FOOD'|translate}}</button>
+        <app-basic-food-form
+            [formGroup]="formGroup"
+        ></app-basic-food-form>
+        <button mat-raised-button (click)="submit()" [disabled]="!formGroup.valid">{{'CREATE_FOOD'|translate}}</button>
     </form>
 </div>
 
