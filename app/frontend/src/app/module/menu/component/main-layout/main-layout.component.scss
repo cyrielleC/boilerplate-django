@@ -1,10 +1,15 @@
+$headerHeight: 90px; // Déclaration de la variable de hauteur
+$sideWidth: 150px; // Déclaration de la variable de hauteur
+
 .main-layout {
     &--header {
+        height: $headerHeight;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        margin: 20px;
+        padding: 20px;
+        overflow-y: auto;
         &-restaurant {
             display: flex;
             flex-direction: row;
@@ -17,11 +22,16 @@
     &--content {
         display: flex;
         flex-direction: row;
+        height: calc(100vh - $headerHeight);
         &-side {
-            width: 250px;
+            width: $sideWidth;
+            overflow: auto;
         }
         &-main {
+            padding: 20px;
             flex-grow: 1;
+            overflow: auto;
+
         }
     }
 }

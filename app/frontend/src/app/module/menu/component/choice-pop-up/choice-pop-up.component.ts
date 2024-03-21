@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { addToCartAction } from '@menu/store/menu.actions';
 import { CategoryService } from '@menu/service/order.service';
 import { Observable, map, startWith } from 'rxjs';
-import { Dish, FoodType } from '@app/model/api-recipe.models';
+import { CATEGORIES, Dish, FoodType } from '@app/model/api-recipe.models';
 import { formArraySizeValidator } from '@app/validaror/form-array-size.validator';
 import { ChoicePopUp } from '@app/model/local-recipe.models';
 import { DishChoice } from '@app/model/local-recipe.models';
@@ -18,7 +18,7 @@ import { DishChoice } from '@app/model/local-recipe.models';
   styleUrl: './choice-pop-up.component.scss'
 })
 export class ChoicePopUpComponent implements OnInit {
-  foodType = FoodType;
+  categoryTypes = CATEGORIES;
   formGroup: FormGroup<{[key in string]: FormArray<FormArray<ChoiceFormGroup>>}> = new FormGroup({});
   price$: Observable<number>;
 

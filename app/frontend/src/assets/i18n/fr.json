@@ -10,7 +10,7 @@
             "WITHOUT_NAME": "{{FOODS}}",
             "WITH_QUANTITY": "{{QUANTITY}} {{FOODS}}"
         },
-        "INGREDIENT_DISPLAY": "Ingrédients:",
+        "INGREDIENT_DISPLAY": "Ingrédients: {{FOODS}}",
         "INGREDIENT": "ingrédient",
         "MAKE_A_CHOICE": "Choisissez votre {{FOOD_NAME}} :",
         "MAKE_SEVERAL_CHOICE": "{{FOOD_NAME}} ({{QUANTITY}} à choisir) :",
@@ -22,7 +22,9 @@
         "TITLE": "Votre commande",
         "ORDER": "Passer la commande",
         "PRICE":  "{{PRICE}} €",
-        "EXTRA_PRICE":  "+ {{PRICE}} €"
+        "EXTRA_PRICE":  "+ {{PRICE}} €",
+        "ORDER_TITLE": "{{NAME}}",
+        "ORDER_TITLE_WITH_FORMULA": "{{NAME}} (formule \"{{FORMULA_DESCRIPTION}}\")"
     },
     "INGREDIENT": {
         "LIST": {

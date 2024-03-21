@@ -51,6 +51,7 @@ export class AddToCartButtonComponent {
     }
     else {
       this.dialog.open<string>(ChoicePopUpComponent, {
+        panelClass: 'choice-pop-up-container',
         width: '100%',
         data: {
           ...actionPayload,

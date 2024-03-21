@@ -15,8 +15,8 @@ export class ObjectGetterService {
   getObject(selector: MemoizedSelector<any, any>, action: TypedAction<any>): Observable<boolean> {
     return this.store.select(selector).pipe(
         tap((el) => {
-          if (!el) {
-            this.store.dispatch(action);
+          if (!el || !el.length) {
+          this.store.dispatch(action);
           }
         }),
         filter((el) => !!el && (el.length === undefined || el.length > 0)),

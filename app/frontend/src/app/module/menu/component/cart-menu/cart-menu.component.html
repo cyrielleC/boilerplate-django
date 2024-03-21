@@ -1,7 +1,7 @@
 <ng-container *ngIf="order$ | async as order">
     <button 
-        [matMenuTriggerFor]="menu"
         mat-raised-button
+        [matMenuTriggerFor]="menu"
         [matBadge]="order.length" matBadgeColor="primary"
     >
         <span class="hideInMobile">{{ 'CART.TITLE' | translate }}</span>

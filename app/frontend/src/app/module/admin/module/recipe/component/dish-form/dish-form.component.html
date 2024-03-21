@@ -1,0 +1,62 @@
+<ng-container *ngIf="dish$ | async as dish">
+    <mat-toolbar 
+        class="dish-form--header">
+        <mat-toolbar-row>
+            <div class="flex-grow-1">{{ ( 'SINGLE_DISH_TITLE') | translate: {DISH_NAME: dish.name} }}</div>
+            <button mat-raised-button [routerLink]="[ '../../..']">
+                <mat-icon>arrow_back_ios</mat-icon>
+                <span>{{ ( 'BACK_TO_RECIPE') | translate }}</span>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <form [formGroup]="formGroup">
+        <app-basic-food-form
+            [formGroup]="formGroup"
+            [food]="dish"
+        ></app-basic-food-form>
+        <div class="dish-form--elements">
+            <div cdkDropList class="dish-form--elements-list" (cdkDropListDropped)="drop(formGroup.controls['elements'].value, $event)">
+                <div
+                    *ngFor="let element of formGroup.controls['elements'].value" 
+                    [class]="'dish-form--elements-list-item ' + (element.child.type | lowercase)" cdkDrag>
+                    <div class="flex-grow-1">{{element.child.name}}</div>
+                    <app-plus-minus-counter
+                        [quantity]="element.quantity"
+                        [available]="1"
+                        [min]="1"
+                        (addElement)="element.quantity = element.quantity + 1"
+                        (removeElement)="element.quantity = element.quantity - 1"
+                    ></app-plus-minus-counter>
+                    <button mat-mini-fab color="link" (click)="remove(element)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>  
+            <div
+                class="dish-form--elements-pick"
+            >
+                <div *ngFor="let type of [foodType.INGREDIENT, foodType.CATEGORY_I]">
+                    <div
+                        class="dish-form--elements-category-title">
+                        <div class="flex-grow-1">{{ ( (type | uppercase) + '_TITLE') | translate }}</div>
+                        <button mat-raised-button color="link" (click)="createElement(type)">
+                            {{ 'NEW' | translate }}
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                    <ng-container *ngFor="let el of (recipeService.data$[type] | async)">
+                        <div
+                            *ngIf="!alreadyInList(el)"
+                            [class]="'dish-form--elements-category-list ' + (type | lowercase)"
+                        >
+                            <div class="flex-grow-1">{{ el.name }}</div>
+                            <button mat-mini-fab color="link" (click)="add(el)">
+                                <mat-icon>add</mat-icon>
+                            </button>                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</ng-container>

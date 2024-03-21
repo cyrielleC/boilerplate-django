@@ -1,6 +1,30 @@
-<mat-tab-group animationDuration="0ms">
-    <mat-tab [label]="'TABS.MANAGE_RECIPE' | translate" [routerLink]="['recipe']"></mat-tab>
-    <mat-tab [label]="'TABS.MANAGE_MENU' | translate" [routerLink]="['menu']"></mat-tab>
-    <mat-tab [label]="'TABS.MANAGE_PROMOTION' | translate" [routerLink]="['promotion']"></mat-tab>
-</mat-tab-group>
-<p>recipe-list works!</p>
+
+<div class="recipe">
+    <div
+        *ngFor="let type of [foodType.DISH,foodType.INGREDIENT,foodType.CATEGORY_I]"
+        class="recipe-category"
+    >
+        <mat-toolbar class="recipe-category--header">
+            <mat-toolbar-row>
+                <div class="flex-grow-1">{{ ( (type | uppercase) + '_TITLE') | translate }}</div>
+                <button 
+                    mat-raised-button
+                    (click)="createFood(type)"
+                >
+                    <mat-icon>add_circle</mat-icon>
+                    <span>{{ ( (type | uppercase) + '_ADD') | translate }}</span>
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    <div
+            class="recipe-category--list"
+        >
+            <button 
+                *ngFor="let food of recipeService.data$[type] | async"
+                mat-raised-button
+                class="recipe-category--list-element"
+                [routerLink]="['./food/' + (type | lowercase) + '/' + food.id]"
+            ><span>{{food.name}}</span></button>
+        </div>
+    </div>
+</div>

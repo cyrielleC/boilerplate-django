@@ -1,6 +1,28 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'responsive.scss';
 /* You can add global styles to this file, and also import other style files */
 
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// TODO put it somewhere specifique
+.choice-pop-up-container .cdk-dialog-container {overflow-y: scroll;}
+.choice-pop-up-container {height: 100%;}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.dish {
+    background-color: #d4cb3b;
+}
+.category_i {
+    background-color: #f2e98b;
+}
+.ingredient {
+    background-color: #f8efcf;
+}
+.category_d {
+    background-color: #7aa30c;
+}

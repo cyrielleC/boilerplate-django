@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { FormulaChoice } from '@app/model/local-recipe.models';
 import { selectOrder } from '@menu/store/menu.selector';
 import { Store } from '@ngrx/store';
-import { DishElement, Food, FoodCategory, FoodElement, FormulaElement, FormulaExtraPrice } from '@app/model/api-recipe.models';
+import { DishElement, Food, FoodDishCategory, FoodElement, FormulaElement, FormulaExtraPrice } from '@app/model/api-recipe.models';
 import { CategoryService } from '@menu/service/order.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class CartComponent {
     return price > 0 ? price.toString() : '';
   }
 
-  getFoodElement(food: Food, foodId: string): FoodElement<FoodCategory> {
-    return food.elements?.find(el => foodId === el.child.id.toString()) as FoodElement<FoodCategory>;
+  getFoodElement(food: Food, foodId: string): FoodElement<FoodDishCategory> {
+    return food.elements?.find(el => foodId === el.child.id.toString()) as FoodElement<FoodDishCategory>;
   }
 }

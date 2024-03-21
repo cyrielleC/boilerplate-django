@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Category, CategoryElement, Dish, DishElement, Food, FoodCategory, FoodElement, FoodType, FormulaElement, FormulaExtraPrice, Ingredient, Restaurant } from '@app/model/api-recipe.models';
+import { CATEGORIES, Category, CategoryElement, Dish, DishElement, Food, FoodDishCategory, FoodElement, FoodIngredientCategory, FoodType, FormulaElement, FormulaExtraPrice, Ingredient, Restaurant } from '@app/model/api-recipe.models';
 import { Store } from '@ngrx/store';
 import { selectRestaurant } from '@menu/store/menu.selector';
 import { DishChoice } from '@app/model/local-recipe.models';
@@ -26,28 +26,28 @@ export class CategoryService {
   }
 
   hasChoice(food: Food): boolean {
-    if (food.type === FoodType.CATEGORY) {
+    if (this.isCategory(food.type)) {
       return true;
     }
-    return !!food.elements?.some(el => el.child.type === FoodType.CATEGORY)
+    return !!food.elements?.some(el => this.isCategory(el.child.type));
   }
 
-  getCategorieElements(categoryId: number): FoodElement<Ingredient | Dish | FoodCategory>[] {
+  getCategorieElements(categoryId: number): FoodElement<Dish | FoodDishCategory>[] | FoodElement<Ingredient | FoodIngredientCategory>[] {
     return this.restaurant?.foodcategories
-      .find((category: FoodCategory) => categoryId === category.id)?.elements ?? [];
+      .find((category: FoodDishCategory) => categoryId === category.id)?.elements ?? [];
   }
 
-  getFlattenCategorieElements(categoryId: number, quantity = 1): FoodElement<Ingredient | Dish>[] {
-    const elements = this.restaurant?.foodcategories.find((category: FoodCategory) => categoryId === category.id)?.elements ?? [];
-    return elements.flatMap(element => {
-      if (element.child.type === FoodType.CATEGORY) {
+  getFlattenCategorieElements(categoryId: number, quantity = 1): (FoodElement<Ingredient> | FoodElement<Dish>)[] {
+    const elements = this.restaurant?.foodcategories.find((category: FoodDishCategory) => categoryId === category.id)?.elements ?? [];
+    return elements.flatMap((element: FoodElement<any>) => {
+      if (this.isCategory(element.child.type)) {
         return this.getFlattenCategorieElements(element.child.id, element.quantity);
       }
       return {
         ...element,
         quantity: element.quantity * quantity,
       };
-    }) as FoodElement<Dish | Ingredient>[];
+    }) as FoodElement<Ingredient>[] | FoodElement<Dish>[];
   }
 
   calculateExtraPrice(extraPrices: FormulaExtraPrice, choice: DishChoice): number {
@@ -82,5 +82,9 @@ export class CategoryService {
       throw new Error('shouldnt happen');
     }
     return dishElement;
+  }
+
+  isCategory(type: FoodType): boolean {
+    return CATEGORIES.includes(type);
   }
 }

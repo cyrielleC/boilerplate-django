@@ -1,0 +1,22 @@
+.recipe {
+    display: flex;
+    flex-direction: column;
+    &-category {
+        &--list {
+            margin: 10px 0;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 10px;
+            &-element {
+                height: 50px;
+                max-width: 150px;
+                // margin-right: 10px;
+                // &:last-child {
+                //     margin-right: 0;
+                // }
+            }
+        }
+        
+    }
+}

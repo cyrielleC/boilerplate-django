@@ -13,12 +13,6 @@ const routes: Routes = [
   },  
   {
     path: 'menu',
-    canActivate: [GetObjectsGuard],
-    data: {
-      objectsConfig: [
-        [selectRestaurant, getRestaurantAction()],
-      ],
-    },
     loadChildren: () => import('./module/menu/menu.module').then(m => m.MenuModule)
   },
 ];

@@ -1,3 +1,3 @@
-<button mat-mini-fab color="link" [disabled]="quantity === 0" (click)="removeElement.emit()">-</button>
+<button mat-mini-fab color="link" [disabled]="quantity === min" (click)="removeElement.emit()">-</button>
 {{ quantity }}
 <button mat-mini-fab color="link" [disabled]="available === 0" (click)="addElement.emit()">+</button>

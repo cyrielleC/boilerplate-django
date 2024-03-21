@@ -6,9 +6,9 @@ f1.save()
 f3 = Food(name = 'base crème', type = FoodType.INGREDIENT.value)
 f3.save()
 
-c = Food(name="base au choix", shortName = "BAC", type = FoodType.CATEGORY.value)
+c = Food(name="base au choix", shortName = "BAC", type = FoodType.CATEGORY_I.value)
 c.save()
-c2 = Food(name="pizza", type = FoodType.CATEGORY.value)
+c2 = Food(name="pizza", type = FoodType.CATEGORY_D.value)
 c2.save()
 
 FoodElement.objects.create(child = f1, order =1, parent = c)
@@ -40,7 +40,7 @@ FormulaElement.objects.create(formula = fo1, dishElement = de, order= 1)
 FormulaElement.objects.create(formula = fo2, dishElement = de, order= 1)
 
 
-dessert = Food.objects.create(name="dessert", type = FoodType.CATEGORY.value)
+dessert = Food.objects.create(name="dessert", type = FoodType.CATEGORY_D.value)
 dessert1 = Food.objects.create(name="tiramisu", type = FoodType.DISH.value)
 dessert2 = Food.objects.create(name="tarte citron", type = FoodType.DISH.value)
 

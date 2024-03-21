@@ -4,36 +4,36 @@
         class="cart-item"
     >
         <div class="cart-item-header">
-            <div>{{orderElement.name}}</div>
+            <div>
+                {{ (orderElement.dishChoice ? 'CART.ORDER_TITLE' : 'CART.ORDER_TITLE_WITH_FORMULA') | translate: {NAME: orderElement.name, FORMULA_DESCRIPTION: orderElement.formula.description} }}
+            </div>
             <div>{{ 'CART.PRICE' | translate: { PRICE: orderElement.price ?? orderElement.formula.price } }}</div>
         </div>
-        <div class="cart-item-body">
+        <div *ngIf="orderElement.dishChoice" class="cart-item-body">
             <div *ngIf="orderElement.formula.description" class="cart-item-formula">
                 <div>{{ 'FORMULA.DESCRIPTION' | translate : {DESCRIPTION: orderElement.formula.description} }}</div>
                 <div>{{  'CART.PRICE' | translate: { PRICE: orderElement.formula.price } }}</div>
             </div>
-            <ng-container *ngIf="orderElement.dishChoice">
-                <ng-container *ngFor="let formulaEl of orderElement.formula.elements">
-                    <div>{{ getDishElement(formulaEl).name }}</div>
-                    <ng-container *ngIf="orderElement.dishChoice[formulaEl.id]">
-                        <ng-container *ngFor="let choices of orderElement.dishChoice[formulaEl.id]">
-                            <ng-container *ngFor="let choice of choices">
-                                <div>
-                                    <div>{{ choice.choice.name}}</div>
-                                    <div
-                                        *ngIf="getFoodExtraPrice(choice.choice.id, orderElement.extraPrices!)"
-                                    >{{ 'CART.EXTRA_PRICE' | translate: { PRICE: getFoodExtraPrice(choice.choice.id, orderElement.extraPrices!)} }}</div>
-                                </div>
-                                <ng-container *ngIf="choice.subChoice">
-                                    <ng-container *ngFor="let ingredientList of choice.subChoice | keyvalue">
-                                        <div *ngIf="getFoodElement(choice.choice, ingredientList.key) as foodElement" >{{ foodElement.child.name }} {{ foodElement.quantity }} :</div>
-                                        <div *ngFor="let ingredient of ingredientList.value">
-                                            <div>{{ ingredient.name}}</div>
-                                            <div
-                                                *ngIf="getFoodExtraPrice(ingredient.id, orderElement.extraPrices!)"
-                                            >{{ 'CART.EXTRA_PRICE' | translate: { PRICE: getFoodExtraPrice(ingredient.id, orderElement.extraPrices!) } }}</div>
-                                        </div>
-                                    </ng-container>
+            <ng-container *ngFor="let formulaEl of orderElement.formula.elements">
+                <div>{{ getDishElement(formulaEl).name }}</div>
+                <ng-container *ngIf="orderElement.dishChoice[formulaEl.id]">
+                    <ng-container *ngFor="let choices of orderElement.dishChoice[formulaEl.id]">
+                        <ng-container *ngFor="let choice of choices">
+                            <div>
+                                <div>{{ choice.choice.name}}</div>
+                                <div
+                                    *ngIf="getFoodExtraPrice(choice.choice.id, orderElement.extraPrices!)"
+                                >{{ 'CART.EXTRA_PRICE' | translate: { PRICE: getFoodExtraPrice(choice.choice.id, orderElement.extraPrices!)} }}</div>
+                            </div>
+                            <ng-container *ngIf="choice.subChoice">
+                                <ng-container *ngFor="let ingredientList of choice.subChoice | keyvalue">
+                                    <div *ngIf="getFoodElement(choice.choice, ingredientList.key) as foodElement" >{{ foodElement.child.name }} {{ foodElement.quantity }} :</div>
+                                    <div *ngFor="let ingredient of ingredientList.value">
+                                        <div>{{ ingredient.name}}</div>
+                                        <div
+                                            *ngIf="getFoodExtraPrice(ingredient.id, orderElement.extraPrices!)"
+                                        >{{ 'CART.EXTRA_PRICE' | translate: { PRICE: getFoodExtraPrice(ingredient.id, orderElement.extraPrices!) } }}</div>
+                                    </div>
                                 </ng-container>
                             </ng-container>
                         </ng-container>

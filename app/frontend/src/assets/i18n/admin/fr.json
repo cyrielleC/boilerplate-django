@@ -1,0 +1,17 @@
+{
+    "DISH_TITLE": "Vos produits",
+    "INGREDIENT_TITLE": "Vos ingredients",
+    "CATEGORY_I_TITLE": "Vos ingrédients \"à choix\"",
+    "DISH_ADD": "Ajouter un produit",
+    "INGREDIENT_ADD": "Ajouter un ingredient",
+    "CATEGORY_I_ADD": "Ajouter un ingrédient \"à choix\"",
+    "BACK_TO_RECIPE": "Retour à la liste de produits",
+    "SINGLE_DISH_TITLE": "Produit \"{{DISH_NAME}}\"",
+    "CREATE_FOOD_TITLE": "Création d'un nouveau produit",
+    "CREATE_FOOD_INSTRUCTION": "Commençons par lui donner un nom",
+    "CREATE_FOOD": "C'est parti !",
+    "NAME": "Nom",
+    "SHORT_NAME": "Nom court",
+    "DESCRIPTION": "Description",
+    "NEW": "Nouveau"
+}

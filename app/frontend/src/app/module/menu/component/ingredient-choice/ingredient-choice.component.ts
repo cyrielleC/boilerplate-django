@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Dish, FoodCategory, FoodElement, FoodType, FormulaExtraPrice, Ingredient } from '@app/model/api-recipe.models';
+import { Dish, FoodDishCategory, FoodElement, FoodIngredientCategory, FoodType, FormulaExtraPrice, Ingredient } from '@app/model/api-recipe.models';
 import { CategoryService } from '@menu/service/order.service';
 import { FormControl, Validators } from '@angular/forms';
 import { removeLastOccurrence } from '@app/utils/removeLastOccurence';
@@ -20,9 +20,9 @@ export class IngredientChoiceComponent implements OnInit {
   @Input({ required: true }) extraPrices!: FormulaExtraPrice;
   @Input({ required: true }) formArray!: ChoiceFormGroup;
   @Input() number: number = 1;
-  foodCategoryElements: (FoodElement<FoodCategory | Ingredient>
+  foodCategoryElements: (FoodElement<FoodIngredientCategory | Ingredient>
   & {
-    elements: FoodElement<Ingredient | Dish>[];
+    elements: FoodElement<Ingredient>[];
   })[];
 
   constructor(
@@ -32,11 +32,11 @@ export class IngredientChoiceComponent implements OnInit {
 
   ngOnInit() {
     this.foodCategoryElements = this.formArray.controls['choice'].value.elements
-      .filter((el: FoodElement<Ingredient | FoodCategory>) => el.child.type === FoodType.CATEGORY)
-      .map((el: FoodElement<Ingredient | FoodCategory>) => {
+      .filter((el: FoodElement<Ingredient | FoodIngredientCategory>) => this.menuService.isCategory(el.child.type))
+      .map((el: FoodElement<Ingredient | FoodIngredientCategory>) => {
         return {
           ...el,
-          elements: this.menuService.getFlattenCategorieElements(el.child.id)
+          elements: this.menuService.getFlattenCategorieElements(el.child.id) as FoodElement<Ingredient>[]
         }
       });
       

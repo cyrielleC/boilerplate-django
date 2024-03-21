@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from './component/card/card.component';
 import { MenuRoutingModule } from './menu.routing.module';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { PipesModule } from '../../pipe/pipe.module';
 import { ChoicePopUpComponent } from './component/choice-pop-up/choice-pop-up.component';
@@ -49,7 +49,6 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
   ],
   imports: [
     CommonModule,
-    MenuRoutingModule,
     TranslateModule,
     MatExpansionModule,
     PipesModule,
@@ -66,9 +65,18 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
       metaReducers: [localStorageSyncReducer]
     }),
     EffectsModule.forFeature(MenuEffects),
-  ],
+    MenuRoutingModule,
+  ],  
   providers: [
     { provide: META_REDUCERS, useFactory: localStorageSyncReducer, multi: true }
   ]
 })
-export class MenuModule { }
+export class MenuModule {
+  constructor(translate: TranslateService) {
+    // this language will be used as a fallback when a translation isn't found in the current language
+    translate.setDefaultLang('fr');
+    console.log('coucocu');
+    // the lang to use, if the lang isn't available, it will use the current loader to get them
+    translate.use('admin/fr');
+  }
+}

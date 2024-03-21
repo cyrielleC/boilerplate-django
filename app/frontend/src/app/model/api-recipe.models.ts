@@ -6,9 +6,12 @@ export interface ObjectWithId {
 
 export enum FoodType {
   DISH = 'DISH',
-  CATEGORY = 'CATEGORY',
+  CATEGORY_I = 'CATEGORY_I',
+  CATEGORY_D = 'CATEGORY_D',
   INGREDIENT = 'INGREDIENT',
 }
+
+export const CATEGORIES = [FoodType.CATEGORY_D, FoodType.CATEGORY_I];
 
 export interface FoodElement<T>  {
   quantity: number;
@@ -18,10 +21,10 @@ export interface FoodElement<T>  {
 
 export interface AbstractFood extends ObjectWithId {
     name: string;
-    shortName: string;
-    description: string;
+    shortName?: string;
+    description?: string;
     type: FoodType;
-    elements: null | (FoodElement<Ingredient | Dish | FoodCategory> | FoodElement<Ingredient>)[];
+    elements: null | (FoodElement<Dish | FoodDishCategory > | FoodElement<Ingredient | FoodIngredientCategory>)[];
 }
 
 export interface Ingredient extends AbstractFood {
@@ -31,17 +34,22 @@ export interface Ingredient extends AbstractFood {
 
 
 export interface Dish extends AbstractFood {
-    elements: FoodElement<Ingredient | FoodCategory>[];
+    elements: FoodElement<Ingredient | FoodIngredientCategory>[];
     type: FoodType.DISH;
 }
 
-export interface FoodCategory extends AbstractFood {
-    elements: FoodElement<Ingredient | Dish | FoodCategory>[];
-    type: FoodType.CATEGORY;
+export interface FoodDishCategory extends AbstractFood {
+    elements: FoodElement<Dish | FoodDishCategory>[];
+    type: FoodType.CATEGORY_D;
 }
 
-export type Food = Dish | FoodCategory | Ingredient;
-export type FoodWithElements = Dish | FoodCategory;
+export interface FoodIngredientCategory extends AbstractFood {
+    elements: FoodElement<Ingredient | FoodIngredientCategory>[];
+    type: FoodType.CATEGORY_I;
+}
+
+export type Food = Dish | FoodDishCategory | Ingredient | FoodIngredientCategory;
+export type FoodWithElements = Dish | FoodDishCategory;
 
 export interface Restaurant {
   name: string;
@@ -49,7 +57,7 @@ export interface Restaurant {
   address: string;
   addressLink: string;
   categories: Category[];
-  foodcategories: FoodCategory[];
+  foodcategories: FoodDishCategory[];
 }
 
 export interface Category {

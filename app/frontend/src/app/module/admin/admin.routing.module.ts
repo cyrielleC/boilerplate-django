@@ -1,20 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { GetObjectsGuard } from '../../guard/get-object.guard.';
-import { getCategoryAction, getDishAction } from '../../store/action/recipe.actions';
-import { selectCategories, selectDishes } from '../../store/selector/recipe.selector';
+import { MainLayoutComponent } from './component/main-layout/main-layout.component';
+import { selectFoodByType } from './store/recipe.selector';
+import { getFoodAction } from './store/recipe.actions';
 
 const routes: Routes = [
   {
-    path: 'recipe',
-    canActivate: [GetObjectsGuard],
-    data: {
-      objectsConfig: [
-        [selectCategories, getCategoryAction()],
-        [selectDishes, getDishAction()]
-      ],
-    },
-    loadChildren: () => import('./module/recipe/recipe.module').then(m => m.RecipeModule)
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      {
+        path: 'recipe',
+        canActivate: [GetObjectsGuard],
+        data: {
+          objectsConfig: [
+            [selectFoodByType(), getFoodAction()]
+          ],
+        },
+        loadChildren: () => import('./module/recipe/recipe.module').then(m => m.RecipeModule)
+      },
+      { path: '**', redirectTo: 'recipe' },
+    ]
   },
 ];
 

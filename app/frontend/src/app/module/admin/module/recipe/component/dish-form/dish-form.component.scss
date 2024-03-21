@@ -1,0 +1,60 @@
+.dish-form {
+    &--elements {
+        display: flex;
+        flex-direction: row;
+        & .dish-form--elements-list {
+            width: 65%;
+            border: solid 1px #ccc;
+            min-height: 50px;
+            overflow: hidden;
+            
+        }
+        &-pick {
+            width: 35%;
+            & .dish-form--elements-category-title, .dish-form--elements-category-list {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                padding: 10px;
+                border: solid 1px #ccc;
+            }
+        }
+
+    }
+}
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+    background-color: red;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  form {
+    margin: 20px;
+  }
+
+.cdk-drop-list-dragging .dish-form--elements-item:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// dont imbrick it or the drag and drop will lose style at dragging
+.dish-form--elements-list-item {
+    padding: 10px;
+    border-bottom: solid 1px #ccc;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    cursor: move;
+}

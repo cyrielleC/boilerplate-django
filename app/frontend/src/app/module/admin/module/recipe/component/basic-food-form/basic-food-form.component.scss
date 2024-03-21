@@ -1,0 +1,13 @@
+.basic-food-form {
+    &--name-inputs {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        > mat-form-field {
+            flex-grow: 0.5;
+        }
+    }
+    > mat-form-field {
+        width: 100%;
+    }
+}

@@ -1,0 +1,18 @@
+<div
+    class="basic-food-form"
+>
+    <div class="basic-food-form--name-inputs">
+        <mat-form-field class="example-full-width">
+            <mat-label>{{ 'NAME' | translate }}</mat-label>
+            <input matInput type="text" [formControl]="formGroup.controls['name']" />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>{{ 'SHORT_NAME' | translate }}</mat-label>
+            <input matInput type="text" [formControl]="formGroup.controls['shortName']" />
+        </mat-form-field>
+    </div>
+    <mat-form-field class="example-full-width">
+        <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+        <textarea matInput [formControl]="formGroup.controls['description']"></textarea>
+    </mat-form-field>
+</div>

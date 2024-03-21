@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Food, FoodType, FormulaExtraPrice } from '@app/model/api-recipe.models';
+import { Food, FormulaExtraPrice } from '@app/model/api-recipe.models';
 import { CategoryService } from '@menu/service/order.service';
 
 @Component({
@@ -18,13 +18,13 @@ export class ChoiceListComponent {
   }
   
   getNameIngredientsAndPrice(): string {
-    if (this.element.type === FoodType.CATEGORY) {
+    if (this.menuService.isCategory(this.element.type)) {
       let elements = this.element.elements;
       if (!elements) {
         elements = this.menuService.getCategorieElements(this.element.id);
       }
       if (elements) {
-        return elements.map((el, index) => 
+        return elements.map((el) => 
           (el.quantity > 1 ?  el.quantity : '') 
           + (el.child.shortName ? el.child.shortName : el.child.name)
           + this.getExtraPriceIfApplicable(el.child)

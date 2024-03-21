@@ -1,5 +1,9 @@
 from django.db import models
 
+# class BaseModel(models.Model):
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+
 class Restaurant(models.Model):
     name = models.CharField(max_length=200)
     number= models.CharField(max_length=50)
@@ -58,8 +62,12 @@ class FormulaExtraPrice(models.Model):
 
 class FoodType(models.TextChoices):
     DISH = 'DISH'
-    CATEGORY = 'CATEGORY'
+    CATEGORY_I = 'CATEGORY_I'
+    CATEGORY_D = 'CATEGORY_D'
     INGREDIENT = 'INGREDIENT'
+
+food_category_types = [FoodType.CATEGORY_I.value, FoodType.CATEGORY_D.value]
+
 
 class Food(models.Model):
     name = models.CharField(max_length=200)
@@ -72,6 +80,8 @@ class Food(models.Model):
     )
     def __str__(self):
         return self.name
+    class Meta:
+        ordering = ['name']
     
 class FoodElement(models.Model):
     quantity = models.IntegerField(default=1)
