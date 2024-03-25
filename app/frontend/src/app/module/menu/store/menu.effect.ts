@@ -20,7 +20,7 @@ export class MenuEffects {
   ), { dispatch: false });
 
   // TODO
-  loadRest2$ = createEffect(() => this.actions$.pipe(
+  loadRest$ = createEffect(() => this.actions$.pipe(
     ofType(getRestaurantAction.type),
     exhaustMap(
         () => this.apiRequestService.getRestaurant()

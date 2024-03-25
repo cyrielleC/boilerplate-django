@@ -1,10 +1,13 @@
 <div class="food-name-pop-up">
-    <div class="food-name-pop-up--title">{{'CREATE_FOOD_TITLE' | translate}}</div>
-    <form [formGroup]="formGroup">
-        <app-basic-food-form
-            [formGroup]="formGroup"
-        ></app-basic-food-form>
-        <button mat-raised-button (click)="submit()" [disabled]="!formGroup.valid">{{'CREATE_FOOD'|translate}}</button>
-    </form>
+    <div class="food-name-pop-up--title">
+        {{ ((data.type ?? food.type) + '.' + createOrUpdate + '_TITLE') | translate : {NAME: food.name} }}
+    </div>
+    <app-basic-food-form
+        [formGroup]="formGroup"
+        [food]="food"
+    ></app-basic-food-form>
+    <button mat-raised-button (click)="submit()" [disabled]="!formGroup.valid">
+        {{ (createOrUpdate + '_FOOD')|translate}}
+    </button>
 </div>
 

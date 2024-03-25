@@ -1,14 +1,14 @@
 import { selectFoodById } from '@admin/store/recipe.selector';
 import { Dialog } from '@angular/cdk/dialog';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Dish, Food, FoodElement, FoodIngredientCategory, FoodType, Ingredient } from '@app/model/api-recipe.models';
+import { Dish, Food, FoodType } from '@app/model/api-recipe.models';
 import { Store } from '@ngrx/store';
 import { Observable, tap } from 'rxjs';
 import { RecipeService } from '../../service/recipe.service';
-import { FoodNamePopUpComponent } from '../food-name-pop-up/food-name-pop-up.component';
+import { deleteFoodAction, updateFoodAction } from '@admin/store/recipe.actions';
+import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-dish-form',
@@ -20,7 +20,7 @@ export class DishFormComponent implements OnInit {
   dish$: Observable<Dish>;
   formGroup: FormGroup = new FormGroup({});
   foodType = FoodType;
-
+  subElements: FoodType[];
 
   constructor(
     private route: ActivatedRoute,
@@ -33,50 +33,44 @@ export class DishFormComponent implements OnInit {
     this.dish$ = this.store.select(selectFoodById(this.route.snapshot.params['id']))
       .pipe(
         tap((el: Food) => {
-            this.formGroup = new FormGroup({
-              elements: new FormControl<FoodElement<Ingredient | FoodIngredientCategory>[]>([...((el as Dish).elements ?? []).map((el) => { return {...el}})])
-            });
+            this.subElements = {
+              [FoodType.CATEGORY_D]: [FoodType.CATEGORY_D, FoodType.DISH],
+              [FoodType.CATEGORY_I]: [FoodType.INGREDIENT, FoodType.CATEGORY_I],
+              [FoodType.DISH]: [FoodType.INGREDIENT, FoodType.CATEGORY_I],
+              [FoodType.INGREDIENT]: [],
+            }[el.type];
         }),
       ) as Observable<Dish>;
   }
 
-  drop(elements: FoodElement<Ingredient | FoodIngredientCategory>[], event: CdkDragDrop<any>) {
-    moveItemInArray(elements, event.previousIndex, event.currentIndex);
-  }
+  combineChoices(): Observable<{ [key in FoodType]?: Food[] }> {
+    const observables: (Observable<Food[]>)[] = this.subElements.map(type => this.recipeService.data$[type]);
 
-  remove(element: FoodElement<FoodIngredientCategory | Ingredient>) {
-    this.formGroup.controls['elements'].setValue(
-      [
-        ...this.formGroup.controls['elements'].value.filter(
-          (el: FoodElement<FoodIngredientCategory | Ingredient>) => el.child.id !== element.child.id)
-      ]
+    return combineLatest(observables).pipe(
+      map(dataArray => {
+        const choices: { [key in FoodType]?: any } = {};
+        this.subElements.forEach((type, index) => {
+          choices[type] = dataArray[index];
+        });
+        return choices;
+      })
     );
   }
 
-  add(element: Food) {
-    this.formGroup.controls['elements'].setValue(
-      [
-        ...this.formGroup.controls['elements'].value,
-        {
-          child: element,
-          quantity: 1,
-          isVisible: true,
-        }
-      ]
-    );
+  save() {
+    // this.formGroup.controls['elements'].setValue((this.formGroup.controls['elements'].value ?? []).map((el: FoodElement<Food>, index: number) => {
+    //   return {
+    //     ...el,
+    //     order: index,
+    //   }}
+    // ));
+    this.store.dispatch(updateFoodAction({food: {
+      ...this.formGroup.value,
+      elements: [...this.formGroup.controls['elements']?.value ?? []]
+    }} ));
   }
-
-  alreadyInList(element: Food) {
-    return this.formGroup.controls['elements'].value.some((el: FoodElement<Ingredient | FoodIngredientCategory>) => el.child.id === element.id);
-  }
-
-  createElement(type: FoodType) {
-    this.dialog.open<string>(FoodNamePopUpComponent, {
-      width: '50%',
-      data: {
-        type,
-      }
-    });  
+  delete(foodId: number) {
+    this.store.dispatch(deleteFoodAction({foodId}));
   }
 
 }

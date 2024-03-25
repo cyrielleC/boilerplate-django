@@ -4,7 +4,7 @@ import { FormulaChoice } from '@app/model/local-recipe.models';
 import { selectOrder } from '@menu/store/menu.selector';
 import { Store } from '@ngrx/store';
 import { DishElement, Food, FoodDishCategory, FoodElement, FormulaElement, FormulaExtraPrice } from '@app/model/api-recipe.models';
-import { CategoryService } from '@menu/service/order.service';
+import { OrderService } from '@menu/service/order.service';
 
 @Component({
   selector: 'app-cart',
@@ -15,7 +15,7 @@ export class CartComponent {
   order$: Observable<FormulaChoice[]> = this.store.select(selectOrder);
   constructor(
     private readonly store: Store,
-    private readonly orderService: CategoryService,
+    private readonly orderService: OrderService,
   ) {
   }
 

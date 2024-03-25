@@ -1,6 +1,7 @@
-from menu.models import CategoryElement, Category, DishElement, Food, FoodElement, FoodType, Formula, Restaurant, food_category_types
+from menu.models import CategoryElement, Category, DishElement, Food, FoodElement, FoodType, Formula, Restaurant, FOOD_CATEGORY_TYPES
 from rest_framework import serializers
 from django.db.models import Q
+from django.db import transaction
 
 class FoodWithoutChildrenSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,9 +13,10 @@ class FoodElementSerializer(serializers.ModelSerializer):
     child = serializers.SerializerMethodField()
     class Meta:
         model = FoodElement
-        fields = ('quantity', 'isVisible','child')  
+        fields = ('quantity', 'isVisible','child', 'order')  
     def get_child(self, instance):
-        if instance.child.type not in food_category_types:
+        print('ifesdilfhdskjfhdjkshfjdkshfjdksfhksjd')
+        if instance.child.type not in FOOD_CATEGORY_TYPES:
             serializer = FoodSerializer(instance.child)
         else:
             serializer = FoodWithoutChildrenSerializer(instance.child)
@@ -37,7 +39,7 @@ class FoodCategorySerializer(FoodWithoutChildrenSerializer):
         elements = instance.elements.all()
         serialized_elements = []
         for element in elements:
-            if element.child.type not in food_category_types:
+            if element.child.type not in FOOD_CATEGORY_TYPES:
                 serializer = FoodElementSerializer(element)
                 serialized_elements.append(serializer.data)
             else:
@@ -52,7 +54,7 @@ class DishElementSerializer(serializers.ModelSerializer):
         model = DishElement
         fields = ('id', 'name', 'food', 'order')
     def get_food(self, instance):
-        if instance.food.type not in food_category_types:
+        if instance.food.type not in FOOD_CATEGORY_TYPES:
             serializer = FoodSerializer(instance.food)
         else:
             serializer = FoodWithoutChildrenSerializer(instance.food)
@@ -96,14 +98,14 @@ class CategoryElementSerializer(serializers.ModelSerializer):
         def add_elements_from_category(category_id, price):
             cat_elements = FoodElement.objects.filter(parent_id = category_id)
             for cat_element in cat_elements:
-                if cat_element.child.type not in food_category_types:
+                if cat_element.child.type not in FOOD_CATEGORY_TYPES:
                     if not cat_element.child.id in serialized_elements:
                         serialized_elements[cat_element.child.id] = price
                 else:
                     add_elements_from_category(cat_element.child.id, price)
 
         for element in elements:
-            if element.food.type not in food_category_types:
+            if element.food.type not in FOOD_CATEGORY_TYPES:
                 serialized_elements[element.food_id] = element.price
             else:
                 add_elements_from_category(element.food_id, element.price)
@@ -138,10 +140,18 @@ class RestaurantSerializer(serializers.ModelSerializer):
     
 
 
+class PutFoodElementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodElement
+        fields = ('quantity', 'isVisible','child', 'order')  
+
+
 class FoodCreateSerializer(serializers.ModelSerializer):
+    elements = PutFoodElementSerializer(many=True)
+
     class Meta:
         model = Food
-        fields = ['name', 'type']
+        fields = ['id', 'name', 'type', 'description', 'shortName', 'elements']
 
     def validate_name(self, value):
         if not value.strip():
@@ -152,3 +162,26 @@ class FoodCreateSerializer(serializers.ModelSerializer):
         if value not in [choice[0] for choice in FoodType.choices]:
             raise serializers.ValidationError("Le type doit être un élément valide de FoodType.")
         return value
+    
+    def update(self, instance, validated_data):
+        elements_data = validated_data.pop('elements', [])
+
+        with transaction.atomic():
+
+            # Supprimer tous les FoodElement associés à l'instance de Food existante
+            instance.elements.all().delete()
+
+            # Mettre à jour les autres attributs de l'instance de Food
+            instance.name = validated_data.get('name', instance.name)
+            instance.type = validated_data.get('type', instance.type)
+            instance.description = validated_data.get('description', instance.description)
+            instance.shortName = validated_data.get('shortName', instance.shortName)
+            instance.save()
+
+            # Créer les nouveaux FoodElement
+            for element_data in elements_data:
+                print(element_data)
+                FoodElement.objects.create(parent=instance, **element_data)
+
+        return instance
+    

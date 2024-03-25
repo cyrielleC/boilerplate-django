@@ -2,7 +2,13 @@
     <mat-toolbar 
         class="dish-form--header">
         <mat-toolbar-row>
-            <div class="flex-grow-1">{{ ( 'SINGLE_DISH_TITLE') | translate: {DISH_NAME: dish.name} }}</div>
+            <div class="flex-grow-1">{{ ( dish.type + '.SINGLE_TITLE') | translate: {NAME: dish.name} }}</div>
+            <button mat-mini-fab color="link" (click)="save()">
+                <mat-icon>save</mat-icon>
+            </button>
+            <button mat-mini-fab color="link" (click)="delete(dish.id)">
+                <mat-icon>delete</mat-icon>
+            </button>
             <button mat-raised-button [routerLink]="[ '../../..']">
                 <mat-icon>arrow_back_ios</mat-icon>
                 <span>{{ ( 'BACK_TO_RECIPE') | translate }}</span>
@@ -14,7 +20,11 @@
             [formGroup]="formGroup"
             [food]="dish"
         ></app-basic-food-form>
-        <div class="dish-form--elements">
+        <app-food-elements-input
+            [formGroupAndFood]="[formGroup, dish]"
+            [choices]="combineChoices() | async"
+        ></app-food-elements-input>
+        <!-- <div class="dish-form--elements">
             <div cdkDropList class="dish-form--elements-list" (cdkDropListDropped)="drop(formGroup.controls['elements'].value, $event)">
                 <div
                     *ngFor="let element of formGroup.controls['elements'].value" 
@@ -63,7 +73,7 @@
                     </ng-container>
                 </div>
             </div>
-        </div>
+        </div> -->
     </form>
 
 </ng-container>

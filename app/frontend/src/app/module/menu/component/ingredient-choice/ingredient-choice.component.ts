@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Dish, FoodDishCategory, FoodElement, FoodIngredientCategory, FoodType, FormulaExtraPrice, Ingredient } from '@app/model/api-recipe.models';
-import { CategoryService } from '@menu/service/order.service';
+import { OrderService } from '@menu/service/order.service';
 import { FormControl, Validators } from '@angular/forms';
 import { removeLastOccurrence } from '@app/utils/removeLastOccurence';
 import { formControlArraySizeValidator } from '@app/validaror/form-control-array-size.validator';
@@ -26,7 +26,7 @@ export class IngredientChoiceComponent implements OnInit {
   })[];
 
   constructor(
-    protected readonly menuService: CategoryService,
+    protected readonly menuService: OrderService,
   ) {
   }
 

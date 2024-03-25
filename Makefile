@@ -1,4 +1,4 @@
-DOCKER_COMPOSE = docker-compose -f docker/docker-compose.yml
+DOCKER_COMPOSE = docker compose -f docker/docker-compose.yml
 
 define set-container-arg
 	$(if $(word 2,$(MAKECMDGOALS)),,$(error Erreur : veuillez spécifier le nom du container. Exemple : make $(word 1,$(MAKECMDGOALS)) nomDuContainer))

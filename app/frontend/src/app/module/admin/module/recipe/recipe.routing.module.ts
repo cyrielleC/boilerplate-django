@@ -13,13 +13,8 @@ const routes: Routes = [
     path: 'food',
     children: [
       {
-        path: FoodType.DISH.toLowerCase(),
-        children: [
-          {
-            path: ':id',
-            component: DishFormComponent,
-          },
-        ]
+        path: ':id',
+        component: DishFormComponent,
       },
     ]
   },

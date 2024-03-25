@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CategoryService } from '@menu/service/order.service';
+import { OrderService } from '@menu/service/order.service';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { FormulaElementWithDishElement } from '@app/model/local-recipe.models';
 import { ingredientChoiceValidator } from '@app/validaror/ingredient-choice.validator';
@@ -18,7 +18,7 @@ export class CategoryChoiceComponent {
   @Input({ required: true }) formArray!: FormArray<FormArray<ChoiceFormGroup>>;
 
   constructor(
-    protected readonly menuService: CategoryService,
+    protected readonly menuService: OrderService,
   ){}
 
   getQuantity(food: Food) {

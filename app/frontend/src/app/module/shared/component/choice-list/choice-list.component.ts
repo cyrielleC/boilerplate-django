@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Food, FormulaExtraPrice } from '@app/model/api-recipe.models';
-import { CategoryService } from '@menu/service/order.service';
+import { OrderService } from '@menu/service/order.service';
 
 @Component({
   selector: 'app-choice-list',
@@ -13,7 +13,7 @@ export class ChoiceListComponent {
   @Input({ required: true }) extraPrices!: FormulaExtraPrice;
 
   constructor(
-    private readonly menuService: CategoryService,
+    private readonly menuService: OrderService,
   ) {
   }
   

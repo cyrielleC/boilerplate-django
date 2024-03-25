@@ -4,21 +4,31 @@ from menu.serializer import CategorySerializer, FoodCreateSerializer, FoodSerial
 from rest_framework import viewsets, generics, permissions
 from django.db.models import Q
 
-# Create your views here.
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+class FoodCategoryIViewSet(viewsets.ModelViewSet):
+    queryset = Food.objects.filter(type=FoodType.CATEGORY_I.value)
+    serializer_class = FoodSerializer
 
-class FoodCategoryViewSet(viewsets.ModelViewSet):
-    queryset = Food.objects.filter(Q(type=FoodType.CATEGORY_I.value) | Q(type=FoodType.CATEGORY_D.value))
+class FoodCategoryDViewSet(viewsets.ModelViewSet):
+    queryset = Food.objects.filter(type=FoodType.CATEGORY_D.value)
     serializer_class = FoodSerializer
 
 class FoodCreateAPIView(generics.CreateAPIView):
     serializer_class = FoodCreateSerializer
 
+class FoodUpdateAPIView(viewsets.ModelViewSet):
+    queryset = Food.objects.all()
+    serializer_class = FoodCreateSerializer
+
 class FoodViewSet(viewsets.ModelViewSet):
     queryset = Food.objects.all()
+    serializer_class = FoodSerializer
+
+class FoodDishViewSet(viewsets.ModelViewSet):
+    queryset = Food.objects.filter(type=FoodType.DISH.value)
     serializer_class = FoodSerializer
 
 

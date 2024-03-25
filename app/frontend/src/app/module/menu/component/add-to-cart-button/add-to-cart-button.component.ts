@@ -4,7 +4,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { ChoicePopUpComponent } from '@menu/component/choice-pop-up/choice-pop-up.component';
 import { FormulaChoice } from '@app/model/local-recipe.models';
 import { FormulaElementWithDishElement } from '@app/model/local-recipe.models';
-import { CategoryService } from '@menu/service/order.service';
+import { OrderService } from '@menu/service/order.service';
 import { addToCartAction } from '@menu/store/menu.actions';
 import { CategoryElement, DishElement, Formula } from '@app/model/api-recipe.models';
 
@@ -21,7 +21,7 @@ export class AddToCartButtonComponent {
   constructor(
     private readonly dialog: Dialog,
     private readonly store: Store,
-    private readonly orderService: CategoryService,
+    private readonly orderService: OrderService,
   ) {}
   
   addToCart(): void {

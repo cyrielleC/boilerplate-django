@@ -23,6 +23,10 @@ export class ApiRequestService {
     return this.httpClient.post<Food>(this.getApiRootUrl() + 'menu/food/', food);
   }
 
+  updateFood(food: Food): Observable<Food> {
+    return this.httpClient.put<Food>(this.getApiRootUrl() + 'menu/food2/' + food.id + '/', food);
+  }
+
   getRestaurant(): Observable<Restaurant> {
     return this.httpClient.get<Restaurant>( this.getApiRootUrl() + 'menu/restaurant/' + environment.restaurantId);
   }

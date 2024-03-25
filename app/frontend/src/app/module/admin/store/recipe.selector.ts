@@ -8,9 +8,15 @@ export const selectFoodByType = (itemName: FoodType | null = null) => createSele
     selectRecipeState,
     (state: RecipeStoreModel) => {
       if (!itemName) {
-        return state.food;
+        return state.food ?? [];
       }
       return state.food.filter((food: Food) => food.type === itemName) ?? [];
+    }
+  );
+export const selectFoodCategories = createSelector(
+    selectRecipeState,
+    (state: RecipeStoreModel) => {
+      return state.food.filter((food: Food) => [FoodType.CATEGORY_D, FoodType.CATEGORY_I].includes(food.type)) ?? [];
     }
   );
 export const selectFoodById = (foodId: string) => createSelector(

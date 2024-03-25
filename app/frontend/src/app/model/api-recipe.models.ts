@@ -15,6 +15,7 @@ export const CATEGORIES = [FoodType.CATEGORY_D, FoodType.CATEGORY_I];
 
 export interface FoodElement<T>  {
   quantity: number;
+  order: number;
   child: T;
   isVisible: boolean;
 }
@@ -38,7 +39,7 @@ export interface Dish extends AbstractFood {
     type: FoodType.DISH;
 }
 
-export interface FoodDishCategory extends AbstractFood {
+export interface  FoodDishCategory extends AbstractFood {
     elements: FoodElement<Dish | FoodDishCategory>[];
     type: FoodType.CATEGORY_D;
 }

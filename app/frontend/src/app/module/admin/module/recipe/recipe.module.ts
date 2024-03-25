@@ -15,8 +15,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { BasicFoodFormComponent } from './component/basic-food-form/basic-food-form.component';
 import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
 import { SharedModule } from '@app/module/shared/shared.module';
-import { FoodElementPickAndOrderComponent } from './component/food-element-pick-and-order/food-element-pick-and-order.component';
 import { PipesModule } from '@app/pipe/pipe.module';
+import { FoodElementsInputComponent } from './component/food-elements-input/food-elements-input.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import { PipesModule } from '@app/pipe/pipe.module';
     DishFormComponent,
     FoodNamePopUpComponent,
     BasicFoodFormComponent,
-    FoodElementPickAndOrderComponent,
+    FoodElementsInputComponent,
   ],
   imports: [
     CommonModule,

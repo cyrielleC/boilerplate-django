@@ -5,7 +5,7 @@ import { ChoiceFormGroup } from '@menu/component/category-choice/category-choice
 import { ingredientChoiceValidator } from '@app/validaror/ingredient-choice.validator';
 import { Store } from '@ngrx/store';
 import { addToCartAction } from '@menu/store/menu.actions';
-import { CategoryService } from '@menu/service/order.service';
+import { OrderService } from '@menu/service/order.service';
 import { Observable, map, startWith } from 'rxjs';
 import { CATEGORIES, Dish, FoodType } from '@app/model/api-recipe.models';
 import { formArraySizeValidator } from '@app/validaror/form-array-size.validator';
@@ -26,7 +26,7 @@ export class ChoicePopUpComponent implements OnInit {
     public dialogRef: DialogRef<string>,
     @Inject(DIALOG_DATA) public data: ChoicePopUp,
     private readonly store: Store,
-    private readonly menuService: CategoryService,
+    private readonly menuService: OrderService,
   ) {}
   
   ngOnInit(): void {

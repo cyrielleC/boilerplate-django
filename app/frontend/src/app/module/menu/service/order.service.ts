@@ -4,11 +4,12 @@ import { Store } from '@ngrx/store';
 import { selectRestaurant } from '@menu/store/menu.selector';
 import { DishChoice } from '@app/model/local-recipe.models';
 import { ChoiceModel } from '@app/model/local-recipe.models';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
+export class OrderService {
 
   restaurant: Restaurant | undefined;
   allDishElements: DishElement[];
@@ -17,12 +18,15 @@ export class CategoryService {
     private readonly store: Store,
     ) {
     this.store.select(selectRestaurant)
-      .subscribe((restaurant: Restaurant | undefined) => {
-        this.restaurant = restaurant;
-        this.allDishElements = this.restaurant!.categories.flatMap(
-          (cat: Category) => cat.elements.flatMap((catEl: CategoryElement) => catEl.elements)
-        );
-      });
+      .pipe(
+        tap((restaurant: Restaurant | undefined) => {
+          this.restaurant = restaurant;
+          this.allDishElements = this.restaurant!.categories.flatMap(
+            (cat: Category) => cat.elements.flatMap((catEl: CategoryElement) => catEl.elements)
+          );
+        }),
+      )
+      .subscribe();
   }
 
   hasChoice(food: Food): boolean {

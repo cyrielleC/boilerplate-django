@@ -6,24 +6,24 @@
     >
         <mat-toolbar class="recipe-category--header">
             <mat-toolbar-row>
-                <div class="flex-grow-1">{{ ( (type | uppercase) + '_TITLE') | translate }}</div>
+                <div class="flex-grow-1">{{ ( (type | uppercase) + '.TITLE') | translate }}</div>
                 <button 
                     mat-raised-button
                     (click)="createFood(type)"
                 >
                     <mat-icon>add_circle</mat-icon>
-                    <span>{{ ( (type | uppercase) + '_ADD') | translate }}</span>
+                    <span>{{ ( (type | uppercase) + '.ADD') | translate }}</span>
                 </button>
             </mat-toolbar-row>
         </mat-toolbar>
-    <div
+        <div
             class="recipe-category--list"
         >
             <button 
                 *ngFor="let food of recipeService.data$[type] | async"
                 mat-raised-button
                 class="recipe-category--list-element"
-                [routerLink]="['./food/' + (type | lowercase) + '/' + food.id]"
+                (click)="updateFood(food)"
             ><span>{{food.name}}</span></button>
         </div>
     </div>

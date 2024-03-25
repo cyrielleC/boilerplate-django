@@ -66,13 +66,13 @@ class FoodType(models.TextChoices):
     CATEGORY_D = 'CATEGORY_D'
     INGREDIENT = 'INGREDIENT'
 
-food_category_types = [FoodType.CATEGORY_I.value, FoodType.CATEGORY_D.value]
+FOOD_CATEGORY_TYPES = [FoodType.CATEGORY_I.value, FoodType.CATEGORY_D.value]
 
 
 class Food(models.Model):
     name = models.CharField(max_length=200)
-    shortName = models.CharField(max_length=200, null = True)
-    description = models.CharField(max_length=1000, null = True)
+    shortName = models.CharField(max_length=200, blank = True, default='')
+    description = models.CharField(max_length=1000, blank = True, default='')
     type = models.CharField(
         max_length=20,
         choices=[(tag, tag.value) for tag in FoodType],
