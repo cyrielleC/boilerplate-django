@@ -8,14 +8,12 @@ class FoodWithoutChildrenSerializer(serializers.ModelSerializer):
         model = Food
         fields = ('id','name', 'type', 'shortName', 'description')
     
-
 class FoodElementSerializer(serializers.ModelSerializer):
     child = serializers.SerializerMethodField()
     class Meta:
         model = FoodElement
         fields = ('quantity', 'isVisible','child', 'order')  
     def get_child(self, instance):
-        print('ifesdilfhdskjfhdjkshfjdkshfjdksfhksjd')
         if instance.child.type not in FOOD_CATEGORY_TYPES:
             serializer = FoodSerializer(instance.child)
         else:
@@ -141,11 +139,18 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 
 class PutFoodElementSerializer(serializers.ModelSerializer):
+    child = serializers.PrimaryKeyRelatedField(queryset=Food.objects.all(), required=False)  # Utiliser PrimaryKeyRelatedField pour accepter les IDs des objets Food
+
     class Meta:
         model = FoodElement
-        fields = ('quantity', 'isVisible','child', 'order')  
+        fields = ('quantity', 'isVisible', 'child', 'order')  
 
-
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['child'] = FoodSerializer(instance.child).data  # Utiliser FoodSerializer pour représenter l'objet Food
+        return representation
+    
+    
 class FoodCreateSerializer(serializers.ModelSerializer):
     elements = PutFoodElementSerializer(many=True)
 
@@ -165,23 +170,22 @@ class FoodCreateSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         elements_data = validated_data.pop('elements', [])
-
+        
         with transaction.atomic():
-
             # Supprimer tous les FoodElement associés à l'instance de Food existante
             instance.elements.all().delete()
 
             # Mettre à jour les autres attributs de l'instance de Food
             instance.name = validated_data.get('name', instance.name)
-            instance.type = validated_data.get('type', instance.type)
             instance.description = validated_data.get('description', instance.description)
             instance.shortName = validated_data.get('shortName', instance.shortName)
+            instance.type = validated_data.get('type', instance.type)
             instance.save()
 
             # Créer les nouveaux FoodElement
             for element_data in elements_data:
-                print(element_data)
-                FoodElement.objects.create(parent=instance, **element_data)
+                child_food_id = element_data.pop('child')  # Récupérer l'ID du Food
+                child_food = Food.objects.get(id=child_food_id.id)  # Récupérer l'objet Food complet
+                FoodElement.objects.create(parent=instance, child=child_food, **element_data)
 
         return instance
-    

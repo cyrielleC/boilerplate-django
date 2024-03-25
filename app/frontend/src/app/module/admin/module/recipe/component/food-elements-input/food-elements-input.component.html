@@ -1,24 +1,24 @@
 <div class="food-elements-input">
     <div cdkDropList class="food-elements-input--list" (cdkDropListDropped)="drop(formControl.value, $event)">
         <ng-container
-            *ngFor="let value of formControl.value">
+            *ngFor="let foodElement of formControl.value">
             <div 
-                *ngIf="getElement(value) as element" 
-                [class]="'food-elements-input--list-item ' + (element.child.type | lowercase)" 
+                *ngIf="getFood(foodElement) as food" 
+                [class]="'food-elements-input--list-item ' + (food.type | lowercase)" 
                 cdkDrag
             >
                 <div class="flex-grow-1">
-                    <div>{{ element.child.name }}</div>
-                    <div *ngIf="element.child.type === foodType.CATEGORY_I">{{ element.child | ingredientList}}</div>
+                    <div>{{ food.name }}</div>
+                    <div *ngIf="food.type === foodType.CATEGORY_I">{{ food | ingredientList}}</div>
                 </div>                    
                 <app-plus-minus-counter
-                    [quantity]="element.quantity"
+                    [quantity]="foodElement.quantity"
                     [available]="1"
                     [min]="1"
-                    (addElement)="element.quantity = element.quantity + 1"
-                    (removeElement)="element.quantity = element.quantity - 1"
+                    (addElement)="foodElement.quantity = foodElement.quantity + 1"
+                    (removeElement)="foodElement.quantity = foodElement.quantity - 1"
                 ></app-plus-minus-counter>
-                <button mat-mini-fab color="link" (click)="remove(element)">
+                <button mat-mini-fab color="link" (click)="remove(food)">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>

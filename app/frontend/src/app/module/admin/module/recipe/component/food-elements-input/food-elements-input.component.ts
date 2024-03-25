@@ -52,11 +52,11 @@ export class FoodElementsInputComponent {
     this.updateOrder();
   }
 
-  remove(element: FoodElement<Food>) {
+  remove(food: Food) {
     this.formControl.setValue(
       [
         ...this.formControl.value.filter(
-          (el: FoodElement<number>) => el.child !== element.child.id)
+          (el: FoodElement<number>) => el.child !== food.id)
       ]
     );
     this.updateOrder();
@@ -81,11 +81,8 @@ export class FoodElementsInputComponent {
     return this.formControl.value.some((el: FoodElement<number>) => el.child === element.id);
   }
   
-  getElement(element: FoodElement<number>): FoodElement<Food> {
-    return {
-      ...element, 
-      child: this.allFoods.find((el) => el.id === element.child)!
-    };
+  getFood(element: FoodElement<number>): Food {
+    return this.allFoods.find((el) => el.id === element.child)!;
   }
 
   createElement(type: FoodType) {

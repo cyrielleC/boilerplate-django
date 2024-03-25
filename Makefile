@@ -10,7 +10,7 @@ logsContainer:
 	$(DOCKER_COMPOSE) logs $(CONTAINER_NAME)
 
 start:
-	$(DOCKER_COMPOSE) up -d
+	$(DOCKER_COMPOSE) up 
 
 initPython: start
 	$(DOCKER_COMPOSE) run backend python manage.py migrate
