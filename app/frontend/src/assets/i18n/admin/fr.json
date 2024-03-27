@@ -1,21 +1,38 @@
 {
     "DISH": {
+        "NAME": "produit",
         "TITLE": "Vos produits",
         "ADD": "Ajouter un produit",
         "SINGLE_TITLE": "Produit \"{{NAME}}\"",
         "CREATE_TITLE": "Création d'un nouveau produit"
     },
     "INGREDIENT": {
+        "NAME": "ingrédient",
         "TITLE": "Vos ingredients",
         "ADD": "Ajouter un ingredient",
         "UPDATE_TITLE": "Modifier l'ingredient \"{{NAME}}\"",
         "CREATE_TITLE": "Création d'un nouvel ingrédient"
     },
     "CATEGORY_I": {
+        "NAME": "ingrédient \"à choix\"",
         "TITLE": "Vos ingredients \"à choix\"",
         "ADD": "Ajouter un ingredient \"à choix\"",
         "SINGLE_TITLE": "Ingredient \"à choix\" \"{{NAME}}\"",
         "CREATE_TITLE": "Création d'un nouvel ingrédient \"à choix\""
+    },
+    "CATEGORY_D": {
+        "NAME": "produit \"à choix\"",
+        "TITLE": "Vos produits \"à choix\"",
+        "ADD": "Ajouter un produit \"à choix\"",
+        "SINGLE_TITLE": "Produit \"à choix\" \"{{NAME}}\"",
+        "CREATE_TITLE": "Création d'un nouveau produit \"à choix\""
+    },
+    "FORMULA": {
+        "TITLE": "Configurations de vos formules",
+        "SINGLE_TITLE": "Configuration de la formule \"{{NAME}}\"",
+        "ELEMENT_DESCRIPTION": "{{QUANTITY}} produits {{NAME}} (de type {{TYPE}})",
+        "PRICE_DESCRIPTION": "Pour un total de {{PRICE}}€",
+        "WARNING": "Il est important de bien faire votre configuration même si elle n'est pas visible dans l'affichage pour bien appliquer les éventuels choix, surcoûts, pénuries..."
     },
     "BACK_TO_RECIPE": "Retour à vos recettes",
     "CREATE_FOOD_INSTRUCTION": "Commençons par lui donner un nom",

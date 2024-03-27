@@ -7,14 +7,26 @@ import { IsAdminAuthenticatedGuard } from '@app/guard/auth.guard';
 
 const routes: Routes = [
   {
-    path: 'admin/:path',
-    canActivate: [IsAdminAuthenticatedGuard],
-    loadChildren: () => import('./module/admin/admin.module').then(m => m.AdminModule)
-  },  
-  {
-    path: 'menu',
-    loadChildren: () => import('./module/menu/menu.module').then(m => m.MenuModule)
-  },
+    path: '',
+    canActivate: [GetObjectsGuard],
+    data: {
+      objectsConfig: [
+        [selectRestaurant, getRestaurantAction()],
+      ],
+    },
+    children: [
+      {
+        path: 'admin/:path',
+        canActivate: [IsAdminAuthenticatedGuard],
+        loadChildren: () => import('./module/admin/admin.module').then(m => m.AdminModule)
+      },  
+      {
+        path: 'menu',
+        
+        loadChildren: () => import('./module/menu/menu.module').then(m => m.MenuModule)
+      },
+    ],
+  }
 ];
 
 @NgModule({

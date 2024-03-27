@@ -1,7 +1,8 @@
+from urllib.request import Request
 from django.shortcuts import render
 from menu.models import Category, Food, FoodType, Restaurant
-from menu.serializer import CategorySerializer, FoodCreateSerializer, FoodSerializer, FoodSerializer, FoodWithoutChildrenSerializer, RestaurantSerializer
-from rest_framework import viewsets, generics, permissions
+from menu.serializer import CategorySerializer, FoodSerializer, FoodSerializer, FoodWithoutChildrenSerializer, RestaurantSerializer
+from rest_framework import viewsets
 from django.db.models import Q
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -15,13 +16,6 @@ class FoodCategoryIViewSet(viewsets.ModelViewSet):
 class FoodCategoryDViewSet(viewsets.ModelViewSet):
     queryset = Food.objects.filter(type=FoodType.CATEGORY_D.value)
     serializer_class = FoodSerializer
-
-class FoodCreateAPIView(generics.CreateAPIView):
-    serializer_class = FoodCreateSerializer
-
-class FoodUpdateAPIView(viewsets.ModelViewSet):
-    queryset = Food.objects.all()
-    serializer_class = FoodCreateSerializer
 
 class FoodViewSet(viewsets.ModelViewSet):
     queryset = Food.objects.all()

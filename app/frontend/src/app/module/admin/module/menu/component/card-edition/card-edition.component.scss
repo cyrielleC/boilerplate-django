@@ -1,0 +1,28 @@
+.card-edition {
+    width: 100%;
+    padding: 10px;
+    &--category {
+        &-element {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            gap:10px;
+            &-form{
+                width: 60%;
+                // background-color: blue;
+                &-inputs, .card-edition--formula-form > div, .card-edition--dish-element-form {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 10px;
+                    width: 100%;
+                    > * {
+                        width: 50%;
+                    }
+                }
+            }
+            &-preview {
+                width: 40%;
+            }
+        }
+    }
+}

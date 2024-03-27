@@ -30,7 +30,7 @@ export interface AbstractFood extends ObjectWithId {
 
 export interface Ingredient extends AbstractFood {
   type: FoodType.INGREDIENT;
-  elements: null;
+  elements: [];
 }
 
 
@@ -67,7 +67,6 @@ export interface Category {
   elements: CategoryElement[];
   shortDescription: string;
 }
-// category-element.model.ts
 export interface CategoryElement {
   id: number;
   name: string | null;

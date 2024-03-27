@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { EMPTY } from 'rxjs';
 import { map, exhaustMap, catchError, switchMap } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { addFoodAction, createFoodAction, getFoodAction, setFoodAction, updateFoodAction, updateInStoreFoodAction } from './recipe.actions';
+import { addFoodAction, createFoodAction, deleteFoodAction, getFoodAction, removeInStoreFoodAction, setFoodAction, updateFoodAction, updateInStoreFoodAction } from './recipe.actions';
 import { Router } from '@angular/router';
 import { Food, FoodType } from '@app/model/api-recipe.models';
 import { ApiRequestService } from '@app/service/api-request.service';
@@ -50,6 +50,16 @@ export class RecipeEffects {
                     catchError(() => EMPTY)
                 )
                 )
+  ));
+  deleteFood$ = createEffect(() => this.actions$.pipe(
+    ofType(deleteFoodAction.type),
+    exhaustMap(
+        ({food}) => this.apiRequestService.deleteFood(food)
+                .pipe(
+                    map((returnedFood: Food) => removeInStoreFoodAction({food})),
+                    catchError(() => EMPTY)
+                )
+    )
   ));
 
   constructor(

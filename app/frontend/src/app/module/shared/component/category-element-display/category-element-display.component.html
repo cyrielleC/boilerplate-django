@@ -1,0 +1,38 @@
+
+<div class="category-element-display">
+    <div class="category-element-display--title" *ngIf="categoryElement.name || categoryElement.elements[0].food.type === foodType.DISH">
+        {{ 
+            categoryElement.name ?? 
+            (
+                categoryElement.elements.length > 1 ? category.name : categoryElement.elements[0].food.name
+            )
+        }}
+    </div>
+    <div>
+        {{categoryElement.description}}
+    </div>
+    <div 
+        *ngIf="categoryElement.elements.length > 1"
+        class="category-element-display--dish-element"
+    >
+        <app-choice-list 
+            *ngFor="let element of categoryElement.elements"
+            [textToReplace]="(element.name ? 'FORMULA.CHOICE_DISPLAY.WITH_NAME' : 'FORMULA.CHOICE_DISPLAY.WITHOUT_NAME') | translate: {NAME: element.name}" 
+            [element]="element.food"
+            [extraPrices]="categoryElement.formulaExtraPrices"
+        >
+        </app-choice-list>
+    </div>
+    <div 
+        *ngIf="categoryElement.elements.length === 1 && categoryElement.elements[0].food.elements.length > 0"
+        [innerHTML]="'FORMULA.INGREDIENT_DISPLAY' | translate: {FOODS: (categoryElement.elements[0].food | ingredientList)}"
+        >
+    </div>
+    <div 
+        *ngFor="let formula of categoryElement.formulas"
+        class="category-element-display--formula"
+    >
+        {{ 'FORMULA.DISPLAY' | translate: {NAME: formula.description, PRICE: formula.price } }}
+        <ng-content select="add-to-cart"></ng-content>
+    </div>
+</div>

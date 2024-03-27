@@ -15,10 +15,20 @@ const routes: Routes = [
         canActivate: [GetObjectsGuard],
         data: {
           objectsConfig: [
-            [selectFoodByType(), getFoodAction()]
+            [selectFoodByType(), getFoodAction()],
           ],
         },
         loadChildren: () => import('./module/recipe/recipe.module').then(m => m.RecipeModule)
+      },
+      {
+        path: 'menu',
+        canActivate: [GetObjectsGuard],
+        data: {
+          objectsConfig: [
+            [selectFoodByType(), getFoodAction()],
+          ],
+        },
+        loadChildren: () => import('./module/menu/menu.module').then(m => m.MenuModule)
       },
       { path: '**', redirectTo: 'recipe' },
     ]

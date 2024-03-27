@@ -13,6 +13,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .flex-grow-1 {
     flex-grow: 1;
 }
+.width-100-p {
+    width: 100%;
+}
+.flexRow {
+    display: flex;
+    flex-direction: row;
+}
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+}
 
 .dish {
     background-color: #d4cb3b;

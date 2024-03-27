@@ -19,7 +19,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { CartMenuComponent } from '@menu/component/cart-menu/cart-menu.component';
 import { ActionReducer, META_REDUCERS, MetaReducer, StoreModule } from '@ngrx/store';
-import { reducer as menuReducer } from '@menu/store/menu.reducer';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { MatBadgeModule } from '@angular/material/badge';
 import { CartComponent } from './component/cart/cart.component';
@@ -61,10 +60,6 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     MatButtonModule,
     CdkAccordionModule,
     MatBadgeModule,
-    StoreModule.forFeature('menu', menuReducer, {
-      metaReducers: [localStorageSyncReducer]
-    }),
-    EffectsModule.forFeature(MenuEffects),
     MenuRoutingModule,
   ],  
   providers: [

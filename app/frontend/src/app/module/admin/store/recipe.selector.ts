@@ -13,6 +13,7 @@ export const selectFoodByType = (itemName: FoodType | null = null) => createSele
       return state.food.filter((food: Food) => food.type === itemName) ?? [];
     }
   );
+  
 export const selectFoodCategories = createSelector(
     selectRecipeState,
     (state: RecipeStoreModel) => {

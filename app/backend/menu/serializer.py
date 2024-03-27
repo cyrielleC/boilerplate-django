@@ -20,15 +20,6 @@ class FoodElementSerializer(serializers.ModelSerializer):
             serializer = FoodWithoutChildrenSerializer(instance.child)
         return serializer.data
 
-class FoodSerializer(FoodWithoutChildrenSerializer):
-    elements = serializers.SerializerMethodField()
-    class Meta(FoodWithoutChildrenSerializer.Meta):
-        fields = FoodWithoutChildrenSerializer.Meta.fields + ('elements', )  
-    def get_elements(self, instance):
-        serializer = FoodElementSerializer(instance.elements, many=True)
-        return serializer.data
-
-
 class FoodCategorySerializer(FoodWithoutChildrenSerializer):
     elements = serializers.SerializerMethodField()
     class Meta(FoodWithoutChildrenSerializer.Meta):
@@ -150,9 +141,12 @@ class PutFoodElementSerializer(serializers.ModelSerializer):
         representation['child'] = FoodSerializer(instance.child).data  # Utiliser FoodSerializer pour représenter l'objet Food
         return representation
     
-    
-class FoodCreateSerializer(serializers.ModelSerializer):
+
+
+class FoodSerializer(FoodWithoutChildrenSerializer):
     elements = PutFoodElementSerializer(many=True)
+    class Meta(FoodWithoutChildrenSerializer.Meta):
+        fields = FoodWithoutChildrenSerializer.Meta.fields + ('elements', )  
 
     class Meta:
         model = Food
@@ -167,6 +161,18 @@ class FoodCreateSerializer(serializers.ModelSerializer):
         if value not in [choice[0] for choice in FoodType.choices]:
             raise serializers.ValidationError("Le type doit être un élément valide de FoodType.")
         return value
+    
+    def create(self, validated_data):
+        elements_data = validated_data.pop('elements', [])  # Récupérer les données des éléments
+        food = Food.objects.create(**validated_data)  # Créer l'objet Food
+        
+        # Créer les nouveaux FoodElement associés à l'objet Food créé
+        for element_data in elements_data:
+            child_food_id = element_data.pop('child_id')  # Récupérer l'ID du Food
+            child_food = Food.objects.get(id=child_food_id)  # Récupérer l'objet Food complet
+            FoodElement.objects.create(parent=food, child=child_food, **element_data)
+        
+        return food
     
     def update(self, instance, validated_data):
         elements_data = validated_data.pop('elements', [])

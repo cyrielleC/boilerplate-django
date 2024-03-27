@@ -1,6 +1,10 @@
 <div class="food-name-pop-up">
     <div class="food-name-pop-up--title">
         {{ ((data.type ?? food.type) + '.' + createOrUpdate + '_TITLE') | translate : {NAME: food.name} }}
+
+        <button *ngIf="food.id" mat-mini-fab color="link" (click)="delete(food)">
+            <mat-icon>delete</mat-icon>
+        </button>
     </div>
     <app-basic-food-form
         [formGroup]="formGroup"

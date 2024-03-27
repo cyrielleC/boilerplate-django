@@ -1,4 +1,4 @@
-import { createFoodAction, updateFoodAction } from '@admin/store/recipe.actions';
+import { createFoodAction, deleteFoodAction, updateFoodAction } from '@admin/store/recipe.actions';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -28,22 +28,27 @@ export class FoodNamePopUpComponent {
   }
 
   submit() {
-    
+    const food = {
+        ...this.formGroup.value,
+        elements: [],
+    };
     this.store.dispatch(this.food.id ?
       updateFoodAction({
-        food: {
-          ...this.formGroup.value,
-          elements: [],
-        }
+        food
       }) :
       createFoodAction(
         {
           food: {
-            ...this.formGroup.value,
+            ...food,
             type: this.data.type
           }
       })
     );
+    this.dialogRef.close();
+  }
+
+  delete(food: Partial<Food>) {
+    this.store.dispatch(deleteFoodAction({food}));
     this.dialogRef.close();
   }
 }

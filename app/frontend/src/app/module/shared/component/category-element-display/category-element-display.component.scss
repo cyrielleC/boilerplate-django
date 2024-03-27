@@ -1,0 +1,9 @@
+.category-element-display {
+    padding: 10px;
+    background-color: grey;
+    &--dish-element {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+    }
+}

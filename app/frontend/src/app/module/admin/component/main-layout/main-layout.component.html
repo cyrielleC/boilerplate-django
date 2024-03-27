@@ -1,6 +1,8 @@
-<mat-tab-group animationDuration="0ms">
-    <mat-tab [label]="'TABS.MANAGE_RECIPE' | translate" [routerLink]="['recipe']"></mat-tab>
-    <mat-tab [label]="'TABS.MANAGE_MENU' | translate" [routerLink]="['menu']"></mat-tab>
-    <mat-tab [label]="'TABS.MANAGE_PROMOTION' | translate" [routerLink]="['promotion']"></mat-tab>
-</mat-tab-group>
-<router-outlet></router-outlet>
+<nav mat-tab-nav-bar [tabPanel]="tabPanel">
+    <a mat-tab-link [routerLink]="['./recipe']" >{{ 'TABS.MANAGE_RECIPE' | translate }}</a>
+    <a mat-tab-link [routerLink]="['./menu']">{{ 'TABS.MANAGE_MENU' | translate }}</a>
+    <a mat-tab-link [routerLink]="['./promotion']">{{'TABS.MANAGE_PROMOTION' | translate}}</a>
+</nav>
+<mat-tab-nav-panel #tabPanel>
+    <router-outlet></router-outlet>
+</mat-tab-nav-panel>

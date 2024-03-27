@@ -1,0 +1,13 @@
+<div>
+    <div>{{'FORMULA.TITLE' | translate}}</div>
+    <div *ngFor="let formula of categoryElement.formulas">
+        <div>{{'FORMULA.SINGLE_TITLE' | translate: {NAME: formula.description} }}</div>
+        <div *ngFor="let formEl of formula.elements">
+            <ng-container
+                *ngIf="getFormulaElAssociatedDishElement(formEl) as dishEl"
+                >
+                {{ 'FORMULA.ELEMENT_DESCRIPTION' | translate : {QUANTITY: formEl.quantity, NAME: dishEl.food.name, TYPE: ((dishEl.food.type + '.NAME')| translate) } }}
+            </ng-container>
+        </div>
+    </div>
+</div>

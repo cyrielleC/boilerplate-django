@@ -9,6 +9,7 @@ import { Observable, tap } from 'rxjs';
 import { RecipeService } from '../../service/recipe.service';
 import { deleteFoodAction, updateFoodAction } from '@admin/store/recipe.actions';
 import { combineLatest, map } from 'rxjs';
+import { navigateAction } from '@app/store/router.actions';
 
 @Component({
   selector: 'app-dish-form',
@@ -69,8 +70,9 @@ export class DishFormComponent implements OnInit {
       elements: [...this.formGroup.controls['elements']?.value ?? []]
     }} ));
   }
-  delete(foodId: number) {
-    this.store.dispatch(deleteFoodAction({foodId}));
+  delete(food: Food) {
+    this.store.dispatch(navigateAction({route: ['../..']}));
+    this.store.dispatch(deleteFoodAction({food}));
   }
 
 }
