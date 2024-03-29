@@ -45,6 +45,7 @@
     "PREVIEW": "Preview",
     "PRICE": "Prix (€)",
     "QUANTITY": "Quantité",
+    "ADD": "Ajouter",
     "DISH_ELEMENTS_HEADER": "Associer des produits à cet élément de menu",
     "FORMULA_HEADER": "Associer des formules à cet élément de menu",
     "FORMULA_ELEMENTS_HEADER": "Associer des produits à cette formule"

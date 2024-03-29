@@ -50,7 +50,7 @@
                                     (click)="add(categoryElement.elements, {order: -1})"
                                 >
                                     <mat-icon>add_circle</mat-icon>
-                                    <span>{{ ( 'DISH_ELEMENT.ADD') | translate }}</span>
+                                    <span>{{ 'ADD' | translate }}</span>
                                 </button>
                             </div>
                             <div 
@@ -87,7 +87,7 @@
                                     (click)="addFormula(categoryElement.formulas)"
                                 >
                                     <mat-icon>add_circle</mat-icon>
-                                    <span>{{ ( 'FORMULA_ELEMENT.ADD') | translate }}</span>
+                                    <span>{{ 'ADD' | translate }}</span>
                                 </button>
                             </div>
                             <div
@@ -129,7 +129,7 @@
                                                     <mat-option *ngFor="let dishEl of categoryElement.elements" [value]="dishEl.id">{{dishEl.name}}</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
-                                            <mat-icon>delete</mat-icon>
+                                            <mat-icon (click)="remove(formula.elements, formulaEl)">delete</mat-icon>
                                         </div>
                                         <button 
                                             mat-raised-button
@@ -141,14 +141,43 @@
                                     </div>
                                 </app-expansion-panel>
                             </div>
-                            
-                            <button 
-                                mat-raised-button
-                                (click)="addFormula(categoryElement.formulas)"
+                        </app-expansion-panel>
+                        <app-expansion-panel
+                            class="card-edition--extra-prices"
+                        >
+                            <div header>
+                                <mat-icon>euro_symbol</mat-icon>
+                                <div>{{ 'EXTRA_PRICES_HEADER' | translate}}</div>
+                                <button 
+                                    mat-raised-button
+                                >
+                                    <mat-icon>add_circle</mat-icon>
+                                    <span>{{ 'ADD' | translate }}</span>
+                                </button>
+                            </div>
+                            <div
+                                *ngFor="let extraPrice of categoryElement.formulaExtraPrices | keyvalue"
                             >
-                                <mat-icon>add_circle</mat-icon>
-                                <span>{{ ( 'FORMULA.ADD') | translate }}</span>
-                            </button>
+                                <app-expansion-panel
+                                    class="card-edition--formula"
+                                >
+                                    <div  header
+                                        class="card-edition--lined-inputs"
+                                    >
+                                        <mat-icon>local_pizza</mat-icon>
+                                        <mat-form-field>
+                                            <mat-select>
+                                                <mat-option *ngFor="let food of dishChoices" [value]="food.id">{{food.name}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-form-field class="form-field-number">
+                                            <mat-label>{{'PRICE' | translate}}</mat-label>
+                                            <input matInput type="number"/>
+                                        </mat-form-field>
+                                        <mat-icon>delete</mat-icon>
+                                    </div>
+                                </app-expansion-panel>
+                            </div>
                         </app-expansion-panel>
                     </div>
                     <div

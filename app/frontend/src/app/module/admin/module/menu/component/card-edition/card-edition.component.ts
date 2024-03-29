@@ -1,5 +1,4 @@
 import { selectFoodByType } from '@admin/store/recipe.selector';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { Category, Food, Formula, Restaurant } from '@app/model/api-recipe.models';
 import { AbstractWithDragAndDrop } from '@app/module/shared/component/abstract-with-drag-and-drop';
@@ -39,6 +38,9 @@ export class CategoryEditionComponent extends AbstractWithDragAndDrop {
   }
 
   protected isElementToSearch(element1: any, element2: any): boolean {
+    console.log(element1);
+    console.log(element2);
+    console.log(element1 === element2);
     return element1 === element2;
   }
 

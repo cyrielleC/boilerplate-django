@@ -12,11 +12,7 @@
         &-element {
             width: 100%;
             display: block;
-            background-color: #DCDCDC;
-            &-header {
-                padding-top: 20px;
-            }
-
+            background-color: #e9e7eb;
             &-content {
                 width: 100%;
                 display: flex;
@@ -36,27 +32,32 @@
                 }
 
                 .card-edition--formula {
-                    background-color: #D3D3D3;
+                    background-color: #dad9dc;
                 }
                 
                 .card-edition--dish-element {
-                    background-color: #C0C0C0;
+                    background-color: #cbcbce;
                 }
                 .card-edition--form-formula-elements {
-                    background-color: #A9A9A9;
+                    background-color: #bcbdbf;
                 }
             }
 
 
             div[header] {
+                min-height: 60px;
                 flex-grow: 1;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 gap: 10px;
+                &.card-edition--lined-inputs {
+                    padding-top: 20px;
+                }
                 > div {
                     flex-grow: 1;
                 }
+
             }
 
 
@@ -72,7 +73,7 @@
                 > mat-form-field {
                     flex-grow: 1;
                     &.form-field-number {
-                        max-width: 80px;
+                        max-width: 100px;
                     }
                 }
             }

@@ -27,8 +27,11 @@ execBackend: start
 execFrontend:
 	$(DOCKER_COMPOSE) exec frontend /bin/sh
 
+execPGadmin:
+	$(DOCKER_COMPOSE) exec pgadmin /bin/sh
+
 updateRightsAfterDockerCreation:
-	sudo chown -R $(USER):$(USER) app
+	sudo chown -R $(USER):$(USER) pgadmin
 
 deleteBackend: stop
 	$(DOCKER_COMPOSE) rm backend

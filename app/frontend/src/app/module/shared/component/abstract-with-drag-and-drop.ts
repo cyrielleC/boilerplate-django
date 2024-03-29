@@ -14,17 +14,15 @@ export abstract class AbstractWithDragAndDrop {
   }
 
   remove(elements: ObjectWithOrder[], element: any) {
-    elements.filter(el => this.isElementToSearch(el, element));
+    let index = elements.findIndex(el => this.isElementToSearch(el, element));
+    elements.splice(index, 1);
     this.updateOrder(elements);
   }
 
   private updateOrder(elements: ObjectWithOrder[]) {
-    elements.map((el: ObjectWithOrder, index: number) => {
-      return {
-        ...el,
-        order: index,
-      }}
-    );
+    elements.forEach((el: ObjectWithOrder, index: number) => {
+      el.order = index;
+    });
   }
 
   protected abstract isElementToSearch(element1: any, element2: any): boolean;
