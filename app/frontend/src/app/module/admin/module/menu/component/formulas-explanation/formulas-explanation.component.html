@@ -1,5 +1,6 @@
 <div>
     <div>{{'FORMULA.TITLE' | translate}}</div>
+    <div>{{'FORMULA.WARNING' | translate}}</div>
     <div *ngFor="let formula of categoryElement.formulas">
         <div>{{'FORMULA.SINGLE_TITLE' | translate: {NAME: formula.description} }}</div>
         <div *ngFor="let formEl of formula.elements">

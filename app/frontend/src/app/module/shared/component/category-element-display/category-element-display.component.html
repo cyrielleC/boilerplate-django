@@ -1,6 +1,6 @@
 
 <div class="category-element-display">
-    <div class="category-element-display--title" *ngIf="categoryElement.name || categoryElement.elements[0].food.type === foodType.DISH">
+    <div class="category-element-display--title" *ngIf="categoryElement.name || (categoryElement.elements?.length && categoryElement.elements[0].food.type === foodType.DISH)">
         {{ 
             categoryElement.name ?? 
             (
@@ -32,7 +32,9 @@
         *ngFor="let formula of categoryElement.formulas"
         class="category-element-display--formula"
     >
-        {{ 'FORMULA.DISPLAY' | translate: {NAME: formula.description, PRICE: formula.price } }}
-        <ng-content select="add-to-cart"></ng-content>
+        <ng-container *ngIf="('FORMULA.DISPLAY' | translate: {NAME: formula.description, PRICE: formula.price }) as name">
+            <div>{{ name }}</div>
+            <mat-icon (click)="addToCart.emit([formula, name])">add_circle</mat-icon>
+        </ng-container>
     </div>
 </div>

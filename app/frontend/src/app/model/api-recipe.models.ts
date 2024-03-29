@@ -3,6 +3,9 @@
 export interface ObjectWithId {
   id: number;
 }
+export interface ObjectWithOrder {
+  order: number;
+}
 
 export enum FoodType {
   DISH = 'DISH',
@@ -13,7 +16,7 @@ export enum FoodType {
 
 export const CATEGORIES = [FoodType.CATEGORY_D, FoodType.CATEGORY_I];
 
-export interface FoodElement<T>  {
+export interface FoodElement<T> extends ObjectWithOrder  {
   quantity: number;
   order: number;
   child: T;
@@ -61,40 +64,38 @@ export interface Restaurant {
   foodcategories: FoodDishCategory[];
 }
 
-export interface Category {
+export interface Category extends ObjectWithOrder {
   id: number;
   name: string;
   elements: CategoryElement[];
   shortDescription: string;
 }
-export interface CategoryElement {
+export interface CategoryElement extends ObjectWithOrder{
   id: number;
   name: string | null;
   description: string | null;
   extras: FoodElementWithPrice[];
-  order: number;
   elements: DishElement[];
   formulas: Formula[]
   formulaExtraPrices: FormulaExtraPrice
 }
 
-export interface DishElement {
+export interface DishElement extends ObjectWithOrder {
   id: number;
   name: string;
   food: FoodWithElements;
 }
 
 export interface Formula {
-  id: number;
+  id?: number;
   price: number;
   description: string | null;
   elements: FormulaElement[];
 }
 
-export interface FormulaElement {
+export interface FormulaElement extends ObjectWithOrder {
   id: number;
   dishElementId: number;
-  order: number;
   quantity: number;
 }
 
@@ -102,12 +103,11 @@ export type FormulaExtraPrice = {
   [key: number]: number;
 }
 
-export interface FoodElementWithPrice {
+export interface FoodElementWithPrice extends ObjectWithOrder {
   quantity: number;
   food: Food;
   price: number;
   includedNumber: number;
-  order: number;
 }
 
 export interface OrderFormula {

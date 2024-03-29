@@ -31,14 +31,11 @@ import { FoodElementsInputComponent } from './component/food-elements-input/food
     RecipeRoutingModule,
     SharedModule,
     TranslateModule,
-    MatButtonModule,
     MatToolbarModule,
     MatIconModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    CdkDropList,
-    CdkDrag,
     PipesModule,
   ]
 })

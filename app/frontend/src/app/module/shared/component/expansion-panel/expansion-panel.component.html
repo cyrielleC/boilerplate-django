@@ -1,0 +1,9 @@
+<div class="expansion-panel--header">
+    <ng-content select="[header]"></ng-content>
+    <mat-icon (click)="expanded = !expanded">{{ expanded ? 'keyboard_arrow_up':'keyboard_arrow_down'}}</mat-icon>
+</div>
+<div 
+    *ngIf="expanded"
+>
+    <ng-content></ng-content>
+</div>

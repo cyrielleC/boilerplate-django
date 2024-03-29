@@ -1,23 +1,32 @@
-<div 
-    *ngIf="dishChoices$ | async as dishChoices"
-    class="card-edition flexColumn"
-    cdkDropList
-    >
-    <div
-        *ngFor="let category of categories$ | async"
-        class="card-edition--category"
-        cdkDrag
-    >
-        <mat-form-field class="width-100-p">
-            <mat-label>{{'CATEGORY.NAME' | translate}}</mat-label>
-            <input matInput [(ngModel)]="category.name" type="text"/>
-        </mat-form-field>
-        <div
-            *ngFor="let categoryElement of category.elements"
-            class="card-edition--category-element"
+<ng-container
+    *ngIf="categories$ | async as categories"
+>
+    <mat-accordion 
+        *ngIf="dishChoices$ | async as dishChoices"
+        class="card-edition flexColumn"
+        [multi]="true"
+        cdkDropList
+        (cdkDropListDropped)="drop(categories, $event)"
         >
-            <div class="card-edition--category-element-form">
-                <div class="card-edition--category-element-form-inputs">
+        <mat-expansion-panel
+            *ngFor="let category of categories"
+            class="card-edition--category"
+            cdkDrag
+            [expanded]="true"
+        >
+            <mat-expansion-panel-header>
+                <mat-form-field>
+                    <mat-label>{{'CATEGORY.NAME' | translate}}</mat-label>
+                    <input matInput [(ngModel)]="category.name" type="text"/>
+                </mat-form-field>
+                <mat-icon>delete</mat-icon>
+            </mat-expansion-panel-header>
+            <app-expansion-panel
+                *ngFor="let categoryElement of category.elements"
+                class="card-edition--category-element"
+            >
+                <div header class="card-edition--category-element-header card-edition--lined-inputs">
+                    <mat-icon>restaurant</mat-icon>
                     <mat-form-field>
                         <mat-label>{{'CATEGORY_ELEMENT.NAME' | translate}}</mat-label>
                         <input matInput [(ngModel)]="categoryElement.name" type="text"/>
@@ -26,64 +35,140 @@
                         <mat-label>{{'CATEGORY_DESCRIPTION.NAME' | translate}}</mat-label>
                         <input matInput [(ngModel)]="categoryElement.description" type="text"/>
                     </mat-form-field>
+                    <mat-icon>delete</mat-icon>
                 </div>
-                <div
-                    *ngFor="let dishElement of categoryElement.elements"
-                    class="card-edition--dish-element-form"
-                >
-                    <mat-form-field>
-                        <mat-label>{{'DISH_ELEMENT.NAME' | translate}}</mat-label>
-                        <input matInput [(ngModel)]="dishElement.name" type="text"/>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-select [(ngModel)]="dishElement.food">
-                            <mat-option *ngFor="let food of dishChoices" [value]="food.id === dishElement.food.id ? dishElement.food : food">{{food.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div
-                    *ngFor="let formula of categoryElement.formulas"
-                    class="card-edition--formula-form"
-                >
-                    <div>
-                        <mat-form-field>
-                            <mat-label>{{'FORMULA.DESCRIPTION' | translate}}</mat-label>
-                            <input matInput [(ngModel)]="formula.description" type="text"/>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-label>{{'FORMULA.PRICE' | translate}}</mat-label>
-                            <input matInput [(ngModel)]="formula.price" type="number"/>
-                        </mat-form-field>
+                <div class="card-edition--category-element-content">
+                    <div class="card-edition--category-element-content-form">
+                        <app-expansion-panel
+                            class="card-edition--dish-element"
+                        >
+                            <div header> 
+                                <mat-icon>local_pizza</mat-icon>
+                                <div>{{ 'DISH_ELEMENTS_HEADER' | translate}}</div>
+                                <button 
+                                    mat-raised-button
+                                    (click)="add(categoryElement.elements, {order: -1})"
+                                >
+                                    <mat-icon>add_circle</mat-icon>
+                                    <span>{{ ( 'DISH_ELEMENT.ADD') | translate }}</span>
+                                </button>
+                            </div>
+                            <div 
+                                cdkDropList
+                                (cdkDropListDropped)="drop(categoryElement.elements, $event)"
+                            >
+                                <div 
+                                    *ngFor="let dishElement of categoryElement.elements"
+                                    class="card-edition--lined-inputs"
+                                    cdkDrag
+                                >
+                                    <mat-icon>drag_indicator</mat-icon>
+                                    <mat-form-field>
+                                        <mat-label>{{'DISH_ELEMENT.NAME' | translate}}</mat-label>
+                                        <input matInput [(ngModel)]="dishElement.name" type="text"/>
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <mat-select [(ngModel)]="dishElement.food">
+                                            <mat-option *ngFor="let food of dishChoices" [value]="food.id === dishElement.food?.id ? dishElement.food : food">{{food.name}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-icon>delete</mat-icon>
+                                </div>
+                            </div>
+                        </app-expansion-panel>
+                        <app-expansion-panel
+                            class="card-edition--formulas"
+                        >
+                            <div header>
+                                <mat-icon>format_list_bulleted</mat-icon>
+                                <div>{{ 'FORMULA_HEADER' | translate}}</div>
+                                <button 
+                                    mat-raised-button
+                                    (click)="addFormula(categoryElement.formulas)"
+                                >
+                                    <mat-icon>add_circle</mat-icon>
+                                    <span>{{ ( 'FORMULA_ELEMENT.ADD') | translate }}</span>
+                                </button>
+                            </div>
+                            <div
+                                *ngFor="let formula of categoryElement.formulas"
+                            >
+                                <app-expansion-panel
+                                    class="card-edition--formula"
+                                >
+                                    <div  header
+                                        class="card-edition--lined-inputs"
+                                    >
+                                        <mat-icon>fastfood</mat-icon>
+                                        <mat-form-field>
+                                            <mat-label>{{'FORMULA.DESCRIPTION' | translate}}</mat-label>
+                                            <input matInput [(ngModel)]="formula.description" type="text"/>
+                                        </mat-form-field>
+                                        <mat-form-field class="form-field-number">
+                                            <mat-label>{{'PRICE' | translate}}</mat-label>
+                                            <input matInput [(ngModel)]="formula.price" type="number"/>
+                                        </mat-form-field>
+                                        <mat-icon>delete</mat-icon>
+                                    </div>
+                                    <div 
+                                        cdkDropList
+                                        (cdkDropListDropped)="drop(formula.elements, $event)"
+                                    >
+                                        <div
+                                            *ngFor="let formulaEl of formula.elements"
+                                            cdkDrag
+                                            class="card-edition--lined-inputs"
+                                        >
+                                            <mat-icon>drag_indicator</mat-icon>
+                                            <mat-form-field class="form-field-number">
+                                                <mat-label>{{'QUANTITY' | translate}}</mat-label>
+                                                <input matInput [(ngModel)]="formulaEl.quantity" type="number"/>
+                                            </mat-form-field>
+                                            <mat-form-field>
+                                                <mat-select [(ngModel)]="formulaEl.dishElementId">
+                                                    <mat-option *ngFor="let dishEl of categoryElement.elements" [value]="dishEl.id">{{dishEl.name}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <mat-icon>delete</mat-icon>
+                                        </div>
+                                        <button 
+                                            mat-raised-button
+                                            (click)="add(formula.elements, {order: -1})"
+                                        >
+                                            <mat-icon>add_circle</mat-icon>
+                                            <span>{{ ( 'FORMULA_ELEMENT.ADD') | translate }}</span>
+                                        </button>
+                                    </div>
+                                </app-expansion-panel>
+                            </div>
+                            
+                            <button 
+                                mat-raised-button
+                                (click)="addFormula(categoryElement.formulas)"
+                            >
+                                <mat-icon>add_circle</mat-icon>
+                                <span>{{ ( 'FORMULA.ADD') | translate }}</span>
+                            </button>
+                        </app-expansion-panel>
                     </div>
                     <div
-                        *ngFor="let formulaEl of formula.elements"
-                        class="card-edition--form-formula-elements"
+                        class="card-edition--category-element-content-preview"
                     >
-                        <mat-form-field>
-                            <mat-label>{{'FORMULA_ELEMENT.QUANTITY' | translate}}</mat-label>
-                            <input matInput [(ngModel)]="formulaEl.quantity" type="number"/>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <mat-select [(ngModel)]="formulaEl.dishElementId">
-                                <mat-option *ngFor="let dishEl of categoryElement.elements" [value]="dishEl.id">{{dishEl.name}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <div>{{'PREVIEW' | translate}}</div>
+                        <app-category-element-display
+                            [categoryElement]="categoryElement"
+                            [category]="category"
+                            class="card-edition--category-element-preview-content"
+                            ></app-category-element-display>
+                        <app-formulas-explanation
+                            [categoryElement]="categoryElement"
+                        ></app-formulas-explanation>
                     </div>
                 </div>
-            </div>
+            </app-expansion-panel>
+            ajouter une entrée dans le menu<mat-icon (click)="add(category.elements, {order: -1, elements: [], formulas: []})">add_circle</mat-icon>
+        </mat-expansion-panel>
+    </mat-accordion>
+    Ajouter une category<mat-icon (click)="add(categories, {elements: [], order: -1})">add_circle</mat-icon>
 
-            <div
-                class="card-edition--category-element-preview"
-            >
-                <app-category-element-display
-                    [categoryElement]="categoryElement"
-                    [category]="category"
-                    class="card-edition--category-element-preview-content"
-                    ></app-category-element-display>
-                <app-formulas-explanation
-                    [categoryElement]="categoryElement"
-                ></app-formulas-explanation>
-            </div>
-        </div>
-    </div>
-</div>
+</ng-container>

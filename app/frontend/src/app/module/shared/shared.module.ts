@@ -5,7 +5,6 @@ import { PlusMinusCounterComponent } from './component/plus-minus-counter/plus-m
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { ExpandComponent } from './component/expand/expand.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ChoiceListComponent } from './component/choice-list/choice-list.component';
 import { TranslateModule } from '@ngx-translate/core';
@@ -13,13 +12,17 @@ import { PipesModule } from '@app/pipe/pipe.module';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CategoryElementDisplayComponent } from './component/category-element-display/category-element-display.component';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatRadioModule } from '@angular/material/radio';
+import { ExpansionPanelComponent } from './component/expansion-panel/expansion-panel.component';
 
 @NgModule({
   declarations: [
     PlusMinusCounterComponent,
-    ExpandComponent,
     ChoiceListComponent,
     CategoryElementDisplayComponent,
+    ExpansionPanelComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +35,9 @@ import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
     MatExpansionModule,
     CdkDropList,
     CdkDrag,
+    CdkAccordionModule,
+    MatBadgeModule,
+    MatRadioModule,
   ],
   exports: [
     PlusMinusCounterComponent,
@@ -39,6 +45,16 @@ import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
     CategoryElementDisplayComponent,
     CdkDropList,
     CdkDrag,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatDividerModule,
+    MatExpansionModule,
+    PipesModule,
+    CdkAccordionModule,
+    MatBadgeModule,
+    MatRadioModule,
+    ExpansionPanelComponent,
   ]
 })
 export class SharedModule { }

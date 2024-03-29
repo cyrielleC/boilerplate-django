@@ -62,16 +62,11 @@ export class FoodElementsInputComponent {
     this.updateOrder();
   }
 
-  add(element: Food) {
+  add(element: FoodElement<number>) {
     this.formControl.setValue(
       [
         ...this.formControl.value,
-        {
-          child: element.id,
-          quantity: 1,
-          isVisible: true,
-          order: -1,
-        }
+        element,
       ]
     );
     this.updateOrder();

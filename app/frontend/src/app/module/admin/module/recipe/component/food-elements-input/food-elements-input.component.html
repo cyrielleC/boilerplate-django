@@ -45,7 +45,12 @@
                         <div>{{ el.name }}</div>
                         <div *ngIf="type === foodType.CATEGORY_I">{{ el | ingredientList}}</div>
                     </div>
-                    <button mat-mini-fab color="link" (click)="add(el)">
+                    <button mat-mini-fab color="link" (click)="add({
+                        child: el.id,
+                        quantity: 1,
+                        isVisible: true,
+                        order: -1,
+                      })">
                         <mat-icon>add</mat-icon>
                     </button>                        
                 </div>

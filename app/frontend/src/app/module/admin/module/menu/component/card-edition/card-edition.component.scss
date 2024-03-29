@@ -2,26 +2,79 @@
     width: 100%;
     padding: 10px;
     &--category {
+        mat-expansion-panel-header {
+            height: 90px;
+            & mat-form-field{
+                // to center it cause it has a space below
+                padding-top: 20px;
+            }
+        }
         &-element {
             width: 100%;
-            display: flex;
-            flex-direction: row;
-            gap:10px;
-            &-form{
-                width: 60%;
-                // background-color: blue;
-                &-inputs, .card-edition--formula-form > div, .card-edition--dish-element-form {
-                    display: flex;
-                    flex-direction: row;
-                    gap: 10px;
-                    width: 100%;
-                    > * {
-                        width: 50%;
-                    }
+            display: block;
+            background-color: #DCDCDC;
+            &-header {
+                padding-top: 20px;
+            }
+
+            &-content {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                gap:10px;
+    
+                &-form {
+                    width: 60%;
+                    
+                }
+                &-preview {
+                    width: 40%;
+                }
+
+                .card-edition--formula, .card-edition--dish-element, .card-edition--form-formula-elements {
+                    display: block;
+                }
+
+                .card-edition--formula {
+                    background-color: #D3D3D3;
+                }
+                
+                .card-edition--dish-element {
+                    background-color: #C0C0C0;
+                }
+                .card-edition--form-formula-elements {
+                    background-color: #A9A9A9;
                 }
             }
-            &-preview {
-                width: 40%;
+
+
+            div[header] {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+                > div {
+                    flex-grow: 1;
+                }
+            }
+
+
+            .card-edition--lined-inputs {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                width: 100%;
+                align-items: center;
+                > mat-icon {
+                    margin-bottom: 20px;
+                }
+                > mat-form-field {
+                    flex-grow: 1;
+                    &.form-field-number {
+                        max-width: 80px;
+                    }
+                }
             }
         }
     }

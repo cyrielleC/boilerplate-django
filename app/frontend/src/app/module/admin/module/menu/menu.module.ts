@@ -9,12 +9,14 @@ import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '@app/module/shared/shared.module';
 import { FormulasExplanationComponent } from './component/formulas-explanation/formulas-explanation.component';
+import { SimpleLinedInputsWithIconsComponent } from './component/simple-lined-inputs-with-icons/simple-lined-inputs-with-icons.component';
 
 
 @NgModule({
   declarations: [
     CategoryEditionComponent,
-    FormulasExplanationComponent
+    FormulasExplanationComponent,
+    SimpleLinedInputsWithIconsComponent
   ],
   imports: [
     CommonModule,

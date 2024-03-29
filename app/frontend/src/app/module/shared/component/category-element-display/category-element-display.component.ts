@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Category, CategoryElement, FoodType } from '@app/model/api-recipe.models';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Category, CategoryElement, FoodType, Formula } from '@app/model/api-recipe.models';
 
 @Component({
   selector: 'app-category-element-display',
@@ -9,6 +9,6 @@ import { Category, CategoryElement, FoodType } from '@app/model/api-recipe.model
 export class CategoryElementDisplayComponent {
   @Input({ required: true }) categoryElement!: CategoryElement;
   @Input({ required: true }) category: Category;
+  @Output() addToCart: EventEmitter<[Formula, string]> = new EventEmitter<[Formula, string]>();
   foodType = FoodType;
-
 }

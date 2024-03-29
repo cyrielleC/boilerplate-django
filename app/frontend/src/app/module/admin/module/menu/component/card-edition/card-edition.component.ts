@@ -1,6 +1,8 @@
 import { selectFoodByType } from '@admin/store/recipe.selector';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
-import { Category, Food, Restaurant } from '@app/model/api-recipe.models';
+import { Category, Food, Formula, Restaurant } from '@app/model/api-recipe.models';
+import { AbstractWithDragAndDrop } from '@app/module/shared/component/abstract-with-drag-and-drop';
 import { CopyService } from '@app/service/copy.service';
 import { selectRestaurant } from '@menu/store/menu.selector';
 import { Store } from '@ngrx/store';
@@ -11,7 +13,7 @@ import { Observable, map } from 'rxjs';
   templateUrl: './card-edition.component.html',
   styleUrl: './card-edition.component.scss'
 })
-export class CategoryEditionComponent {
+export class CategoryEditionComponent extends AbstractWithDragAndDrop {
 
   categories$: Observable<Category[]> = this.store.select(selectRestaurant).pipe(
     map((restaurant: Restaurant) => CopyService.clone(restaurant.categories)),
@@ -25,6 +27,19 @@ export class CategoryEditionComponent {
   constructor(
     private readonly store: Store,
   ) {
+    super();
+  }
+
+  addFormula(formulas: Formula[]) {
+    formulas.push({
+      price: 0,
+      description: '',
+      elements: [],
+    });
+  }
+
+  protected isElementToSearch(element1: any, element2: any): boolean {
+    return element1 === element2;
   }
 
 }
