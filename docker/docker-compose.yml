@@ -56,7 +56,6 @@ services:
       - PGADMIN_DEFAULT_DATABASE=postgres
       - PGADMIN_DEFAULT_USERNAME=postgres
       - PGADMIN_DEFAULT_PASSWORD=postgres
- 
     volumes:
       - ../pgadmin:/var/lib/pgadmin
     restart: always

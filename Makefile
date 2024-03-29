@@ -10,7 +10,7 @@ logsContainer:
 	$(DOCKER_COMPOSE) logs $(CONTAINER_NAME)
 
 start:
-	$(DOCKER_COMPOSE) up 
+	$(DOCKER_COMPOSE) up -d
 
 initPython: start
 	$(DOCKER_COMPOSE) run backend python manage.py migrate
@@ -27,11 +27,8 @@ execBackend: start
 execFrontend:
 	$(DOCKER_COMPOSE) exec frontend /bin/sh
 
-execPGadmin:
-	$(DOCKER_COMPOSE) exec pgadmin /bin/sh
-
 updateRightsAfterDockerCreation:
-	sudo chown -R $(USER):$(USER) pgadmin
+	sudo chown -R $(USER):$(USER) app
 
 deleteBackend: stop
 	$(DOCKER_COMPOSE) rm backend
