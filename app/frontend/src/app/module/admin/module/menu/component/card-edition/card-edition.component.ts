@@ -38,9 +38,6 @@ export class CategoryEditionComponent extends AbstractWithDragAndDrop {
   }
 
   protected isElementToSearch(element1: any, element2: any): boolean {
-    console.log(element1);
-    console.log(element2);
-    console.log(element1 === element2);
     return element1 === element2;
   }
 

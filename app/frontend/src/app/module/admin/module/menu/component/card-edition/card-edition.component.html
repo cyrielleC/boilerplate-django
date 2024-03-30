@@ -167,10 +167,10 @@
                                         <mat-icon>local_pizza</mat-icon>
                                         <mat-form-field>
                                             <mat-select>
-                                                <mat-option *ngFor="let food of dishChoices" [value]="food.id">{{food.name}}</mat-option>
+                                                <mat-option *ngFor="let food of dishChoices" [value]="food.id" [selected]="extraPrice.key === food.id">{{food.name}}</mat-option>
                                             </mat-select>
                                         </mat-form-field>
-                                        <mat-form-field class="form-field-number">
+                                        <mat-form-field class="form-field-number" [(ngModel)]="categoryElement.formulaExtraPrices[extraPrice]">
                                             <mat-label>{{'PRICE' | translate}}</mat-label>
                                             <input matInput type="number"/>
                                         </mat-form-field>
